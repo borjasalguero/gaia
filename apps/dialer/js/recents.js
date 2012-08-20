@@ -96,7 +96,7 @@ var Recents = {
       this.deleteSelectedThreads.addEventListener('click',
         this.deleteSelected.bind(this));
     }
-
+    // ----------------------------------------------------------------------
     var indexedDB = window.indexedDB || window.webkitIndexedDB ||
         window.mozIndexedDB || window.msIndexedDB;
 
@@ -121,6 +121,8 @@ var Recents = {
 
     this._cachedContacts = new Object();
     this.render();
+    // ----------------------------------------------------------------------
+    
   },
 
   recentsHeaderAction: function re_recentsIconEditAction(event) {
@@ -256,11 +258,15 @@ var Recents = {
       this.recentsHeaderAction('cancel-button');
   },
 
+  // ----------------------------------------------------------------------
+    
   cleanup: function re_cleanup() {
     if (this._recentsDB)
       this._recentsDB.close();
   },
 
+  // ----------------------------------------------------------------------
+    
   getDatabase: function re_getDatabase(callback) {
     var self = this;
     if (!this._recentsDB) {
@@ -274,6 +280,8 @@ var Recents = {
     callback(this._recentsDB);
   },
 
+  // ----------------------------------------------------------------------
+    
   add: function re_add(recentCall) {
     var self = this;
 
@@ -294,6 +302,8 @@ var Recents = {
     });
   },
 
+  // ----------------------------------------------------------------------
+    
   deleteAll: function re_deleteAll() {
     var response = window.confirm(_('confirm-deletion'));
     if (response) {
@@ -318,6 +328,8 @@ var Recents = {
     }
   },
 
+  // ----------------------------------------------------------------------
+  
   deleteSelected: function re_deleteSelected() {
     var selected = this.recentsContainer.querySelectorAll('.log-item.selected');
     for (var i = 0; i < selected.length; i++) {
@@ -325,6 +337,8 @@ var Recents = {
     }
   },
 
+  // ----------------------------------------------------------------------
+    
   executeDeletion: function re_executeDeletion() {
     var self = this;
 
@@ -374,6 +388,8 @@ var Recents = {
     });
   },
 
+  // ----------------------------------------------------------------------
+    
   getSameTypeCallsOnSameDayForDeletion: function re_getSameTypeCallsOnSameDay(
     day, phoneNumber, phoneNumberType, callType, startingWith) {
     var groupSelector = '[data-num^="' + phoneNumber +
@@ -705,6 +721,8 @@ var Recents = {
     return startDate.getTime();
   },
 
+  // ----------------------------------------------------------------------
+    
   history: function re_history(callback) {
     this.getDatabase((function(database) {
       var recents = [],
@@ -728,6 +746,8 @@ var Recents = {
     }).bind(this));
   },
 
+  // ----------------------------------------------------------------------
+    
   updateLatestVisit: function re_updateLatestVisit() {
     localStorage.setItem('latestCallLogVisit', Date.now());
   },
@@ -744,7 +764,8 @@ var Recents = {
 
 window.addEventListener('load', function recentsSetup(evt) {
   window.removeEventListener('load', recentsSetup);
-  Recents.init();
+  RecentsDBManager._init();
+  // Recents.init();
 });
 
 window.addEventListener('unload', function recentsCleanup(evt) {
