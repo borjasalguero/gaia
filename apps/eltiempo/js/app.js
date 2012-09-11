@@ -201,10 +201,13 @@ var weatherStatus = {
 };
 
 function callback(data){
-    // alert("asdasdads");
     var forecast = data.query.results.channel.item.forecast;
     var status = weatherStatus[forecast[0].code];
-    document.getElementById("resultado").innerHTML = JSON.stringify(status); 
-    document.getElementById("resultado").innerHTML +='<img src="style/'+status.image+'">'
+    // document.getElementById("resultado").innerHTML = JSON.stringify(status); 
+    document.getElementById("today").innerHTML +=JSON.stringify(forecast[0]);
+    document.getElementById("today").innerHTML +='<img src="style/'+weatherStatus[forecast[0].code].image+'">'; 
+    document.getElementById("tomorrow").innerHTML +=JSON.stringify(forecast[1]);
+   
+    document.getElementById("tomorrow").innerHTML +='<img src="style/'+weatherStatus[forecast[1].code].image+'">';
 }
 
