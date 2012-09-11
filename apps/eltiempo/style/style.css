@@ -1,0 +1,17 @@
+#moveme{
+  background: red;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#moveme2{
+  background: blue;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

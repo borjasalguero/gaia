@@ -1,0 +1,31 @@
+{
+  "name": "El tiempo",
+  "description": "El tiempo de Madrid",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "The Gaia Team",
+    "url": "https://github.com/mozilla-b2g/gaia"
+  },
+  "permissions": [
+    "background",
+    "backgroundservice",
+    "settings"
+  ],
+  "locales": {
+    "en-US": {
+      "name": "Weather",
+      "description": "Weather"
+    },
+    "es": {
+      "name": "El tiempo",
+      "description": "El tiempo"
+    }
+  },
+  "default_locale": "en-US",
+  "background_page": "/background.html#0",
+  "icons": {
+    "120": "/style/icons/Sms.png",
+    "60": "/style/icons/60/Sms.png"
+  },
+  "orientation": "portrait-primary"
+}
