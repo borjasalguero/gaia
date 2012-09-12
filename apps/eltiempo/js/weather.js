@@ -1,7 +1,7 @@
 var query = escape('select item from weather.forecast where location="SPXX0050" and u="c"'),
     url = "http://query.yahooapis.com/v1/public/yql?callback=callback&q=" + query + "&format=json"; 
 
-alert(query);
+// alert(query);
 
 
 var headID = document.getElementsByTagName("head")[0];         

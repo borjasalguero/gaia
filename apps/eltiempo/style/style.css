@@ -1,31 +1,68 @@
 
-html{
+
+
+html,body{
   height: 100%;
   width: 100%;
-background: #2990d1; /* Old browsers */
-background: -moz-linear-gradient(top, #2990d1 0%, #b7d1e5 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2990d1), color-stop(100%,#b7d1e5)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #2990d1 0%,#b7d1e5 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #2990d1 0%,#b7d1e5 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #2990d1 0%,#b7d1e5 100%); /* IE10+ */
-background: linear-gradient(to bottom, #2990d1 0%,#b7d1e5 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2990d1', endColorstr='#b7d1e5',GradientType=0 ); /* IE6-9 */
+  overflow: hidden;
+  font-size: 10px;
+  background: yellow;
+  font-family: 'Open Sans', sans-serif;
 }
 
-#moveme{
+#info{
+  height: 8rem;
   background: red;
-  height: 30px;
-  width: 30px;
-  position: absolute;
-  top: 0;
-  right: 0;
+  display: block;
+  
 }
 
-#moveme2{
+#date{
+  display: block;
+  float: right;
+  background: yellow;
+  width: 50%;
+  height: 100%;
+  font-size: 2rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#place{
+  display: block;
+  float: left;
+  background: yellow;
+  width: 50%;
+  height: 100%;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+}
+
+  #city{
+    font-size: 4rem;
+  }
+  #forecast_name{
+    font-size: 2rem;
+    overflow: hidden;
+    width: 100%;
+    color:red;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+#today{
+  display: block;
+  height: -moz-calc(100% - 18rem);
+  height: -webkit-calc(100% - 18rem);
   background: blue;
-  height: 30px;
-  width: 30px;
-  position: absolute;
-  top: 0;
-  left: 0;
+}
+
+#tomorrow{
+  display: block;
+  height: 10rem;
+  background: #f0f0f0 ;
+  
 }
