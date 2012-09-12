@@ -201,19 +201,20 @@ var weatherStatus = {
 };
 
 function callback(data){
-  alert("ASDASDASD");
+  alert("Recibo datos");
     var forecast = data.query.results.channel.item.forecast;
   document.getElementById("date").innerHTML =forecast[0].date;
-   document.getElementById("today_min").innerHTML =forecast[0].low+' C';
-   document.getElementById("today_max").innerHTML =forecast[0].high+' C';
+   document.getElementById("today_min").innerHTML =forecast[0].low+'ºC';
+   document.getElementById("today_max").innerHTML =forecast[0].high+'ºC';
     document.getElementById("forecast_name").innerHTML =forecast[0].text;
     document.getElementById("today_image").innerHTML ='<img class="image_small" src="style/'+weatherStatus[forecast[0].code].image+'">'; 
  
-    document.getElementById("tomorrow_min").innerHTML =forecast[1].low+' C';
-   document.getElementById("tomorrow_max").innerHTML =forecast[1].high+' C';
+    document.getElementById("tomorrow_min").innerHTML =forecast[1].low+'ºC';
+   document.getElementById("tomorrow_max").innerHTML =forecast[1].high+'ºC';
 document.getElementById("header_tomorrow").innerHTML =forecast[1].date;
    document.getElementById("tomorrow_image").innerHTML ='<img class="image_small" src="style/'+weatherStatus[forecast[0].code].image+'">'; 
  
   
 }
+
 

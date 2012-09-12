@@ -21,6 +21,11 @@ html,body{
   margin: 0;
 }
 
+#app_container{
+  width: 100%;
+  height: 100%;
+}
+
 #info{
   height: 10rem;
   /*background: red;*/
@@ -35,7 +40,7 @@ html,body{
   /*background: yellow;*/
   width: 40%;
   height: 100%;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   padding: 1rem;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -67,6 +72,7 @@ html,body{
     /*color:red;*/
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-weight: 200;
   }
 
 #today{
@@ -79,11 +85,12 @@ html,body{
   /*background: blue;*/
 }
   #today_image{
-    height: -moz-calc(100% - 7rem);
-    height: -webkit-calc(100% - 7rem);
+    height: -moz-calc(100% - 8rem);
+    height: -webkit-calc(100% - 8rem);
   }
   #today_forecast{
-    height: 7rem;
+    height: 8rem;
+    padding: 0 4rem;
   }
 
   .forecast_today_temp {
@@ -94,16 +101,20 @@ html,body{
     .forecast_today_temp header{
       font-size: 2rem;
       color: white;
+      font-weight: 200;
+      padding-bottom: 1rem;
     }
     .forecast_today_temp section{
       font-size: 4rem;
       color: white;
+      font-weight: 200;
     }
 
 #tomorrow{
   width: 100%;
   display: block;
   height: 10rem;
+  background: -moz-linear-gradient(top, #7db9e8  0%, #2989d8 50%,  #1e5799 100%); /* FF3.6+ */
 
   /*background: #f0f0f0 ;*/
   
@@ -111,7 +122,7 @@ html,body{
 
   #tomorrow_image {
     height: 100%;
-    width: 30%;
+    width: 50%;
     /*background: red;*/
     display: block;
     float: left;
@@ -119,7 +130,7 @@ html,body{
 
   #tomorrow_forecast {
     height: 100%;
-    width: 70%;
+    width: 50%;
     float: left;
     display: block;
 
@@ -132,13 +143,13 @@ html,body{
   }
     .forecast_tomorrow_temp header{
       font-size: 1.2rem;
-      
+      padding-bottom: .6rem;
       color: white;
     }
     .forecast_tomorrow_temp section{
       font-size: 2.5rem;
       height: 4rem;
-      
+      font-weight: 200;
       color: white;
     }
     #tomorrow_image {
@@ -154,4 +165,5 @@ html,body{
       color: white;
       height: 2rem;
       padding-top: 1rem;
+      padding-bottom: .7rem;
     }
