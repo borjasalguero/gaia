@@ -1,68 +1,157 @@
 
-
+html{
+background: #1e5799; /* Old browsers */
+background: -moz-linear-gradient(top,  #1e5799 0%, #2989d8 50%, #7db9e8 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1e5799), color-stop(50%,#2989d8), color-stop(100%,#7db9e8)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #1e5799 0%,#2989d8 50%,#7db9e8 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #1e5799 0%,#2989d8 50%,#7db9e8 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #1e5799 0%,#2989d8 50%,#7db9e8 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #1e5799 0%,#2989d8 50%,#7db9e8 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+}
 
 html,body{
   height: 100%;
   width: 100%;
   overflow: hidden;
   font-size: 10px;
-  background: yellow;
+  /*background: yellow;*/
   font-family: 'Open Sans', sans-serif;
+  padding: 0;
+  margin: 0;
 }
 
 #info{
-  height: 8rem;
-  background: red;
+  height: 10rem;
+  /*background: red;*/
   display: block;
-  
+  color: white;
 }
 
 #date{
   display: block;
+  text-align: right;
   float: right;
-  background: yellow;
-  width: 50%;
+  /*background: yellow;*/
+  width: 40%;
   height: 100%;
-  font-size: 2rem;
+  font-size: 1.2rem;
   padding: 1rem;
   box-sizing: border-box;
-  overflow: hidden;
+  -moz-box-sizing: border-box;
+  /*overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: nowrap;*/
 }
 
 #place{
   display: block;
   float: left;
-  background: yellow;
-  width: 50%;
+  /*background: yellow;*/
+  width: 60%;
   height: 100%;
   padding: 1rem 2rem;
   box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
   #city{
+    
     font-size: 4rem;
   }
   #forecast_name{
+    color: white;
     font-size: 2rem;
     overflow: hidden;
     width: 100%;
-    color:red;
+    /*color:red;*/
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
 #today{
+  text-align: center;
   display: block;
-  height: -moz-calc(100% - 18rem);
-  height: -webkit-calc(100% - 18rem);
-  background: blue;
+  width: 100%;
+  height: -moz-calc(100% - 20rem);
+  height: -webkit-calc(100% - 20rem);
+  border-bottom:1px solid #6c6c6c;
+  /*background: blue;*/
 }
+  #today_image{
+    height: -moz-calc(100% - 7rem);
+    height: -webkit-calc(100% - 7rem);
+  }
+  #today_forecast{
+    height: 7rem;
+  }
+
+  .forecast_today_temp {
+    width: 50%;
+    text-align: center;
+    float: left;
+  }
+    .forecast_today_temp header{
+      font-size: 2rem;
+      color: white;
+    }
+    .forecast_today_temp section{
+      font-size: 4rem;
+      color: white;
+    }
 
 #tomorrow{
+  width: 100%;
   display: block;
   height: 10rem;
-  background: #f0f0f0 ;
+
+  /*background: #f0f0f0 ;*/
   
 }
+
+  #tomorrow_image {
+    height: 100%;
+    width: 30%;
+    /*background: red;*/
+    display: block;
+    float: left;
+  }
+
+  #tomorrow_forecast {
+    height: 100%;
+    width: 70%;
+    float: left;
+    display: block;
+
+  }
+
+  .forecast_tomorrow_temp {
+    width: 50%;
+    text-align: center;
+    float: left;
+  }
+    .forecast_tomorrow_temp header{
+      font-size: 1.2rem;
+      
+      color: white;
+    }
+    .forecast_tomorrow_temp section{
+      font-size: 2.5rem;
+      height: 4rem;
+      
+      color: white;
+    }
+    #tomorrow_image {
+      text-align: center;
+    }
+    .image_small{
+      height: 100%;
+    }
+
+    #header_tomorrow{
+      font-size: 1.6rem;
+      text-align: center;
+      color: white;
+      height: 2rem;
+      padding-top: 1rem;
+    }

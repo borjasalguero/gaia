@@ -7,14 +7,17 @@
     "url": "https://github.com/mozilla-b2g/gaia"
   },
   "permissions": [
+    "browser",
+    "systemXHR",
+    
     "background",
     "backgroundservice",
     "settings"
   ],
   "locales": {
     "en-US": {
-      "name": "Weather",
-      "description": "Weather"
+      "name": "El tiempo",
+      "description": "El tiempo"
     },
     "es": {
       "name": "El tiempo",
