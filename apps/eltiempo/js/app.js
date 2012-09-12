@@ -201,7 +201,7 @@ var weatherStatus = {
 };
 
 function callback(data){
-  alert("Recibo datos");
+  document.getElementById("loading").classList.remove("show-loading");
     var forecast = data.query.results.channel.item.forecast;
   document.getElementById("date").innerHTML =forecast[0].date;
    document.getElementById("today_min").innerHTML =forecast[0].low+'ºC';
