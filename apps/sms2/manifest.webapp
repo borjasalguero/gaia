@@ -1,0 +1,33 @@
+{
+  "name": "PushApp",
+  "description": "Gaia Messages",
+  "type": "certified",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "The Gaia Team",
+    "url": "https://github.com/mozilla-b2g/gaia"
+  },
+  "permissions": {
+    "systemXHR": {},
+    "push": {},
+    "settings":{ "access": "readonly" },
+    "desktop-notification":{}
+  },
+  "locales": {
+    "en-US": {
+      "name": "PushApp!",
+      "description": "Push client."
+    }
+  },
+  "default_locale": "en-US",
+  "icons": {
+    "120": "/style/icons/Sms.png",
+    "60": "/style/icons/60/Sms.png"
+  },
+  "orientation": "portrait-primary",
+  "messages": [
+      { "notification": "/index.html" },
+      { "push": "/index.html"},
+      { "push-register": "/index.html"}
+  ]
+}

@@ -1,0 +1,660 @@
+/*
+Currently media queries with min/max resolution are not working
+in Firefox until fixing:
+https://bugzilla.mozilla.org/show_bug.cgi?id=779527
+That's why in SII or Nexus SMS App is not rendered properly.
+*/
+
+@media screen and (min-resolution: 230dpi) {
+
+  html {
+    font-size: 14.7px;
+  }
+}
+
+@media screen and (max-resolution: 220dpi) {
+
+  html {
+    font-size: 13.5px;
+  }
+}
+
+@media screen and (max-resolution: 200dpi) {
+
+  html {
+    font-size: 10px;
+  }
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  font-family: 'MozTT', sans-serif;
+}
+
+/* Override Building Block [Header] styles */
+section[role="region"] > header:first-child .icon.icon-clear {
+  background-image: url(images/icons/clear.png);
+  right: calc(-50% + 7rem);
+  width: 2rem;
+  margin: 0;
+  padding: 0 2rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+section[role="region"] > header:first-child form {
+  display: none;
+}
+
+/* Override Building Block [Imput areas] styles */
+form.bottom[role="search"] {
+  z-index: 3;
+}
+
+#receiver-input {
+  padding-right: 3rem;
+}
+
+/* Override Building Block [Edit mode] styles */
+form[role="dialog"][data-type="edit"] header,
+form[role="dialog"][data-type="edit"] > menu {
+  transition: all 0.4s ease;
+}
+
+form[role="dialog"][data-type="edit"] header {
+  transform: translateY(-110%);
+}
+
+form[role="dialog"][data-type="edit"] > menu {
+  transform: translateY(110%);
+}
+
+/* BB issue */
+form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
+  border: none;
+  color: #fff;
+}
+
+/* Override Building Block [Lists] styles */
+[data-type="list"] {
+  padding: 0;
+  text-align: left;
+}
+
+[data-type="list"] header {
+  margin: 0 1.5rem;
+  padding: 0.5rem 1.5rem;
+}
+
+[data-type="list"] header:first-child {
+  padding-top: 1.5rem;
+}
+
+[data-type="list"] ul {
+  padding: 0 1.5rem;
+}
+
+[data-type="list"] li {
+  height: 6.1rem;
+}
+
+[data-type="list"] li > label {
+  opacity: 0;
+  display: block;
+  overflow: hidden;
+  right: 5rem; 
+}
+
+[data-type="list"] aside.icon-unread {
+  margin: 0;
+  width: 1.5rem;
+}
+
+[data-type="list"] .unread aside.icon-unread {
+  background: url("../style/images/unread.png") no-repeat scroll left center transparent;
+}
+
+[data-type="list"] p time {
+  display: inline-block;
+}
+
+[data-type="list"] .unread p time {
+  color: #1D8399;
+}
+
+[data-type="list"] aside.pack-end img[src=""] {
+  opacity: 0;
+  width: 0;
+}
+
+/* Lists: edit mode */
+.edit [data-type="list"] li > label {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(5rem);
+  transition: all 0.3s ease;
+}
+
+.edit [data-type="list"] li > a > aside.icon-unread {
+  opacity: 0;
+}
+
+.edit [data-type="list"] li > a > p {
+  transform: translateX(3.5rem);
+  transition: all 0.3s ease;
+}
+
+.edit #thread-list-container[data-type="list"] aside.pack-end {
+  margin: 0 0 0 -3rem;
+}
+
+.edit #thread-list-container[data-type="list"] aside.pack-end img {
+  transform: translateX(7.5rem);
+  transition: all 0.3s ease;
+}
+
+.edit #thread-list-container[data-type="list"] aside.pack-end img[src=""] {
+  width: 6.5rem;
+}
+
+/* Panel handling */
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.panel {
+  position: absolute;
+  float: left;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes slideRightSecondary {
+  from {
+    transform: translateX(1%);
+  }
+ 
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slideRightPrimary {
+  from {
+    transform: translateX(-99%);
+  }
+ 
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.panel:nth-child(2) {
+  transform: translateX(100%);
+}
+.to-left-boot > .panel:first-child {
+  transform: translateX(-0.1%);
+}
+
+.to-left-boot > .panel:nth-child(2) {
+  transform: translateX(99.9%);
+}
+
+.to-left > .panel:first-child {
+  transition: transform .2s linear;
+  transform: translateX(-100%);
+}
+
+.to-left > .panel:nth-child(2) {
+  transition: transform .2s linear;
+  transform: translateX(0%);
+}
+
+.to-left-fixed > .panel:first-child {
+  transform: translateX(-100%);
+}
+
+.to-left-fixed > .panel:nth-child(2) {
+  transform: translateX(0);
+}
+
+.to-right > .panel:first-child {
+  animation-duration: .4s;
+  animation-name: slideRightPrimary;
+}
+
+.to-right > .panel:nth-child(2) {
+  animation-duration: .4s;
+  animation-name: slideRightSecondary;
+}
+
+
+#thread-list,#thread-messages {
+  z-index: 10;
+  background: white;
+}
+
+#icon-contact {
+  display: none;
+}
+
+/* 
+  Styles for Edit mode in Thread List
+*/
+
+.edit form[role="dialog"][data-type="edit"] > menu {
+  transform: translateY(0);
+}
+
+.edit .new-sms-form {
+  transform: translateY(3.6rem);
+}
+
+.edit form[role="dialog"][data-type="edit"] header {
+  transform: translateY(0);
+}
+
+.edit #thread-list-container .item > a {
+  transform: translateX(3rem);
+  pointer-events: none;
+}
+
+.edit #thread-list-container .item > a.unread .unread-tag {
+  opacity: 0;
+}
+
+.edit #thread-list-container .checkbox-container {
+  pointer-events:auto;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.edit .undo-candidate {
+  display: none;
+}
+
+.edit .message-block {
+  border-top: .1rem solid #DBDBDB;
+  margin-bottom: 0;
+}
+
+/*
+  Styles for new message
+*/
+
+section[role="region"].new > header:first-child h1 {
+  display: none;
+}
+
+section[role="region"].new > header:first-child form {
+  display: block;
+}
+
+.carrier-wrapper {
+  z-index: 2;
+}
+
+.new .carrier-wrapper {
+  display: none;
+}
+
+.new #icon-edit {
+  display: none;
+}
+
+.new #icon-contact {
+  display: block;
+}
+
+/*
+  Messages Style as 'bubbles'
+*/
+
+#messages-container {
+  -moz-box-sizing: border-box;
+  background: none repeat scroll 0 0 #F4F4F4;
+  text-align: left;
+}
+
+#messages-container header:first-child {
+  margin-top: 2rem;
+}
+
+#messages-container header {
+  border-bottom: 0.1rem solid #A6A6A6;
+  color: #606060;
+  font-size: calc(6 * 0.226rem);
+  margin: 0 1.5rem 1rem;
+  padding: 1rem 1.5rem 0;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+#messages-container[data-type="list"] > ul:last-child {
+  margin-bottom: 7rem;
+}
+
+#messages-container[data-type="list"] li.bubble {
+  border-bottom: 0.1rem solid transparent;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0.5rem 0;
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+#messages-container[data-type="list"] li.bubble:first-child {
+  padding: 0 0 0.5rem 0;
+}
+
+#messages-container[data-type="list"] li.bubble a {
+  height: 100%;
+}
+
+#messages-container[data-type="list"] li.bubble p {  
+  text-align: right;
+  overflow: visible;
+  white-space: normal;
+  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+  border: 0.2rem solid #2c393b;
+  background: #fff;
+  margin-right: 0.7rem;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  -moz-box-sizing: border-box;
+  max-width: 20rem;
+  padding: 1rem;
+  position: relative;
+  text-align: left;
+  float: right;
+}
+
+#messages-container[data-type="list"] li.bubble p:after {
+  content: '';
+  width: 1.1rem;
+  height: 1rem;
+  background-image: url('images/bubble_ticks.png');
+  position: absolute;
+  background-position: -22px 0;
+  right: -1.1rem;
+  top: 1rem;
+}
+
+#messages-container[data-type="list"] li.bubble .received p {
+  float: left;
+  background: #FBEAE0;
+  border: 0.2rem solid #FF4E00;
+  margin-left: 0.7rem;
+  float: left;
+}
+
+#messages-container[data-type="list"] li.bubble .received p:after {
+  background-position: 0 0;
+  left: -1.1rem;
+  margin-top: 0;
+}
+
+#messages-container[data-type="list"] li.bubble .sending p {
+  border: 0.2rem solid #5f5f5f;
+  color: #5f5f5f;
+}
+
+#messages-container[data-type="list"] li.bubble .sending p:after {
+  background-position: -33px 0;
+  right: -1.1rem;
+}
+
+#messages-container[data-type="list"] li.bubble .error p {
+  border: 0.2rem solid #B90000;
+}
+
+#messages-container[data-type="list"] li.bubble .error p:after {
+  background-position: -44px 0;
+  right: -1.1rem;
+}
+
+#messages-container[data-type="list"] li.bubble .error aside.pack-end {
+  background: url('images/icons/exclamation.png') no-repeat center center;
+  background-size: 2.2rem;
+  width: 3.2rem;
+  height: 2.2rem;
+  margin-top: 1rem;
+}
+#messages-container[data-type="list"] li.bubble aside progress {
+  margin-top: 0.4rem;
+}
+
+#messages-container[data-type="list"] li.bubble aside {
+  overflow: hidden;
+}
+
+/* 
+  Styles for Edit mode in Messages Container
+*/
+
+.edit #messages-container[data-type="list"] li {
+  border-color: #e7e7e7;
+}
+
+.edit #messages-container[data-type="list"] li:last-child {
+  border-color: transparent;
+}
+
+.edit [data-type="list"] li a {
+  pointer-events: none;
+}
+
+.edit #messages-container[data-type="list"] li p {
+  transform: translateX(0);
+}
+
+.edit #messages-container[data-type="list"] li .received p {
+  transform: translateX(4rem);
+  transition: all 0.3s ease 0s;
+}
+
+.edit #messages-container[data-type="list"] li.selected p {
+  border: 0.2rem solid #B90000;
+}
+
+.edit #messages-container[data-type="list"] li.selected p:after {
+  background-position: -44px 0;
+}
+
+.edit #messages-container[data-type="list"] li.selected .received p:after {
+  background-position: -11px 0;
+}
+
+.edit-button {
+  background: -moz-linear-gradient(top, #b50404 0%, #850a0a 100%);
+  height: 100%;
+  width: 100%;
+  -moz-box-sizing: border-box;
+  font-weight: 600;
+  font-size: calc(7 * 0.226rem);
+  color: white;
+  opacity: 0.99; /* hackaround for painting bug (bug 821221) */
+}
+
+.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/*
+  Bottom bar for sending SMS
+*/
+
+.new-sms-form {
+  transition: transform .2s ease-in;
+}
+
+form.bottom[role="search"].new-sms-form {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#send-message.active {
+  background: #008aaa;
+}
+
+#send-message:before {
+  content: attr(data-counter);
+  font-size: 1.2rem;
+  color: #606060;
+  position: absolute;
+  right: 1.5rem;
+  bottom: 2.4rem;
+}
+
+#message-to-send {
+  padding: 0.4rem 0 0.4rem 0.4rem;
+  line-height: 2rem;
+}
+
+#send-message-container {
+  height: 100%;
+  width: 6rem;
+  float: right;
+}
+
+
+/*
+  LOGIN
+*/
+
+#login {
+  background: white;
+  display: block;
+  z-index: 20000;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+#login.hiding {
+  opacity: 0;
+}
+#login.hidden {
+ display: none;
+}
+
+
+#login-form {
+  margin: 1rem 3rem;
+  text-align: left;
+}
+#login-form p {
+  margin: 2rem 0rem;
+  text-align: left;
+}
+
+#login-form label {
+  padding: .5rem 0rem;
+  width: 100%;
+}
+
+#login-button {
+  border: solid .1rem;
+  border-color: #ccc;
+  font-size: 1.4rem;
+  border-radius: .3rem;
+  background: #ddd;
+  height: 4rem;
+  width: -moz-calc(100% - 6rem);
+  bottom: 3rem;
+  position: fixed;
+  left: 3rem;
+}
+
+/*
+  Loading screen while deleting
+*/
+
+#loading {
+  z-index: 20000;
+}
+
+#loading.show-loading {
+  display: block;
+}
+
+#loading {
+  display: none;
+}
+
+.loading-header {
+  text-align: left;
+}
+
+#loading [role="status"] {
+  text-align: center;
+  height: 4rem;
+} 
+
+/*
+  No result container
+*/
+
+#no-result-container {
+  background-image: url('images/SMS_200x200_bubble.png');
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  background-position:center;
+  height: 100%;
+  width: 100%;
+}
+
+#no-result-message {
+  text-align: left;
+  line-height: 3rem;
+  position: relative;
+  top: 50%;
+  border-top: .1rem solid rgba(96,96,96,.5);
+  padding: 2rem 0.5rem;
+  width: 27rem;
+  margin: -8rem auto;
+  color: #606060;
+  font-weight: 300;
+  font-size: calc(10 * 0.226rem);
+}
+
+/*
+  Fixed headers
+*/
+.fixed-title {
+  position: absolute;
+  top: 5rem;
+  width: calc(100% - 6rem);
+  padding: 1.5rem 1.5rem 0.5rem;
+  margin: 0 1.5rem;
+  border-bottom: solid 0.1rem #ff4e00;
+  background-repeat: no-repeat;
+  background-color: #FFFFFF;
+  transform: translateY(-3rem);
+  pointer-events: none;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  font-weight: normal;
+  line-height: 1.8rem;
+  color: #FF4E00;
+  z-index: 4;
+}
