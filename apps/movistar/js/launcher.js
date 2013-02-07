@@ -71,10 +71,10 @@ var Launcher = {
           break;
         case 214:
           // MOVISTAR ESPAÑA
-          url = 'http://www.elmundo.es/';
+          url = 'http://www.telefonica.es/portada/index.html';
           break;
         default:
-          url = 'http://www.movistar.es/';
+          url = 'http://www.telefonica.es/portada/index.html';
           break;
       }
     }
@@ -114,6 +114,12 @@ var Launcher = {
 
     this.iframe.addEventListener('mozbrowserlocationchange', function() {
       self.updateNavigationBar().bind(self);
+    });
+
+    this.iframe.addEventListener('mozbrowsererror', function(e){
+      // e.stopInmediatePropagation()
+      alert('There is no connection available. Please connect to Wifi/3G and try again.')
+      window.close();
     });
   }
 };
