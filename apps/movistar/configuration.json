@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "name"  : "Movistar Venezuela",
+      "mcc" : 734,
+      "url" : "https://mi.movistar.com.ve/"
+    },
+    {
+      "name"  : "Movistar Colombia",
+      "mcc" : 732,
+      "url" : "http://www.m.movistar.co/Servicio_en_linea/"
+    },
+    {
+      "name"  : "Movistar España",
+      "mcc" : 214,
+      "url" : "http://www.telefonica.es/portada/index.html"
+    }
+  ],
+  "default" : 
+  {
+    "name"  : "Movistar Default",
+    "url" : "http://www.telefonica.es/portada/index.html"
+  }
+}
