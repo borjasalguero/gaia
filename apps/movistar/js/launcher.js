@@ -71,7 +71,7 @@ var Launcher = {
           break;
         case 214:
           // MOVISTAR ESPAÑA
-          url = 'http://www.movistar.es/';
+          url = 'http://www.elmundo.es/';
           break;
         default:
           url = 'http://www.movistar.es/';
@@ -79,7 +79,6 @@ var Launcher = {
       }
     }
     // Append the iframe
-    
     var iframe = document.createElement('iframe');
     iframe.setAttribute('mozbrowser', 'true');
     iframe.setAttribute('mozallowfullscreen', true);
@@ -116,8 +115,6 @@ var Launcher = {
     this.iframe.addEventListener('mozbrowserlocationchange', function() {
       self.updateNavigationBar().bind(self);
     });
-    
-
   }
 };
 
