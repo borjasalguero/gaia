@@ -1055,11 +1055,13 @@ function showThreadFromSystemMessage(number) {
 }
 
 
-window.navigator.mozSetMessageHandler('notification', function() {
+window.navigator.mozSetMessageHandler('push', function() {
+  console.log('PUSH system message');
   var pushEndPoint = e.target.pushEndpoint;
   var registrations = PushManager.getRegistrations();
   for (var i = 0; i < registrations.length; i++) {
     if (registrations[i].pushEndpoint == pushEndPoint) {
+      console.log('Calling the system message handler');
       registrations[i].handler();
       break;
     }
