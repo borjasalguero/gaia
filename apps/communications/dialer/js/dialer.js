@@ -102,8 +102,9 @@ var CallHandler = (function callHandler() {
     Recents.load(function recentsLoaded() {
       RecentsDBManager.init(function() {
         RecentsDBManager.add(entry, function() {
-          RecentsDBManager.close();
-          Recents.refresh();
+          // RecentsDBManager.close();
+          // Recents.refresh();
+          Recents.updateCalllog();
         });
       });
     });

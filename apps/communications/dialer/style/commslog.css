@@ -191,6 +191,10 @@ ul[role="tablist"][data-type="filter"] > [role="tab"].selected > a {
   transition: transform 0.3s ease;
 }
 
+.recents-edit .log-item * {
+  pointer-events: none;
+}
+
 .recents-edit .log-item a {
   transform: translateX(3rem);
   transition: all 0.3s ease;

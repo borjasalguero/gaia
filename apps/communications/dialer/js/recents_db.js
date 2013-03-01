@@ -118,17 +118,26 @@ var RecentsDBManager = {
     });
   },
   deleteList: function rdbm_deleteList(list, callback) {
-    if (list.length > 0) {
-      var itemToDelete = list.pop();
-      var self = this;
-      this.delete(itemToDelete, function() {
-        self.deleteList(list, callback);
-      });
-    } else {
+    // if (list.length > 0) {
+    //   var itemToDelete = parseInt(list.pop(), 10);
+    //   var self = this;
+    //   this.delete(itemToDelete, function() {
+    //     self.deleteList(list, callback);
+    //   });
+    // } else {
+    //   if (callback) {
+    //     callback();
+    //   }
+    // }
+    for (var i = 0; i < list.length; i++) {
+      var id = parseInt(list[i],10);
+      this.delete(id);
+      console.log(id);
+    }
+
       if (callback) {
         callback();
       }
-    }
   },
   deleteAll: function rdbm_deleteAll(callback) {
     var self = this;
@@ -151,23 +160,27 @@ var RecentsDBManager = {
   },
   // Method for retrieving all recents from DB
   get: function rdbm_get(callback) {
-    var objectStore = this.db.transaction(RecentsDBManager._dbStore).
+    this._checkDBReady.call(this, function() {
+      var objectStore = this.db.transaction(RecentsDBManager._dbStore).
                         objectStore(RecentsDBManager._dbStore);
-    var recents = [];
-    var cursor = objectStore.openCursor(null, 'prev');
-    cursor.onsuccess = function(event) {
-      var item = event.target.result;
-      if (item) {
-        recents.push(item.value);
-        item.continue();
-      } else {
-        callback(recents);
-      }
-    };
+      var recents = [];
+      var cursor = objectStore.openCursor(null, 'prev');
+      cursor.onsuccess = function(event) {
+        var item = event.target.result;
+        if (item) {
+          recents.push(item.value);
+          item.continue();
+        } else {
+          callback(recents);
+        }
+      };
 
-    cursor.onerror = function(e) {
-      console.log('recents_db get failure: ', e.message);
-    };
+      cursor.onerror = function(e) {
+        console.log('recents_db get failure: ', e.message);
+      };
+
+    });
+    
   },
 
   getLast: function rdbm_getLast(callback) {
