@@ -169,16 +169,14 @@ var Recents = {
 
   // Refresh can be called on an unloaded Recents
   refresh: function re_refresh() {
-    // this.load(function loaded() {
-      RecentsDBManager.init(function() {
-        RecentsDBManager.get(function(recents) {
-          // We need l10n to be loaded before rendering
-          LazyL10n.get(function localized() {
-            Recents.render(recents);
-          });
+    RecentsDBManager.init(function() {
+      RecentsDBManager.get(function(recents) {
+        // We need l10n to be loaded before rendering
+        LazyL10n.get(function localized() {
+          Recents.render(recents);
         });
       });
-    // });
+    });
   },
 
   recentsHeaderAction: function re_recentsIconEditAction(event) {
@@ -582,7 +580,7 @@ var Recents = {
       FixedHeader.refresh();
 
       self.updateContactDetails();
-      
+
       var event = new Object();
       self._allViewGroupingPending = true;
       self._missedViewGroupingPending = true;

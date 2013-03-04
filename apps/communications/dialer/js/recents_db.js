@@ -80,7 +80,7 @@ var RecentsDBManager = {
   // Method for prepopulating the recents DB for Dev-team
   prepopulateDB: function rdbm_prepopulateDB(callback) {
     var recent;
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 500; i++) {
       recent = {
         date: (Date.now() - i * 86400000),
         type: 'incoming',
@@ -151,23 +151,25 @@ var RecentsDBManager = {
   },
   // Method for retrieving all recents from DB
   get: function rdbm_get(callback) {
-    var objectStore = this.db.transaction(RecentsDBManager._dbStore).
+    this._checkDBReady.call(this, function() {
+      var objectStore = this.db.transaction(RecentsDBManager._dbStore).
                         objectStore(RecentsDBManager._dbStore);
-    var recents = [];
-    var cursor = objectStore.openCursor(null, 'prev');
-    cursor.onsuccess = function(event) {
-      var item = event.target.result;
-      if (item) {
-        recents.push(item.value);
-        item.continue();
-      } else {
-        callback(recents);
-      }
-    };
+      var recents = [];
+      var cursor = objectStore.openCursor(null, 'prev');
+      cursor.onsuccess = function(event) {
+        var item = event.target.result;
+        if (item) {
+          recents.push(item.value);
+          item.continue();
+        } else {
+          callback(recents);
+        }
+      };
 
-    cursor.onerror = function(e) {
-      console.log('recents_db get failure: ', e.message);
-    };
+      cursor.onerror = function(e) {
+        console.log('recents_db get failure: ', e.message);
+      };
+    });
   },
 
   getLast: function rdbm_getLast(callback) {
