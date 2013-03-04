@@ -103,7 +103,8 @@ var CallHandler = (function callHandler() {
       RecentsDBManager.init(function() {
         RecentsDBManager.add(entry, function() {
           RecentsDBManager.close();
-          Recents.refresh();
+          console.log('|--------> AÑADO EL ELEMENTO A LA BBDD');
+          // Recents.refresh();
         });
       });
     });

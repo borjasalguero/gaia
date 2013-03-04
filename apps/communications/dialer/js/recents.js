@@ -795,6 +795,7 @@ var Recents = {
 // Keep the call history up to date
 document.addEventListener('mozvisibilitychange', function visibility(e) {
   if (!document.mozHidden) {
-    Recents.refresh();
+    console.log('|--------> VISIBILIDAD');
+    // Recents.refresh();
   }
 });
