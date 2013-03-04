@@ -3,7 +3,7 @@
 var Recents = {
   _: null,
   loaded: false,
-  _TIME_WINDOW: 86400000, // One week of window in calllog
+  _TIME_WINDOW: 604800000, // One week of window in calllog
   get headerEditModeText() {
     delete this.headerEditModeText;
     return this.headerEditModeText = document.

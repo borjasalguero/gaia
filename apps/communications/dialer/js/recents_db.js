@@ -86,14 +86,14 @@ var RecentsDBManager = {
         type: 'incoming',
         number: '123123123'
       };
-      this.add(recent);
+      RecentsDBManager.add(recent);
     }
     recent = {
       date: (Date.now() - 86400000),
       type: 'dialing',
       number: '321321321'
     };
-    this.add(recent);
+    RecentsDBManager.add(recent);
     if (callback) {
       callback();
     }
