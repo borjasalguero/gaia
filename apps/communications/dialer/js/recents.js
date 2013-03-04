@@ -90,7 +90,6 @@ var Recents = {
   },
 
   load: function re_load(callback) {
-    console.log('LOADED!');
     if (this.loaded) {
       if (callback) {
         callback();
