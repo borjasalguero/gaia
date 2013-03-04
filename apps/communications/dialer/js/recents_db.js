@@ -4,7 +4,7 @@ var RecentsDBManager = {
   _dbName: 'dialerRecents',
   _dbStore: 'dialerRecents',
   _dbVersion: 1,
-  prepolulated: false,
+  prepolulate: false,
   init: function rdbm_init(callback) {
     try {
       var indexedDB = window.indexedDB || window.webkitIndexedDB ||
@@ -20,9 +20,8 @@ var RecentsDBManager = {
       this.request.onsuccess = function(event) {
         //Store DB object in RecentsDBManager
         self.db = event.target.result;
-        if (!navigator.mozTelephony && !self.prepopulated) {
+        if (self.prepolulate) {
           self.prepopulateDB();
-          self.prepopulated = true;
         }
         if (callback) {
           //Callback if needed
@@ -78,6 +77,7 @@ var RecentsDBManager = {
    });
   },
   // Method for prepopulating the recents DB for Dev-team
+  // Set self.prepopulate to true in order to call it.
   prepopulateDB: function rdbm_prepopulateDB(callback) {
     var recent;
     for (var i = 0; i < 500; i++) {
