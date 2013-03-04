@@ -100,7 +100,15 @@ var CallHandler = (function callHandler() {
   /* === Recents support === */
   function handleRecentAddRequest(entry) {
     RecentsDBManager.init(function() {
-      RecentsDBManager.add(entry);
+      RecentsDBManager.add(entry, function() {
+        if (Recents.loaded) {
+          if (window.location.hash === '#recents-view') {
+            Recents.refresh();
+          } else {
+            Recents.renderNeeded = true;
+          }
+        }
+      });
     });
   }
 
@@ -388,7 +396,10 @@ var NavbarManager = {
             Recents.load();
             return;
           }
-          Recents.refresh();
+          if (Recents.renderNeeded) {
+            Recents.refresh();
+            Recents.renderNeeded = false;
+          }
           Recents.updateLatestVisit();
         });
         break;

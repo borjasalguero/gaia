@@ -77,6 +77,7 @@ var Recents = {
   },
 
   load: function re_load(callback) {
+    console.log('LOADED!');
     if (this.loaded) {
       if (callback) {
         callback();
@@ -580,7 +581,7 @@ var Recents = {
       FixedHeader.refresh();
 
       self.updateContactDetails();
-
+      
       var event = new Object();
       self._allViewGroupingPending = true;
       self._missedViewGroupingPending = true;
@@ -792,6 +793,6 @@ var Recents = {
 // Keep the call history up to date
 document.addEventListener('mozvisibilitychange', function visibility(e) {
   if (!document.mozHidden) {
-    Recents.refresh();
+    Recents.updateContactDetails();
   }
 });
