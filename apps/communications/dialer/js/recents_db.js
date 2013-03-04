@@ -150,12 +150,22 @@ var RecentsDBManager = {
     });
   },
   // Method for retrieving all recents from DB
-  get: function rdbm_get(callback) {
+  get: function rdbm_get(callback, dateFilter) {
     this._checkDBReady.call(this, function() {
       var objectStore = this.db.transaction(RecentsDBManager._dbStore).
                         objectStore(RecentsDBManager._dbStore);
       var recents = [];
-      var cursor = objectStore.openCursor(null, 'prev');
+      // Number 0 is smaller than any timestamp and empty string is larger
+      // than all numeric values.
+      var startDate = 0, endDate = '';
+      if (dateFilter && dateFilter.startDate) {
+        startDate = dateFilter.startDate;
+      }
+      if (dateFilter && dateFilter.endDate) {
+        endDate = dateFilter.endDate;
+      }
+      var range = IDBKeyRange.bound(startDate, endDate);
+      var cursor = objectStore.openCursor(range, 'prev');
       cursor.onsuccess = function(event) {
         var item = event.target.result;
         if (item) {

@@ -3,7 +3,7 @@
 var Recents = {
   _: null,
   loaded: false,
-
+  _TIME_WINDOW: 86400000, // One week of window in calllog
   get headerEditModeText() {
     delete this.headerEditModeText;
     return this.headerEditModeText = document.
@@ -74,6 +74,19 @@ var Recents = {
     delete this.recentsEditMenu;
     return this.recentsEditMenu = document.
       getElementById('edit-mode');
+  },
+
+  createFilter: function re_createFilter(startDate, endDate) {
+    var dateFilter = {
+      'startDate': Date.now() - this._TIME_WINDOW,
+    };
+    if (startDate) {
+      dateFilter.startDate = startDate;
+    } 
+    if (endDate) {
+      dateFilter.endDate = endDate;
+    }
+    return dateFilter;
   },
 
   load: function re_load(callback) {
@@ -170,13 +183,14 @@ var Recents = {
 
   // Refresh can be called on an unloaded Recents
   refresh: function re_refresh() {
+    var self = this;
     RecentsDBManager.init(function() {
       RecentsDBManager.get(function(recents) {
         // We need l10n to be loaded before rendering
         LazyL10n.get(function localized() {
           Recents.render(recents);
         });
-      });
+      }, self.createFilter());
     });
   },
 
@@ -368,7 +382,7 @@ var Recents = {
           ConfirmDialog.hide();
           self.render(recents);
           document.body.classList.remove('recents-edit');
-        });
+        }, self.createFilter());
     });
   },
 
