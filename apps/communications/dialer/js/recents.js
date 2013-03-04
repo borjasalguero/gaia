@@ -180,6 +180,27 @@ var Recents = {
     });
   },
 
+  removeContactInfo: function re_removeContact(id) {
+    // Reused code from current one.
+    // Should be refactored for avoiding so many
+    // querySelectors
+    var selector = '[data-contact-id="' + id + '"]';
+    var toUpdate = this.recentsContainer.querySelectorAll(selector);
+    for (var i = toUpdate.length - 1; i >= 0; i--) {
+      var logItem = toUpdate[i];
+      logItem.dataset.contactId = '';
+      var contactPhoto = logItem.querySelector('.call-log-contact-photo');
+      var primaryInfoMainNode = logItem.querySelector('.primary-info-main'),
+        manyContactsNode = logItem.querySelector('.many-contacts'),
+        phoneNumberAdditionalInfoNode =
+          logItem.querySelector('.call-additional-info');
+      primaryInfoMainNode.textContent = logItem.dataset.num;
+      contactPhoto.src = '';
+      logItem.classList.remove('hasPhoto');
+      phoneNumberAdditionalInfoNode.textContent = '';
+    };
+  },
+
   // Refresh can be called on an unloaded Recents
   refresh: function re_refresh() {
     var self = this;
@@ -804,8 +825,17 @@ var Recents = {
 };
 
 // Keep the call history up to date
-document.addEventListener('mozvisibilitychange', function visibility(e) {
-  if (!document.mozHidden) {
-    Recents.updateContactDetails();
+navigator.mozContacts.oncontactchange = function oncontactchange(event) {
+  switch (event.reason) {
+    case 'create':
+    case 'update':
+      Recents.updateContactDetails();
+      break;
+
+    case 'remove':
+      // Avoiding refresh the whole list. We just remove
+      // contact info from entries with data-contact-id = id
+      Recents.removeContactInfo(event.contactID);
+      break;
   }
-});
+};
