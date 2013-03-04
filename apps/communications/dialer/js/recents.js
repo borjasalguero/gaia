@@ -2,7 +2,7 @@
 
 var Recents = {
   _: null,
-  _loaded: false,
+  loaded: false,
 
   get headerEditModeText() {
     delete this.headerEditModeText;
@@ -77,14 +77,14 @@ var Recents = {
   },
 
   load: function re_load(callback) {
-    if (this._loaded) {
+    if (this.loaded) {
       if (callback) {
         callback();
       }
       return;
     }
 
-    this._loaded = true;
+    this.loaded = true;
 
     // Time to load the external css/js
     var scripts = [
@@ -97,8 +97,7 @@ var Recents = {
 
       '/dialer/js/phone_action_menu.js',
       '/dialer/js/fixed_header.js',
-      '/dialer/js/utils.js',
-      '/dialer/js/recents_db.js'
+      '/dialer/js/utils.js'
     ];
 
     loader.load(scripts, function() {
@@ -170,7 +169,7 @@ var Recents = {
 
   // Refresh can be called on an unloaded Recents
   refresh: function re_refresh() {
-    this.load(function loaded() {
+    // this.load(function loaded() {
       RecentsDBManager.init(function() {
         RecentsDBManager.get(function(recents) {
           // We need l10n to be loaded before rendering
@@ -179,7 +178,7 @@ var Recents = {
           });
         });
       });
-    });
+    // });
   },
 
   recentsHeaderAction: function re_recentsIconEditAction(event) {
@@ -583,7 +582,7 @@ var Recents = {
       FixedHeader.refresh();
 
       self.updateContactDetails();
-
+      
       var event = new Object();
       self._allViewGroupingPending = true;
       self._missedViewGroupingPending = true;
@@ -605,7 +604,7 @@ var Recents = {
 
   updateContactDetails: function re_updateContactDetails() {
     // If we're not loaded yet, nothing to update
-    if (!this._loaded) {
+    if (!this.loaded) {
       return;
     }
 
@@ -748,7 +747,7 @@ var Recents = {
 
   updateHighlighted: function re_updateHighlighted() {
     // No need to update if we're not loaded yet
-    if (!this._loaded)
+    if (!this.loaded)
       return;
 
     var itemSelector = '.log-item.highlighted',
