@@ -34,7 +34,7 @@ var Launcher = {
           var currentMCC = conn.voice.network.mcc;
           // We check which of the configurations is the one that we need
           for (var i = 0, l = this.configurations.length; i < l; i++) {
-            if (this.configurations[i] === currentMCC) {
+            if (this.configurations[i].mcc === currentMCC) {
               url = this.configurations[i].url;
               break;
             }
