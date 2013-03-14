@@ -1,11 +1,11 @@
 {
-  "name": "Movistar",
-  "description": "Movistar",
+  "name": "Mi Movistar",
+  "description": "Mi Movistar",
   "type": "certified",
   "launch_path": "/index.html",
   "developer": {
-    "name": "The Gaia Team",
-    "url": "https://github.com/mozilla-b2g/gaia"
+    "name": "Movistar",
+    "url": "http://www.movistar.es/"
   },
   "permissions": {
     "mobileconnection":{},
@@ -13,8 +13,12 @@
   },
   "locales": {
     "en-US": {
-      "name": "Movistar",
-      "description": "Movistar"
+      "name": "Mi Movistar",
+      "description": "Mi Movistar"
+    },
+    "es": {
+      "name": "Mi Movistar",
+      "description": "Mi Movistar"
     }
   },
   "default_locale": "en-US",
