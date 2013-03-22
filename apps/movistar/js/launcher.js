@@ -31,7 +31,7 @@ var Launcher = {
           url = this.defaultConfiguration.url;
         } else {
           // If a connection is available, we retrieve MCC from SIM Card
-          var currentMCC = conn.voice.network.mcc;
+          var currentMCC = conn.iccInfo.mcc;
           // We check which of the configurations is the one that we need
           for (var i = 0, l = this.configurations.length; i < l; i++) {
             if (this.configurations[i] === currentMCC) {
