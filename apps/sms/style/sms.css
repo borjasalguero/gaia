@@ -240,7 +240,7 @@ form[role="dialog"][data-type="edit"] header menu[type="toolbar"] button {
 */
 
 section[role="region"].new > header:first-child h1 {
-  display: none;
+  /*display: none;*/
 }
 
 section[role="region"].new > header:first-child form {
@@ -561,3 +561,67 @@ form.bottom[role="search"].messages-compose-form {
   color: #FF4E00;
   z-index: 4;
 }
+
+/*
+  TO Field
+*/
+
+section[role="region"].new #to-field {
+  display: block;
+}
+
+#to-field {
+  display: none;
+  text-align: left;
+  background: #E3E3E3;
+  min-height: 4.3rem;
+  line-height: 4.3rem;
+  padding: 0 2rem;
+  position: relative;
+  left: 0;
+  right: 0;
+}
+
+#to-field label{
+  float: left;
+  font-size: 1.4rem;
+}
+
+#to-field #pick-contact{
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 3rem;
+  font-size: 2rem;
+  color: black;
+  text-align: center;
+  -moz-user-select: none;
+}
+
+#to-field #pick-contact:active{
+  background: #79B4CA;
+}
+
+#fake-recipients-container {
+  margin-left: 3rem;
+  max-height: 4.3rem;
+  overflow: auto;
+  height: 4.3rem;
+  margin-right: 2rem;
+}
+
+#fake-recipients-container a{
+  background: white;
+  min-height: 2rem;
+  line-height: 2rem;
+  border: 1px solid #000000;
+  padding: .4rem 1rem;
+  font-size: 1.4rem;
+  color: black;
+  margin-right: .5rem;
+}
+
+#fake-recipients-container a:last-child{
+  margin-right: 0;
+}
+

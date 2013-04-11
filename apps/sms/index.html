@@ -96,19 +96,36 @@
             <span class="icon icon-back"></span>
           </a>
           <menu type="toolbar">
-            <a id="messages-contact-pick-button">
+            <a id="messages-contact-pick-button" class="hide">
               <span class="icon icon-user"></span>
             </a>
             <a href="#edit" id="icon-edit">
               <span class="icon icon-edit"></span>
             </a>
           </menu>
-          <h1 id="messages-header-text" data-l10n-id="messages" aria-hidden="true">Messages</h1>
-          <form id="messages-tel-form">
+          <h1 id="messages-header-text" data-l10n-id="" aria-hidden="true">New Message</h1>
+          <form id="messages-tel-form" class="hide">
             <input id="messages-recipient" type="text" name="tel" class="tel" />
             <span id="messages-clear-button" role="button" class="icon icon-clear"></span>
           </form>
         </header>
+        <form id="to-field" class="">
+          <label for="recipients">To: </label>
+          <section id="fake-recipients-container">
+            <a>+34123123</a>
+            <!--<a>+34123123</a>
+            <a>+34123123</a>
+            <a>+34123123</a>
+            <a>+34123123</a>
+            <a>+34123123</a>
+            <a>+34123123</a>
+            <a>+34123123</a>-->
+          </section>
+          <input id="recipients" type="" class="hide" />
+          <a id="pick-contact">
+            +
+          </a>
+        </form>
         <div id="contact-carrier" data-l10n-id="carrier-unknown" class="carrier-wrapper">
           Carrier unknown
         </div>

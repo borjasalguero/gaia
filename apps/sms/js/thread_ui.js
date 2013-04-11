@@ -170,6 +170,9 @@ var ThreadUI = {
     var barHeight =
       document.getElementById('messages-compose-form').offsetHeight / fontSize;
     var adjustment = barHeight - inputHeight;
+    if (window.location.hash === '#new') {
+      adjustment += 4.2;
+    }
     this.input.style.maxHeight = (viewHeight - adjustment) + 'rem';
   },
   back: function thui_back() {
