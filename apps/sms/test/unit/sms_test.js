@@ -733,174 +733,174 @@ suite('SMS App Unit-Test', function() {
     });
   });
 
-  // suite('Secure User Input', function() {
-  //   function mock(definition) {
-  //     return function mock() {
-  //       mock.called = true;
-  //       mock.args = [].slice.call(arguments);
-  //       definition.apply(this, mock.args);
-  //     };
-  //   }
+  suite('Secure User Input', function() {
+    function mock(definition) {
+      return function mock() {
+        mock.called = true;
+        mock.args = [].slice.call(arguments);
+        definition.apply(this, mock.args);
+      };
+    }
 
-  //   test('+99', function(done) {
-  //     var getPhoneDetails = Utils.getPhoneDetails;
-  //     Utils.getPhoneDetails = mock(function(number, contact, handler) {
-  //       handler({});
-  //     });
+    test('+99', function(done) {
+      var getPhoneDetails = Utils.getPhoneDetails;
+      Utils.getPhoneDetails = mock(function(number, contact, handler) {
+        handler({});
+      });
+      var ul = document.createElement('ul');
 
-  //     ThreadUI.recipient.value = '+99';
-  //     assert.doesNotThrow(function() {
-  //       ThreadUI.renderContact({
-  //         name: 'Spider Monkey',
-  //         tel: [{ value: '...' }]
-  //       });
-  //     });
-  //     assert.ok(Utils.getPhoneDetails.called);
-  //     assert.equal(Utils.getPhoneDetails.args[0], '...');
+      ThreadUI.recipients.value = '+99';
+      assert.doesNotThrow(function() {
+        ThreadUI.renderContact({
+          name: 'Spider Monkey',
+          tel: [{ value: '...' }]
+        }, '+99', ul);
+      });
+      assert.ok(Utils.getPhoneDetails.called);
+      assert.equal(Utils.getPhoneDetails.args[0], '...');
 
-  //     done();
-  //     Utils.getPhoneDetails = getPhoneDetails;
-  //   });
+      Utils.getPhoneDetails = getPhoneDetails;
+      done();
+    });
 
-  //   test('*67 [800]-555-1212', function(done) {
-  //     var getPhoneDetails = Utils.getPhoneDetails;
-  //     Utils.getPhoneDetails = mock(function(number, contact, handler) {
-  //       handler({});
-  //     });
+    test('*67 [800]-555-1212', function(done) {
+      var getPhoneDetails = Utils.getPhoneDetails;
+      Utils.getPhoneDetails = mock(function(number, contact, handler) {
+        handler({});
+      });
+      var ul = document.createElement('ul');
 
-  //     ThreadUI.recipient.value = '*67 [800]-555-1212';
-  //     assert.doesNotThrow(function() {
-  //       ThreadUI.renderContact({
-  //         name: 'Spider Monkey',
-  //         tel: [{ value: '...' }]
-  //       });
-  //     });
-  //     assert.ok(Utils.getPhoneDetails.called);
-  //     assert.equal(Utils.getPhoneDetails.args[0], '...');
+      assert.doesNotThrow(function() {
+        ThreadUI.renderContact({
+          name: 'Spider Monkey',
+          tel: [{ value: '...' }]
+        }, '*67 [800]-555-1212', ul);
+      });
+      assert.ok(Utils.getPhoneDetails.called);
+      assert.equal(Utils.getPhoneDetails.args[0], '...');
 
-  //     done();
-  //     Utils.getPhoneDetails = getPhoneDetails;
-  //   });
+      Utils.getPhoneDetails = getPhoneDetails;
+      done();
+    });
 
-  //   test('\\^$*+?.', function(done) {
-  //     var getPhoneDetails = Utils.getPhoneDetails;
-  //     Utils.getPhoneDetails = mock(function(number, contact, handler) {
-  //       handler({});
-  //     });
+    test('\\^$*+?.', function(done) {
+      var getPhoneDetails = Utils.getPhoneDetails;
+      Utils.getPhoneDetails = mock(function(number, contact, handler) {
+        handler({});
+      });
+      var ul = document.createElement('ul');
+      assert.doesNotThrow(function() {
+        ThreadUI.renderContact({
+          name: 'Spider Monkey',
+          tel: [{ value: '...' }]
+        }, '\\^$*+?.', ul);
+      });
+      assert.ok(Utils.getPhoneDetails.called);
+      assert.equal(Utils.getPhoneDetails.args[0], '...');
 
-  //     ThreadUI.recipient.value = '\\^$*+?.';
-  //     assert.doesNotThrow(function() {
-  //       ThreadUI.renderContact({
-  //         name: 'Spider Monkey',
-  //         tel: [{ value: '...' }]
-  //       });
-  //     });
-  //     assert.ok(Utils.getPhoneDetails.called);
-  //     assert.equal(Utils.getPhoneDetails.args[0], '...');
+      Utils.getPhoneDetails = getPhoneDetails;
+      done();
+    });
+  });
 
-  //     done();
-  //     Utils.getPhoneDetails = getPhoneDetails;
-  //   });
-  // });
+  suite('Defensive Contact Rendering', function() {
+    test('has tel number', function() {
+      var contact = new MockContact();
+      assert.isTrue(ThreadUI.renderContact(contact));
+    });
 
-  // suite('Defensive Contact Rendering', function() {
-  //   test('has tel number', function() {
-  //     var contact = new MockContact();
-  //     assert.isTrue(ThreadUI.renderContact(contact));
-  //   });
+    test('no tel number', function() {
+      var contact = new MockContact();
+      contact.tel = null;
+      assert.isFalse(ThreadUI.renderContact(contact));
+    });
+  });
 
-  //   test('no tel number', function() {
-  //     var contact = new MockContact();
-  //     contact.tel = null;
-  //     assert.isFalse(ThreadUI.renderContact(contact));
-  //   });
-  // });
+  suite('Sending SMS from new screen', function() {
+    test('Sending to contact should put in right thread', function(done) {
+      var mock = [
+          {
+            id: 111,
+            name: ['Pietje'],
+            tel: [{
+              value: '0624710190',
+              type: 'Mobile'
+            }]
+          }
+        ];
+      Contacts.findByString = stub(function(str, callback) {
+        callback(mock);
+      });
+      Contacts.findByPhoneNumber = stub(function(str, callback) {
+        callback(mock);
+      });
 
-  // suite('Sending SMS from new screen', function() {
-  //   test('Sending to contact should put in right thread', function(done) {
-  //     var mock = [
-  //         {
-  //           id: 111,
-  //           name: ['Pietje'],
-  //           tel: [{
-  //             value: '0624710190',
-  //             type: 'Mobile'
-  //           }]
-  //         }
-  //       ];
-  //     Contacts.findByString = stub(function(str, callback) {
-  //       callback(mock);
-  //     });
-  //     Contacts.findByPhoneNumber = stub(function(str, callback) {
-  //       callback(mock);
-  //     });
+      MessageManager.onHashChange = stub();
+      MessageManager.send = stub();
 
-  //     MessageManager.onHashChange = stub();
-  //     MessageManager.send = stub();
+      window.location.hash = '#new';
+      ThreadUI.recipient = {
+        value: '0624710190'
+      };
+      ThreadUI.input.value = 'Jo quiro';
+      ThreadUI.sendMessage();
 
-  //     window.location.hash = '#new';
-  //     ThreadUI.recipient = {
-  //       value: '0624710190'
-  //     };
-  //     ThreadUI.input.value = 'Jo quiro';
-  //     ThreadUI.sendMessage();
+      setTimeout(function() {
+        assert.equal(Contacts.findByString.callCount, 0);
+        assert.equal(Contacts.findByPhoneNumber.callCount, 1);
+        assert.equal(MessageManager.send.callCount, 1);
+        assert.equal(MessageManager.send.calledWith[0], '0624710190');
+        assert.equal(MessageManager.send.calledWith[1], 'Jo quiro');
 
-  //     setTimeout(function() {
-  //       assert.equal(Contacts.findByString.callCount, 0);
-  //       assert.equal(Contacts.findByPhoneNumber.callCount, 1);
-  //       assert.equal(MessageManager.send.callCount, 1);
-  //       assert.equal(MessageManager.send.calledWith[0], '0624710190');
-  //       assert.equal(MessageManager.send.calledWith[1], 'Jo quiro');
+        assert.equal(ThreadUI.headerText.textContent, 'Pietje');
+        assert.equal(ThreadUI.headerText.dataset.isContact, 'true');
 
-  //       assert.equal(ThreadUI.headerText.textContent, 'Pietje');
-  //       assert.equal(ThreadUI.headerText.dataset.isContact, 'true');
+        window.location.hash = '';
+        done();
+      }, 30);
+    });
 
-  //       window.location.hash = '';
-  //       done();
-  //     }, 30);
-  //   });
+    test('Sending to short nr should not link to contact', function(done) {
+      // findByString does a substring find
+      Contacts.findByString = stub(function(str, callback) {
+        callback([
+          {
+            id: 111,
+            name: ['Pietje'],
+            tel: [{
+              value: '0624710190',
+              type: 'Mobile'
+            }]
+          }
+        ]);
+      });
+      Contacts.findByPhoneNumber = stub(function(str, callback) {
+        callback([]);
+      });
 
-  //   test('Sending to short nr should not link to contact', function(done) {
-  //     // findByString does a substring find
-  //     Contacts.findByString = stub(function(str, callback) {
-  //       callback([
-  //         {
-  //           id: 111,
-  //           name: ['Pietje'],
-  //           tel: [{
-  //             value: '0624710190',
-  //             type: 'Mobile'
-  //           }]
-  //         }
-  //       ]);
-  //     });
-  //     Contacts.findByPhoneNumber = stub(function(str, callback) {
-  //       callback([]);
-  //     });
+      MessageManager.onHashChange = stub();
+      MessageManager.send = stub();
 
-  //     MessageManager.onHashChange = stub();
-  //     MessageManager.send = stub();
+      window.location.hash = '#new';
+      ThreadUI.recipient = {
+        value: '2471'
+      };
+      ThreadUI.input.value = 'Short';
+      ThreadUI.sendMessage();
 
-  //     window.location.hash = '#new';
-  //     ThreadUI.recipient = {
-  //       value: '2471'
-  //     };
-  //     ThreadUI.input.value = 'Short';
-  //     ThreadUI.sendMessage();
+      setTimeout(function() {
+        assert.equal(Contacts.findByString.callCount, 0);
+        assert.equal(Contacts.findByPhoneNumber.callCount, 1);
+        assert.equal(MessageManager.send.callCount, 1);
+        assert.equal(MessageManager.send.calledWith[0], '2471');
+        assert.equal(MessageManager.send.calledWith[1], 'Short');
 
-  //     setTimeout(function() {
-  //       assert.equal(Contacts.findByString.callCount, 0);
-  //       assert.equal(Contacts.findByPhoneNumber.callCount, 1);
-  //       assert.equal(MessageManager.send.callCount, 1);
-  //       assert.equal(MessageManager.send.calledWith[0], '2471');
-  //       assert.equal(MessageManager.send.calledWith[1], 'Short');
+        assert.equal(ThreadUI.headerText.textContent, '2471');
+        assert.equal(ThreadUI.headerText.dataset.isContact, undefined);
 
-  //       assert.equal(ThreadUI.headerText.textContent, '2471');
-  //       assert.equal(ThreadUI.headerText.dataset.isContact, undefined);
-
-  //       window.location.hash = '';
-  //       done();
-  //     }, 30);
-  //   });
-  // });
+        window.location.hash = '';
+        done();
+      }, 30);
+    });
+  });
 });
