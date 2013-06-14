@@ -436,13 +436,49 @@ var ThreadUI = global.ThreadUI = {
     });
 
     activity.onsuccess = (function() {
-      var details = Utils.getContactDetails('', activity.result);
+      Contacts.findByPhoneNumber(activity.result.number,
+        (function onContact(contacts) {
+          if (contacts.length == 0) {
+            // If we have any problem looking for the contact
+            // use the info that is coming from the activity
+            var details = Utils.getContactDetails('',
+              activity.result);
+            this.recipients.add({
+              name: details.title || details.number || activity.result.name[0],
+              number: details.number || activity.result.number,
+              source: 'contacts',
+              display: details.number || activity.result.number
+            });
+          } else {
+            var contact = contacts[0];
 
-      this.recipients.add({
-        name: details.title || details.number || activity.result.name[0],
-        number: details.number || activity.result.number,
-        source: 'contacts'
-      });
+            // Find the correct tel, if more than one
+            var tel = null;
+            for (var i = 0; i < contact.tel.length && tel == null; i++) {
+              if (contact.tel[i].value === activity.result.number) {
+                tel = contact.tel[i];
+              }
+            }
+
+            // Get the title in the standar way
+            var details = Utils.getContactDetails(tel,
+              contact);
+
+            var data = this._getDisplayObject(details.title || null, tel);
+            data.source = 'contacts';
+            /*
+              XXX: We need to move this to use a single point for
+              formating:
+              ${type}${separator}${carrier}${numberHTML}
+            */
+            data.display = data.type +
+              data.separator +
+              data.carrier +
+              tel.value;
+
+            this.recipients.add(data);
+          }
+      }).bind(this));
     }).bind(this);
 
     activity.onerror = (function(e) {
@@ -1479,6 +1515,31 @@ var ThreadUI = global.ThreadUI = {
     }).bind(this);
   },
 
+  /*
+    Given a mozContact object, extract the information from the
+    object and generate a standard object containing the fields
+    with separators and filled information that will be used
+    in templates for displaying the contact information
+  */
+  _getDisplayObject: function thui_getDisplayObject(t, tel) {
+    var number = tel.value;
+    var title = t || number;
+    var type = tel.type && tel.type.length ? tel.type[0] : '';
+    var carrier = tel.carrier ? (tel.carrier + ', ') : '';
+    var separator = type || carrier ? ' | ' : '';
+    var data = {
+      name: title,
+      number: number,
+      type: type,
+      carrier: carrier,
+      separator: separator,
+      nameHTML: '',
+      numberHTML: ''
+    };
+
+    return data;
+  },
+
   // Returns true when a contact has been rendered
   // Returns false when no contact has been rendered
   renderContact: function thui_renderContact(params) {
@@ -1558,22 +1619,8 @@ var ThreadUI = global.ThreadUI = {
         continue;
       }
 
-      var number = current.value;
-      var title = details.title || number;
-      var type = current.type && current.type.length ? current.type[0] : '';
-      var carrier = current.carrier ? (current.carrier + ', ') : '';
-      var separator = type || carrier ? ' | ' : '';
       var li = document.createElement('li');
-      var data = {
-        name: title,
-        number: number,
-        type: type,
-        carrier: carrier,
-        separator: separator,
-        nameHTML: '',
-        numberHTML: ''
-      };
-
+      var data = this._getDisplayObject(details.title, current);
 
       ['name', 'number'].forEach(function(key) {
         if (isSuggestion) {
