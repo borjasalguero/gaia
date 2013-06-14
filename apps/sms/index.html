@@ -172,6 +172,19 @@
             </button>
           </menu>
         </form>
+        <form class="hide" id="contact-disambiguation" role="dialog" data-type="confirm">
+          <section>
+            <p>
+              <strong id="disambiguation-name"></strong>
+              <small id="disambiguation-display"></small>
+            </p>
+            <p></p>
+          </section>
+          <menu>
+            <button id="disambiguation-remove-button" data-l10n-id="remove">Remove</button>
+            <button id="disambiguation-cancel-button" data-l10n-id="cancel" class="recommend">Cancel</button>
+          </menu>
+        </form>
       </section>
     </article>
     <article id="loading">
@@ -201,7 +214,7 @@
     <div id="messages-contact-tmpl" class="hide">
       <!--
       <a class="suggestion"
-        data-number="${number}" data-source="contacts" data-name="${name}">
+        data-number="${number}" data-source="contacts" data-name="${name}" data-display="${type}${separator}${carrier}${numberHTML}">
         <p class="name">${nameHTML}</p>
         <p>
           ${type}${separator}${carrier}${numberHTML}
@@ -271,7 +284,7 @@
       <!--
       <span class="recipient" x-inputmode="verbatim"
         contenteditable="${editable}"
-        data-number="${number}" data-source="${source}" data-name="${name}">
+        data-number="${number}" data-source="${source}" data-name="${name}" data-display="${display}">
         ${name}
       </span>
       -->

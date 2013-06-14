@@ -22,6 +22,7 @@
     this.email = opts.email || '';
     this.editable = opts.editable || 'true';
     this.source = opts.source || 'manual';
+    this.display = opts.display || '';
   }
   /**
    * set
@@ -714,7 +715,6 @@
                   owner.remove(
                     relation.get(target)
                   );
-                  this.reset().focus();
                 }
               }.bind(this));
 
@@ -902,19 +902,53 @@
 
   Recipients.View.prompts = {
     remove: function(candidate, callback) {
+      // Fail soon if we don't have required data
+      var data = candidate.dataset;
+      if (!data.name || !data.display) {
+        return;
+      }
+
       var response = {
         isConfirmed: false,
         recipient: candidate
       };
-      var message = navigator.mozL10n.get('recipientRemoval', {
-        recipient: candidate.textContent.trim()
-      });
-      // If it's a contact we should ask to remove
-      if (confirm(message)) {
-        response.isConfirmed = true;
+
+      /*
+        Build a custom dialog to present the display
+        information about the contact to disambiguate
+        between different phones or carriers.
+
+        If required information is not present don't
+        show the dialog
+      */
+      var dialog = document.getElementById('contact-disambiguation');
+      document.getElementById('disambiguation-name').textContent =
+        data.name;
+      document.getElementById('disambiguation-display').textContent =
+        data.display;
+
+      var cancelBtn = document.getElementById('disambiguation-cancel-button');
+      var removeBtn = document.getElementById('disambiguation-remove-button');
+
+      // Same callback for the two options,
+      // unregister listeners for both and hide
+      function onOptionSelected(evt) {
+        cancelBtn.removeEventListener('click', onOptionSelected);
+        removeBtn.removeEventListener('click', onOptionSelected);
+
+        response.isConfirmed = evt.target == removeBtn;
+
+        if (callback) {
+          callback(response);
+        }
+
+        dialog.classList.add('hide');
       }
 
-      callback(response);
+      cancelBtn.addEventListener('click', onOptionSelected);
+      removeBtn.addEventListener('click', onOptionSelected);
+
+      dialog.classList.remove('hide');
     }
   };
 
