@@ -710,7 +710,12 @@
               //
               // 1.a Delete Mode
               //
-              Recipients.View.prompts.remove(target, function(result) {
+              var recipientWrapper = {
+                target: target,
+                recipient: recipient
+              };
+              Recipients.View.prompts.
+                remove(recipientWrapper, function(result) {
                 if (result.isConfirmed) {
                   owner.remove(
                     relation.get(target)
@@ -902,53 +907,47 @@
 
   Recipients.View.prompts = {
     remove: function(candidate, callback) {
-      // Fail soon if we don't have required data
-      var data = candidate.dataset;
-      if (!data.name || !data.display) {
-        return;
-      }
-
       var response = {
         isConfirmed: false,
-        recipient: candidate
+        recipient: candidate.target
       };
-
-      /*
-        Build a custom dialog to present the display
-        information about the contact to disambiguate
-        between different phones or carriers.
-
-        If required information is not present don't
-        show the dialog
-      */
-      var dialog = document.getElementById('contact-disambiguation');
-      document.getElementById('disambiguation-name').textContent =
-        data.name;
-      document.getElementById('disambiguation-display').textContent =
-        data.display;
-
-      var cancelBtn = document.getElementById('disambiguation-cancel-button');
-      var removeBtn = document.getElementById('disambiguation-remove-button');
-
-      // Same callback for the two options,
-      // unregister listeners for both and hide
-      function onOptionSelected(evt) {
-        cancelBtn.removeEventListener('click', onOptionSelected);
-        removeBtn.removeEventListener('click', onOptionSelected);
-
-        response.isConfirmed = evt.target == removeBtn;
-
-        if (callback) {
-          callback(response);
-        }
-
-        dialog.classList.add('hide');
-      }
-
-      cancelBtn.addEventListener('click', onOptionSelected);
-      removeBtn.addEventListener('click', onOptionSelected);
-
-      dialog.classList.remove('hide');
+      // If it's a contact we should ask to remove
+      var dialog = new Dialog(
+        {
+          title: {
+            value: candidate.recipient.name || candidate.recipient.number,
+            l10n: false
+          },
+          body: {
+            value: candidate.recipient.number,
+            l10n: false
+          },
+          options: {
+            cancel: {
+              text: {
+                value: 'cancel',
+                l10n: true
+              }
+            }
+            ,
+            confirm: {
+              text: {
+                value: 'remove',
+                l10n: true
+              },
+              method: function(callback, response) {
+                if (response) {
+                  response.isConfirmed = true;
+                  if (callback && typeof callback === 'function') {
+                     callback(response);
+                  }
+                }
+              },
+              params: [callback, response]
+            }
+          }
+        });
+      dialog.show();
     }
   };
 

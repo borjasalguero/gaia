@@ -28,11 +28,3 @@ section[role="notification"] p {
   text-align: left;
 }
 
-/* 
-Dissambiguation screen is a bb dialog, but we need a bit
-of space between the title and content
-*/
-#disambiguation-display {
-  padding-top: 1rem;
-  margin-bottom: -0.5rem;
-}
