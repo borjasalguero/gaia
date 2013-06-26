@@ -1,8 +1,40 @@
 'use strict';
 
 /*
- Generic confirm screen. Options should have the following structure:
+ Generic confirm screen. Only 'cancel/default' is mandatory.  For having l10n
+ you should define the key value and you have to set l10n to 'true'. Options
+ should follow the following structure:
 
+ {
+  title: {
+    value: 'foo Title',
+    l10n: false
+  },
+  body: {
+    value: 'foo Body',
+    l10n: false
+  },
+  options: {
+    // Cancel is a mandatory option. You need to define at least the text
+    cancel: {
+      text: {
+        value: 'cancel',
+        l10n: true
+      }
+    },
+    // Confirm is an optional one. As in cancel, you could add as well a method
+    // with params
+    confirm: {
+      text: {
+        value: 'remove',
+        l10n: true
+      },
+      method: function(params) {
+        fooFunction(params);
+      },
+      params: [arg1, arg2,....]
+    }
+  }
 */
 
 
@@ -37,15 +69,13 @@ var Dialog = function(params) {
 
   // Adding this elements to the DOM
   var infoSection = document.createElement('section');
-
+  // We create the info container
   var infoContainer = document.createElement('p');
-  var safeSpace = document.createElement('p');
   infoContainer.appendChild(titleDOM);
   infoContainer.appendChild(bodyDOM);
-
+  // We append to the section
   infoSection.appendChild(infoContainer);
-  // infoSection.appendChild(safeSpace);
-
+  // At the end we have to append to the form
   this.form.appendChild(infoSection);
 
   // Adding options. In this case we have a maximum of 2, with different styles

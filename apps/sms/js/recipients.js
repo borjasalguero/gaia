@@ -928,8 +928,7 @@
                 value: 'cancel',
                 l10n: true
               }
-            }
-            ,
+            },
             confirm: {
               text: {
                 value: 'remove',
