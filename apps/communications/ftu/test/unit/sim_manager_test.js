@@ -244,14 +244,40 @@ suite('sim mgmt >', function() {
     });
   });
 
+  suite('No Telephony', function() {
+    var realMozMobileConnection;
+
+    setup(function() {
+      createDOM();
+
+      realMozMobileConnection = navigator.mozMobileConnection;
+      // no telephony API
+      navigator.mozMobileConnection = null;
+
+      SimManager.init();
+    });
+
+    teardown(function() {
+      navigator.mozMobileConnection = realMozMobileConnection;
+      realMozMobileConnection = null;
+    });
+
+    test('hide sim import section', function() {
+      SimManager.skip();
+      assert.isFalse(UIManager.simImport.classList.contains('show'));
+    });
+  });
+
   function createDOM() {
     var markup =
     '<section id="activation-screen"></section>' +
     // Import from SIM
+    '<li id="sim-import" class="importOption">' +
     '<button id="sim-import-button">' +
     ' SIM card' +
     '</button>' +
     '<p id="no-sim">To import insert a SIM card</p>' +
+    '</li>' +
     // SIM Unlock screen
     '<section id="unlock-sim-screen" class="skin-organic">' +
     ' <header>' +
