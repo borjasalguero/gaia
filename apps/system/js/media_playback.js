@@ -8,30 +8,11 @@ var MediaPlayback = {
     this.trackTitle = this.container.querySelector('.title');
     this.trackArtist = this.container.querySelector('.artist');
     this.albumArt = this.container.querySelector('.albumart');
-
-    var self = this;
-    window.navigator.mozSetMessageHandler('connection', function(request) {
-      if (request.keyword !== 'mediacomms')
-        return;
-
-      var port = request.port;
-      port.onmessage = function(event) {
-        var message = event.data;
-        switch (message.type) {
-        case 'appinfo':
-          self.updateAppInfo(message.data);
-          break;
-        case 'nowplaying':
-          self.updateNowPlaying(message.data);
-          break;
-        case 'status':
-          self.updatePlaybackStatus(message.data);
-          break;
-        }
-      };
-    });
-
     this.nowPlaying.addEventListener('click', this.openMediaApp.bind(this));
+
+    window.addEventListener('iac-appinfo', this.updateAppInfo.bind(this));
+    window.addEventListener('iac-nowplaying', this.updateNowPlaying.bind(this));
+    window.addEventListener('iac-status', this.updatePlaybackStatus.bind(this));
 
     // Listen for when the music app is terminated. We know which app to look
     // for because we got it from the "appinfo" message. Then we hide the Now
@@ -43,7 +24,8 @@ var MediaPlayback = {
     }.bind(this));
   },
 
-  updateAppInfo: function mp_updateAppInfo(info) {
+  updateAppInfo: function mp_updateAppInfo(evt) {
+    var info = evt.detail.data;
     if (!info)
       return;
 
@@ -51,7 +33,8 @@ var MediaPlayback = {
     this.icon.style.backgroundImage = 'url(' + info.icon + ')';
   },
 
-  updateNowPlaying: function mp_updateNowPlaying(metadata) {
+  updateNowPlaying: function mp_updateNowPlaying(evt) {
+    var metadata = evt.detail.data;
     if (!metadata)
       return;
 
@@ -74,7 +57,8 @@ var MediaPlayback = {
     }
   },
 
-  updatePlaybackStatus: function mp_updatePlaybackStatus(status) {
+  updatePlaybackStatus: function mp_updatePlaybackStatus(evt) {
+    var status = evt.detail.data;
     this.container.hidden = (status.playStatus === 'STOPPED');
   },
 
