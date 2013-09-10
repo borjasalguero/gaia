@@ -1,5 +1,6 @@
 'use strict';
 
+require('/shared/test/unit/load_body_html_helper.js');
 requireApp(
   'communications/ftu/test/unit/mock_navigator_moz_mobile_connection.js');
 requireApp('communications/ftu/test/unit/mock_ui_manager.js');
@@ -19,10 +20,11 @@ suite('sim mgmt >', function() {
   var realL10n,
       realMozMobileConnection;
   var mocksHelper = mocksHelperForNavigation;
-  var conn, container;
+  var conn;
 
   setup(function() {
-    createDOM();
+    // Load real html
+    loadBodyHTML('/ftu/index.html');
 
     realMozMobileConnection = navigator.mozMobileConnection;
     navigator.mozMobileConnection = MockNavigatorMozMobileConnection;
@@ -42,7 +44,6 @@ suite('sim mgmt >', function() {
     navigator.mozL10n = realL10n;
     realL10n = null;
 
-    container.parentNode.removeChild(container);
     mocksHelper.teardown();
   });
 
@@ -248,8 +249,6 @@ suite('sim mgmt >', function() {
     var realMozMobileConnection;
 
     setup(function() {
-      createDOM();
-
       realMozMobileConnection = navigator.mozMobileConnection;
       // no telephony API
       navigator.mozMobileConnection = null;
@@ -267,91 +266,4 @@ suite('sim mgmt >', function() {
       assert.isFalse(UIManager.simImport.classList.contains('show'));
     });
   });
-
-  function createDOM() {
-    var markup =
-    '<section id="activation-screen"></section>' +
-    // Import from SIM
-    '<li id="sim-import" class="importOption">' +
-    '<button id="sim-import-button">' +
-    ' SIM card' +
-    '</button>' +
-    '<p id="no-sim">To import insert a SIM card</p>' +
-    '</li>' +
-    // SIM Unlock screen
-    '<section id="unlock-sim-screen" class="skin-organic">' +
-    ' <header>' +
-    '   <h1 id="unlock-sim-header">Enter PIN code</h1>' +
-    ' </header>' +
-    ' <article role="main">' +
-    '   <section id="pincode-screen">' +
-    '     <label id="pin-label">Type your PIN code</label>' +
-    '     <label id="pin-retries-left">Unknown tries left</label>' +
-    '     <section class="input-wrapper">' +
-    '       <input id="pin-input" name="simpin" type="password" ' +
-    '              size="8" maxlength="8" />' +
-    '       <input id="fake-pin-input" class="fake-input" ' +
-    '              name="fake-simpin" type="number" ' +
-    '              size="8" maxlength="8" />' +
-    '       <label id="pin-error" class="hidden error">' +
-    '         The PIN was incorrect.' +
-    '       </label>' +
-    '     </section>' +
-    '   </section>' +
-    '   <section id="pukcode-screen">' +
-    '     <label id="puk-label">The SIM card is locked</label>' +
-    '     <label id="puk-retries-left">Unknown tries left</label>' +
-    '     <section class="input-wrapper">' +
-    '       <input id="puk-input" name="simpuk" type="password" ' +
-    '              size="8" maxlength="8" />' +
-    '       <input id="fake-puk-input" class="fake-input" name="fake-simpuk" ' +
-    '              type="number" size="8" maxlength="8" />' +
-    '       <div id="puk-info" class="info">...text...</div>' +
-    '       <div id="puk-error" class="hidden error">...text...</div>' +
-    '     </section>' +
-    '     <label id="newpin">Create new PIN</label>' +
-    '     <section class="input-wrapper">' +
-    '       <input id="newpin-input" name="newpin" ' +
-    '              type="password" size="8" maxlength="8" />' +
-    '       <input id="fake-newpin-input" class="fake-input" ' +
-    '              name="fake-newpin" type="number" size="8" maxlength="8" />' +
-    '       <label id="newpin-error" class="hidden error">text</label>' +
-    '     </section>' +
-    '     <label id="confirm-newpin">Confirm new PIN</label>' +
-    '     <section class="input-wrapper">' +
-    '       <input id="confirm-newpin-input" name="confirm-newpin" ' +
-    '              type="password" size="8" maxlength="8" />' +
-    '       <input id="fake-confirm-newpin-input" class="fake-input" ' +
-    '              name="fake-confirm-newpin" type="number" ' +
-    '              size="8" maxlength="8" />' +
-    '       <label id="confirm-newpin-error" class="hidden error">txt</label>' +
-    '     </section>' +
-    '   </section>' +
-    '   <section id="xckcode-screen">' +
-    '     <label id="xck-label" >Type your NCK code</label>' +
-    '     <label id="xck-retries-left">Unknown</label>' +
-    '     <section class="input-wrapper">' +
-    '       <input id="xck-input" name="simxck" ' +
-    '              type="password" size="16" maxlength="16" />' +
-    '       <input id="fake-xck-input" class="fake-input" name="fake-simxck" ' +
-    '              type="number" size="16" maxlength="16" />' +
-    '       <label id="xck-error" class="hidden error"></label>' +
-    '     </section>' +
-    '   </section>' +
-    ' </article>' +
-    ' <nav role="navigation">' +
-    '   <button id="skip-pin-button" class="button-left">' +
-    '     Skip' +
-    '   </button>' +
-    '   <button id="unlock-sim-button" class="recommend">' +
-    '     Send' +
-    '   </button>' +
-    ' </nav>' +
-    '</section>';
-
-    container = document.createElement('div');
-    container.insertAdjacentHTML('beforeend', markup);
-    document.body.appendChild(container);
-  };
-
 });
