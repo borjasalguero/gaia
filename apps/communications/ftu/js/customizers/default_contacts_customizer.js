@@ -5,12 +5,11 @@ var DefaultContactsCustomizer = {
     for (var i = 0; i < contacts.length; ++i) {
       var contact = new mozContact();
       contact.init(contacts[i]);
-      navigator.mozContacts.save(contact).onerror = (function(contact) {
-        return function(event) {
-          console.error('Saving default contact failed: ' + event.target.error);
-          console.log('Contact being saved was: ' + JSON.stringify(contact));
-        };
-      })(contacts[i]);
+      var savingContact = navigator.mozContacts.save(contact);
+      savingContact.onerror = function errorHandler(error) {
+        console.error('Saving default contact failed: ' + error);
+        console.error('Error while saving ' + JSON.stringify(contact));
+      };
     }
   },
 
@@ -24,8 +23,25 @@ var DefaultContactsCustomizer = {
     window.addEventListener('customization', function customize(event) {
       if (event.detail.setting == 'default_contacts') {
         window.removeEventListener('customization', customize);
-        //XXX Bug 917740 changes the way this needs to be handled.
-        self.saveContacts(event.detail.value);
+        // Retrieve default contacts from the URI provide by
+        // 'customization.json'
+        var URI = event.detail.value;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', URI, true);
+        xhr.overrideMimeType('application/json');
+        xhr.responseType = 'json';
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            self.saveContacts(xhr.response);
+          } else {
+            console.error('Failed to fetch file: ' + URI, xhr.statusText);
+          }
+        };
+        try {
+          xhr.send();
+        } catch (e) {
+          console.error('Failed to fetch file: ' + URI);
+        }
       }
     });
   }
