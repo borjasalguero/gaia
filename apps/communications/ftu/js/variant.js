@@ -4,7 +4,6 @@ var VariantManager = {
   // This file is created during the BUILD process
   customizationFile: '/resources/customization.json',
   init: function vm_init() {
-
     if (!IccHelper.enabled) {
       console.error('Impossible to access iccInfo via IccHelper. Aborting.');
       return;
@@ -20,38 +19,19 @@ var VariantManager = {
     }
   },
 
-  getVariantSettings: function settings_getVariantSettings(onsuccess, onerror) {
+  getVariantSettings: function vm_getVariantSettings(onsuccess, onerror) {
     var self = this;
     var filePath = this.customizationFile;
-    this.readJSONFile(filePath, function(data) {
+    Resources.load(filePath, 'json', function(data) {
       self._variantCustomization = data;
       if (onsuccess) onsuccess(data);
     }, onerror);
   },
 
-  readJSONFile: function settings_readJSONFile(file, onsuccess, onerror) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', file, true);
-    xhr.overrideMimeType('application/json');
-    xhr.responseType = 'json';
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        if (onsuccess) onsuccess(xhr.response);
-      } else {
-        console.error('Failed to fetch file: ' + file, xhr.statusText);
-        if (onerror) onerror();
-      }
-    };
-    try {
-      xhr.send();
-    } catch (e) {
-      console.error('Failed to fetch file: ' + file);
-      onerror && onerror();
-    }
-
-  },
-
   CUSTOMIZERS: [
+    // Base class, dont remove!
+    '/ftu/js/customizers/customizer.js',
+    // Extended classes from 'Customizer'
     '/ftu/js/customizers/wallpaper_customizer.js',
     '/ftu/js/customizers/support_contacts_customizer.js',
     '/ftu/js/customizers/default_contacts_customizer.js'
@@ -79,7 +59,7 @@ var VariantManager = {
   {
     var customizationParams = variantCustomization[this.mcc_mnc];
     if (!customizationParams) {
-      console.log('There is no variant customization available for ' +
+      console.error('There is no variant customization available for ' +
         this.mcc_mnc);
       return;
     }
@@ -105,7 +85,11 @@ var VariantManager = {
 
   },
 
-  getMccMnc: function getMccMnc() {
+  getMccMnc: function vm_getMccMnc() {
+    if (!IccHelper) {
+      return undefined;
+    }
+
     var mcc = IccHelper.iccInfo ? IccHelper.iccInfo.mcc : undefined;
     var mnc = IccHelper.iccInfo ? IccHelper.iccInfo.mnc : undefined;
     if ((mcc !== undefined) && (mcc !== null) &&
@@ -117,7 +101,7 @@ var VariantManager = {
 
   // Given a number returns a three characters string padding with zeroes
   // to the left until the desired length (3) is reached
-  normalizeCode: function normalizeCode(aCode) {
+  normalizeCode: function vm_normalizeCode(aCode) {
     var ncode = '' + aCode;
     while (ncode.length < 3) {
       ncode = '0' + ncode;
@@ -125,5 +109,3 @@ var VariantManager = {
     return ncode;
   }
 };
-
-VariantManager.init();

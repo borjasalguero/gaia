@@ -1,58 +1,30 @@
 'use strict';
 
+requireApp('communications/ftu/js/customizers/customizer.js');
 requireApp('communications/ftu/js/customizers/wallpaper_customizer.js');
 requireApp('communications/ftu/test/unit/mock_navigator_moz_settings.js');
 
-var resourcesDir = '/ftu/test/unit';
-var wallpaperPath = '/resources/wallpaper.jpg';
-var fullPath;
-
-suite('wallpaper customizer >', function() {
+suite('WallpaperCustomizer >', function() {
+  var createLockSpy, realSettings;
 
   suiteSetup(function() {
-    fullPath = resourcesDir + wallpaperPath;
+    realSettings = navigator.mozSettings;
+    navigator.mozSettings = MockNavigatorSettings;
+    createLockSpy = sinon.spy(MockNavigatorSettings, 'createLock');
   });
 
   suiteTeardown(function() {
-    fullPath = null;
+    navigator.mozSettings = realSettings;
+    realSettings = null;
+    createLockSpy.restore();
   });
 
-  test(' retrieve file ok ', function(done) {
-    WallpaperCustomizer.retrieveWallpaper(fullPath, function() {
-      done();
-    });
+  setup(function() {
+    createLockSpy.reset();
   });
 
-  test(' retrieve file fail ', function(done) {
-    var onsuccess = function() {};
-    WallpaperCustomizer.retrieveWallpaper('wrongPath.png', onsuccess,
-     function() {
-      done();
-    });
-  });
-
-  suite(' setWallpaperSetting > ', function() {
-    var createLockSpy;
-    var realSettings;
-    suiteSetup(function() {
-      realSettings = navigator.mozSettings;
-      navigator.mozSettings = MockNavigatorSettings;
-      createLockSpy = sinon.spy(MockNavigatorSettings, 'createLock');
-    });
-
-    suiteTeardown(function() {
-      navigator.mozSettings = realSettings;
-      realSettings = null;
-      createLockSpy.restore();
-    });
-
-    teardown(function() {
-      createLockSpy.reset();
-    });
-
-    test(' requested', function() {
-      WallpaperCustomizer.setWallpaperSetting('ABCDE');
-      assert.isTrue(createLockSpy.calledOnce);
-    });
+  test(' set > ', function() {
+    wallpaperCustomizer.set('ABCDE');
+    assert.isTrue(createLockSpy.calledOnce);
   });
 });
