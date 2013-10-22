@@ -72,7 +72,7 @@
   }
 
   .finish-screen-base .content {
-    background: url(images/start_for_large.png) no-repeat center 21rem / 33rem,
+    background: url(images/start_for_large.png) no-repeat center center,
                 url(images/bg_for_large.png) no-repeat;
   }
 

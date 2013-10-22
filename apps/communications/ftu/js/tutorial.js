@@ -4,6 +4,7 @@ var Tutorial = {
   tutorialSteps: {},
   numTutorialSteps: null,
   currentStep: 1,
+  imagesLoaded: [],
   layout: 'tiny',
   init: function n_init() {
     this.layout = (ScreenLayout && ScreenLayout.getCurrentLayout) ?
@@ -62,11 +63,15 @@ var Tutorial = {
     this[headerID].innerHTML = _(localeKey);
 
     // Make sure we show image when loaded
-    this[imageID].classList.add('hide');
-    this[imageID].addEventListener('load', function onLoad() {
-      this.removeEventListener('load', onLoad);
-      this.classList.remove('hide');
-    });
+    if (Tutorial.imagesLoaded.indexOf(imageID) === -1) {
+      this[imageID].classList.add('hide');
+      this[imageID].addEventListener('load', function onLoad() {
+        this.removeEventListener('load', onLoad);
+        this.classList.remove('hide');
+        Tutorial.imagesLoaded.push(imageID);
+      });
+    }
+
     this[imageID].src = this.tutorialSteps[this.currentStep].image;
   },
   handleHowToExit: function() {
