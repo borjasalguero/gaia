@@ -488,6 +488,27 @@ aside.connecting {
   left: 3rem;
 }
 
+
+/*
+  Firefox accounts
+*/
+#firefox_accounts {
+  padding: 2rem;
+  background: url(images/ff_account_logo.png);
+  background-position: center 1rem;
+  background-repeat: no-repeat;
+  -moz-box-sizing: border-box;
+}
+
+#firefox_accounts p {
+  margin-top: 21rem;
+  font-size: 1.6rem;
+}
+
+#firefox_accounts button {
+  color: white;
+}
+
 /*
   Finish process
 */

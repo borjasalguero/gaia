@@ -83,7 +83,8 @@ var UIManager = {
     'newsletter-input',
     'newsletter-success-screen',
     'offline-newsletter-error-dialog',
-    'invalid-email-error-dialog'
+    'invalid-email-error-dialog',
+    'join-firefox-account'
   ],
 
   init: function ui_init() {
@@ -105,6 +106,7 @@ var UIManager = {
     this.skipPinButton.addEventListener('click', this);
     this.backSimButton.addEventListener('click', this);
     this.unlockSimButton.addEventListener('click', this);
+    this.joinFirefoxAccount.addEventListener('click', this);
 
     this.dataConnectionSwitch.addEventListener('click', this);
 
@@ -321,6 +323,10 @@ var UIManager = {
       // Privacy
       case 'share-performance':
         this.updateSetting(event.target.name, event.target.checked);
+        break;
+      // FxOs Accounts
+      case 'join-firefox-account':
+        window.open('fxos_accounts/fxos_accounts.html');
         break;
       default:
         // wifi selection
