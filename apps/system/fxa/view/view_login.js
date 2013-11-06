@@ -32,7 +32,7 @@ var View = {
 
       },
       onNext: function(callback) {
-        FxaModuleOverlay.show('Dummy Signing');
+        FxaModuleOverlay.show('Signing');
         setTimeout(function() {
           // console.log(document.getElementById('fxa-email-input'));
           // console.log(document.getElementById('fxa-email-input').value);
@@ -66,7 +66,7 @@ var View = {
 
       },
       onNext: function(callback) {
-        FxaModuleOverlay.show('Dummy check of password');
+        FxaModuleOverlay.show('Checking password');
         setTimeout(function() {
           callback && callback();
           FxaModuleOverlay.hide();

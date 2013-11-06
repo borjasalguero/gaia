@@ -1,7 +1,6 @@
 'use strict';
 
 var UIManager = {
-
   // As in other Gaia apps, we store all the dom selectors in one
   // place and then camelCase them and attach to the main object,
   // eg. instead of calling document.getElementById('splash-screen')
@@ -83,7 +82,8 @@ var UIManager = {
     'newsletter-input',
     'newsletter-success-screen',
     'offline-newsletter-error-dialog',
-    'invalid-email-error-dialog'
+    'invalid-email-error-dialog',
+    'join-firefox-account'
   ],
 
   init: function ui_init() {
@@ -105,6 +105,7 @@ var UIManager = {
     this.skipPinButton.addEventListener('click', this);
     this.backSimButton.addEventListener('click', this);
     this.unlockSimButton.addEventListener('click', this);
+    this.joinFirefoxAccount.addEventListener('click', this);
 
     this.dataConnectionSwitch.addEventListener('click', this);
 
@@ -332,6 +333,24 @@ var UIManager = {
       // Privacy
       case 'share-performance':
         this.updateSetting(event.target.name, event.target.checked);
+        break;
+      // FxOs Accounts
+      case 'join-firefox-account':
+        // window.open('fxos_accounts/fxos_accounts.html');
+        FxAccountsIACHelper['openFlow'](function(params) {
+          
+          document.getElementById('fxa-message').textContent =
+            'Congrats! Now you are part of Mozilla' +
+            ' community. Enjoy your FxOS experience!';
+          document.getElementById('newsletter-input').value =
+            params.email;
+          document.getElementById('join-firefox-account')
+            .setAttribute('disabled', 'disabled');
+          
+          
+        }, function() {
+          console.log('Error from FxAccounts');
+        });
         break;
       default:
         // wifi selection
