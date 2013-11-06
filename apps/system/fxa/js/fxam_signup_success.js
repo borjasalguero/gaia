@@ -4,7 +4,6 @@
 FxaModuleSignUpSuccess = (function() {
   'use strict';
 
-  var states = FxaModulesStates;
   var EMAIL_SELECTOR = '#fxa-summary-email';
 
   function $(selector) {
@@ -12,7 +11,7 @@ FxaModuleSignUpSuccess = (function() {
   }
 
   function getNextState(done) {
-    return done(states.DONE);
+    return done(FxaModuleStates.DONE);
   }
 
   var Module = {

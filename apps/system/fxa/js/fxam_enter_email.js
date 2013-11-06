@@ -5,7 +5,6 @@
 FxaModuleEnterEmail = (function() {
   'use strict';
 
-  var states = FxaModulesStates;
   var FF_ACCOUNT_EMAIL_SELECTOR = '#fxa-email-input';
   // TODO update for invalid email dialogs.
   var INVALID_EMAIL_ERROR_SELECTOR = '#invalid-email-error-dialog';
@@ -37,16 +36,18 @@ FxaModuleEnterEmail = (function() {
     // TODO - hook this up to a backend somewhere.
     setTimeout(function() {
       hideCheckingEmail();
-      if ( ! email) return done(states.DONE);
-      if (email === 'newuser@newuser.com') return done(states.SET_PASSWORD);
+      if ( ! email) return done(FxaModuleStates.DONE);
+      if (email === 'newuser@newuser.com') return done(FxaModuleStates.SET_PASSWORD);
 
-      done(states.ENTER_PASSWORD);
+      done(FxaModuleStates.ENTER_PASSWORD);
     }, 500);
   }
 
   var Module = {
+    id: 'fxa-email',
     init: function() {
       // nothing to do here.
+      console.log('initialize the fxa-enter-email state');
     },
 
     onNext: function(gotoNextStepCallback) {

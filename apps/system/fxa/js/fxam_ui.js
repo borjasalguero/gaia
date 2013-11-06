@@ -34,7 +34,8 @@ var FxaModuleUI = {
   setMaxSteps: function(num) {
     this.maxSteps = num;
   },
-  loadStep: function(id, index, callback) {
+  loadStep: function(step, index, callback) {
+    var id = step.id;
     var previousStep = document.getElementsByClassName('current')[0];
     var currentStep = document.getElementById(id);
     // Lazy load of the panel
@@ -54,6 +55,10 @@ var FxaModuleUI = {
         }
       }
       this.progress(100 * (index + 1) / this.maxSteps);
+
+      if (step.init) {
+        step.init();
+      }
       callback && callback();
 
 

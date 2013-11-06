@@ -1,9 +1,7 @@
 /**
  */
-FirefoxAccountEnterPassword = (function() {
+FxaModuleEnterPassword = (function() {
   'use strict';
-
-  var states = FirefoxAccountsStates;
 
   var EMAIL_SELECTOR = '#fxa-user-email';
   var PASSWORD_SELECTOR = '#fxa-pw-input';
@@ -47,6 +45,7 @@ FirefoxAccountEnterPassword = (function() {
 
 
   var Module = {
+    id: 'fxa-password',
     init: function(options) {
       options = options || {};
 
@@ -73,7 +72,7 @@ FirefoxAccountEnterPassword = (function() {
         }
 
         this.passwordValue = passwordValue;
-        gotoNextStepCallback(states.SIGNIN_SUCCESS);
+        gotoNextStepCallback(FxaModuleStates.SIGNIN_SUCCESS);
       }.bind(this));
     },
 

@@ -5,8 +5,6 @@
 FxaModuleSetPassword = (function() {
   'use strict';
 
-  var states = FxaModulesStates;
-
   var EMAIL_SELECTOR = '#fxa-user-email';
   var PASSWORD_SELECTOR = '#fxa-pw-input';
   var SHOW_PASSWORD_SELECTOR = '#fxa-hide-pw';
@@ -47,6 +45,7 @@ FxaModuleSetPassword = (function() {
   }
 
   var Module = {
+    id: 'fxa-password',
     init: function(options) {
       options = options || {};
 
@@ -73,7 +72,7 @@ FxaModuleSetPassword = (function() {
         }
 
         this.passwordValue = passwordValue;
-        gotoNextStepCallback(states.SIGNUP_SUCCESS);
+        gotoNextStepCallback(FxaModuleStates.SIGNUP_SUCCESS);
       }.bind(this));
     },
 

@@ -9,42 +9,48 @@ var FxaModuleNavigation = {
     // Load view
     LazyLoader._js('view/view_' + flow + '.js', function loaded() {
       this.view = View;
-      this.maxSteps = Object.keys(View).length;
-      this.currentStep = this.view[0];
+      this.maxSteps = View.length;
+      this.currentStep = View.start;
 
-      FxaModuleUI.setMaxSteps(Object.keys(View).length);
-      FxaModuleUI.loadStep(this.currentStep.id, 0);
+      FxaModuleUI.setMaxSteps(View.length);
+      FxaModuleUI.loadStep(this.currentStep, 0);
     }.bind(this));
   },
   back: function() {
     this.currentStep = this.view[--this.stepCount];
-    FxaModuleUI.loadStep(this.currentStep.id, this.stepCount);
+    FxaModuleUI.loadStep(this.currentStep, this.stepCount);
   },
   next: function() {
+    /*
     var futureIndex = this.stepCount + 1;
     var futureStep = this.view[futureIndex];
+    */
     // this.currentStep = this.view[++this.stepCount];
-    function loadNextStep() {
+    function loadNextStep(futureStep) {
       FxaModuleNavigation.currentStep = futureStep;
       FxaModuleNavigation.stepCount++;
       function callback() {
-        FxaModuleNavigation.currentStep.handler.init &&
-        FxaModuleNavigation.currentStep.handler.init(
+        /*
+        FxaModuleNavigation.currentStep.init &&
+        FxaModuleNavigation.currentStep.init(
           FxaModuleManager.paramsRetrieved
         );
+        */
       };
 
-      FxaModuleUI.loadStep(FxaModuleNavigation.currentStep.id,
+      FxaModuleUI.loadStep(FxaModuleNavigation.currentStep,
         FxaModuleNavigation.stepCount,
         callback);
     };
 
 
+    /*
     if (!this.currentStep.handler.onNext) {
       loadNextStep();
     } else {
-      this.currentStep.handler.onNext(loadNextStep);
-    }
+      */
+      this.currentStep.onNext(loadNextStep);
+    /*}*/
   },
   done: function() {
     FxaModuleManager.done();

@@ -4,7 +4,6 @@
 FxaModulePasswordResetSuccess = (function() {
   'use strict';
 
-  var states = FxaModulesStates;
   var EMAIL_SELECTOR = '#ff_account--password_reset_success--email';
 
   function $(selector) {
@@ -12,7 +11,7 @@ FxaModulePasswordResetSuccess = (function() {
   }
 
   function getNextState(done) {
-    return done(states.DONE);
+    return done(FxaModuleStates.DONE);
   }
 
   var Module = {
