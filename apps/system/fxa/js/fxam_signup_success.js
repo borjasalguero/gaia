@@ -5,7 +5,7 @@ FxaModuleSignUpSuccess = (function() {
   'use strict';
 
   var states = FxaModulesStates;
-  var EMAIL_SELECTOR = '#ff_account--signup_success--email';
+  var EMAIL_SELECTOR = '#fxa-summary-email';
 
   function $(selector) {
     return document.querySelector(selector);

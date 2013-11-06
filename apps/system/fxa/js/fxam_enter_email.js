@@ -24,11 +24,19 @@ FxaModuleEnterEmail = (function() {
     return $(INVALID_EMAIL_ERROR_SELECTOR).classList.add('visible');
   }
 
+  function showCheckingEmail() {
+    FxaModuleOverlay.show('Checking email');
+  }
+
+  function hideCheckingEmail() {
+    FxaModuleOverlay.hide();
+  }
+
   function getNextState(email, done) {
-    utils.overlay.show(_('ff-account-connecting-to-firefox'), 'spinner');
+    showCheckingEmail();
     // TODO - hook this up to a backend somewhere.
     setTimeout(function() {
-      utils.overlay.hide();
+      hideCheckingEmail();
       if ( ! email) return done(states.DONE);
       if (email === 'newuser@newuser.com') return done(states.SET_PASSWORD);
 

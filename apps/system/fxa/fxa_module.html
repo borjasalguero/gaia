@@ -16,8 +16,8 @@
     <link rel="import" href="elements/fxa-email.html">
     <link rel="import" href="elements/fxa-password.html">
     <link rel="import" href="elements/fxa-final-summary.html">
-    
-    
+
+
     <script src="shared/js/lazy_loader.js"></script>
     <script src="shared/js/l10n.js"></script>
     <script src="js/utils.js"></script>
@@ -25,7 +25,15 @@
     <script src="js/fxam_navigation.js"></script>
     <script src="js/fxam_ui.js"></script>
     <script src="js/fxam_manager.js"></script>
-    
+
+    <!-- state modules -->
+    <script src="js/fxam_states.js"></script>
+    <script src="js/fxam_enter_email.js"></script>
+    <script src="js/fxam_enter_password.js"></script>
+    <script src="js/fxam_password_reset_success.js"></script>
+    <script src="js/fxam_set_password.js"></script>
+    <script src="js/fxam_signup_success.js"></script>
+
   </head>
   <body>
     <section role="region" class="skin-organic">
@@ -57,6 +65,6 @@
       <progress></progress>
       <p id="fxa-overlay-msg">Connecting to Firefox</p>
     </section>
-    
+
   </body>
 </html>
