@@ -15,6 +15,7 @@ FxaModuleSignupSuccess = (function() {
   }
 
   var Module = {
+    id: 'fxa-signup-success',
     init: function(options) {
       options = options || {};
       $(EMAIL_SELECTOR).innerHTML = options.email;

@@ -36,6 +36,7 @@ FxaModuleEnterEmail = (function() {
     // User can abort FTE without entering an email address.
     if ( ! email) return done(FxaModuleStates.DONE);
 
+    console.log("entered email", email);
     showCheckingEmail();
     isReturningUser(email, function(isReturning) {
       hideCheckingEmail();
@@ -47,9 +48,7 @@ FxaModuleEnterEmail = (function() {
   function isReturningUser(email, done) {
     setTimeout(function() {
       // TODO - hook this up to a backend somewhere.
-      if (email === 'newuser@newuser.com') return done(FxaModuleStates.SET_PASSWORD);
-
-      done(FxaModuleStates.ENTER_PASSWORD);
+      done(email === 'newuser@newuser.com');
     }, 500);
   }
 

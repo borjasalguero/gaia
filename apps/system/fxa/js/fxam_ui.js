@@ -35,6 +35,7 @@ var FxaModuleUI = {
     this.maxSteps = num;
   },
   loadStep: function(step, index, callback) {
+              console.log("step", JSON.stringify(step, null, 2), index);
     var id = step.id;
     var previousStep = document.getElementsByClassName('current')[0];
     var currentStep = document.getElementById(id);

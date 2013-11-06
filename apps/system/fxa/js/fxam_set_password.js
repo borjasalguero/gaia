@@ -8,7 +8,7 @@ FxaModuleSetPassword = (function() {
   var EMAIL_SELECTOR = '#fxa-user-email';
   var PASSWORD_SELECTOR = '#fxa-pw-input';
   var SHOW_PASSWORD_SELECTOR = '.pack-checkbox';
-  var SHOW_PASSWORD_CHECKBOX_SELECTOR = '#fxa-hide-pw';
+  var SHOW_PASSWORD_CHECKBOX_SELECTOR = '#fxa-show-pw';
   var INVALID_PASSWORD_ERROR_SELECTOR =
           '#ff-account-password-invalid-error-dialog';
   var PASSWORD_NOT_SET_ERROR_SELECTOR =
@@ -83,6 +83,7 @@ FxaModuleSetPassword = (function() {
         }
 
         this.passwordValue = passwordValue;
+        console.log("set password SUCCESS!", FxaModuleStates.SIGNUP_SUCCESS);
         gotoNextStepCallback(FxaModuleStates.SIGNUP_SUCCESS);
       }.bind(this));
     },

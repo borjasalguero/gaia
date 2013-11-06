@@ -5,8 +5,8 @@ FxaModuleEnterPassword = (function() {
 
   var EMAIL_SELECTOR = '#fxa-user-email';
   var PASSWORD_SELECTOR = '#fxa-pw-input';
-  var SHOW_PASSWORD_SELECTOR = '#fxa-hide-pw';
-  var SHOW_PASSWORD_CHECKBOX_SELECTOR = '#ffx-hide-pw';
+  var SHOW_PASSWORD_SELECTOR = '.pack-checkbox';
+  var SHOW_PASSWORD_CHECKBOX_SELECTOR = '#fxa-show-pw';
   var PASSWORD_INVALID_ERROR_SELECTOR =
           '#ff-account-password-invalid-error-dialog';
   var PASSWORD_MISMATCH_ERROR_SELECTOR =
