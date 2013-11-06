@@ -10,6 +10,9 @@
 
 var FxAccountsClient = function FxAccountsClient() {
 
+  // Account stored only for DEMO purposes.
+  var account = null;
+
   var eventCount = 0;
 
   var callbacks = {};
@@ -96,9 +99,10 @@ var FxAccountsClient = function FxAccountsClient() {
   };
 
   var getAccounts = function getAccounts(successCb, errorCb) {
-    sendMessage({
+    successCb(account);
+    /*sendMessage({
       method: 'getAccounts'
-    }, successCb, errorCb);
+    }, successCb, errorCb);*/
   };
 
   var logout = function logout(accountId, password, successCb, errorCb) {
@@ -125,6 +129,13 @@ var FxAccountsClient = function FxAccountsClient() {
   };
 
   var signUp = function signUp(accountId, password, successCb, errorCb) {
+    account = {
+      accountId: accountId,
+      logged: true,
+      verificationStatus: 'verified',
+      RPs: []
+    };
+
     sendMessage({
       method: 'signUp',
       accountId: accountId,

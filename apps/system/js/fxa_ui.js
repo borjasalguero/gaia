@@ -52,8 +52,14 @@ var FxUI = {
   // which request FxAccounts
   done: function(data) {
     // Proccess data retrieved
-    this.onsuccessCB && this.onsuccessCB(data);
-    this.close();
+    var self = this;
+    LazyLoader.load('js/fxa_client.js', function() {
+      // Mock
+      FxAccountsClient.signUp(data.email, 'dummypass', function() {
+        self.onsuccessCB();
+        self.close();
+      }, self.error);
+    });
   },
   error: function() {
     this.onerrorCB && this.onerrorCB();
