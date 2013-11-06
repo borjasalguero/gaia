@@ -338,7 +338,6 @@ var UIManager = {
       case 'join-firefox-account':
         // window.open('fxos_accounts/fxos_accounts.html');
         FxAccountsIACHelper['openFlow'](function(params) {
-          
           document.getElementById('fxa-message').textContent =
             'Congrats! Now you are part of Mozilla' +
             ' community. Enjoy your FxOS experience!';
@@ -346,8 +345,7 @@ var UIManager = {
             params.email;
           document.getElementById('join-firefox-account')
             .setAttribute('disabled', 'disabled');
-          
-          
+          document.getElementById('newsletter-input').value = params.email;
         }, function() {
           console.log('Error from FxAccounts');
         });
