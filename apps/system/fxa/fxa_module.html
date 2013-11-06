@@ -14,8 +14,13 @@
 
     <link rel="import" href="elements/fxa-intro.html">
     <link rel="import" href="elements/fxa-email.html">
-    <link rel="import" href="elements/fxa-password.html">
-    <link rel="import" href="elements/fxa-final-summary.html">
+
+    <link rel="import" href="elements/fxa-set-password.html">
+    <link rel="import" href="elements/fxa-signup-success.html">
+
+    <link rel="import" href="elements/fxa-enter-password.html">
+    <link rel="import" href="elements/fxa-signin-success.html">
+    <link rel="import" href="elements/fxa-password-reset-success.html">
 
 
     <script src="shared/js/lazy_loader.js"></script>
@@ -29,10 +34,14 @@
     <!-- state modules -->
     <script src="js/fxam_intro.js"></script>
     <script src="js/fxam_enter_email.js"></script>
-    <script src="js/fxam_enter_password.js"></script>
-    <script src="js/fxam_password_reset_success.js"></script>
+
     <script src="js/fxam_set_password.js"></script>
     <script src="js/fxam_signup_success.js"></script>
+
+    <script src="js/fxam_enter_password.js"></script>
+    <script src="js/fxam_signin_success.js"></script>
+    <script src="js/fxam_password_reset_success.js"></script>
+
     <script src="js/fxam_states.js"></script>
 
   </head>
@@ -46,8 +55,11 @@
       <article id="step-container">
         <section id="fxa-intro" is="fxa-intro" class="screen"></section>
         <section id="fxa-email" is="fxa-email" class="screen"></section>
-        <section id="fxa-password" is="fxa-password" class="screen"></section>
-        <section id="fxa-final-summary" is="fxa-final-summary" class="screen"></section>
+        <section id="fxa-set-password" is="fxa-set-password" class="screen fxa-password"></section>
+        <section id="fxa-enter-password" is="fxa-enter-password" class="screen fxa-password"></section>
+        <section id="fxa-signup-success" is="fxa-signup-success" class="screen"></section>
+        <section id="fxa-signin-success" is="fxa-signup-success" class="screen"></section>
+        <section id="fxa-password-reset-success" is="fxa-password-reset-success" class="screen"></section>
       </article>
       <nav role="navigation" class="horizontal navigation" id="fxa-module-navigation">
         <button id="fxa-module-back" class="left">

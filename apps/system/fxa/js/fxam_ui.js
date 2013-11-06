@@ -57,7 +57,7 @@ var FxaModuleUI = {
       this.progress(100 * (index + 1) / this.maxSteps);
 
       if (step.init) {
-        step.init();
+        step.init(FxaModuleManager.paramsRetrieved);
       }
       callback && callback();
 

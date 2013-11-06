@@ -1,7 +1,7 @@
 /**
  * Display the signup success message to the user.
  */
-FxaModuleSignupSuccess = (function() {
+FxaModuleSigninSuccess = (function() {
   'use strict';
 
   var EMAIL_SELECTOR = '#fxa-summary-email';

@@ -17,8 +17,8 @@ var FxaModuleNavigation = {
     }.bind(this));
   },
   back: function() {
-    this.currentStep = this.view[--this.stepCount];
-    FxaModuleUI.loadStep(this.currentStep, this.stepCount);
+    this.stepCount--;
+    FxaModuleUI.loadStep(this.lastStep, this.stepCount);
   },
   next: function() {
     /*
@@ -27,6 +27,7 @@ var FxaModuleNavigation = {
     */
     // this.currentStep = this.view[++this.stepCount];
     function loadNextStep(futureStep) {
+      FxaModuleNavigation.lastStep = FxaModuleNavigation.currentStep;
       FxaModuleNavigation.currentStep = futureStep;
       FxaModuleNavigation.stepCount++;
       function callback() {

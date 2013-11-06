@@ -137,11 +137,11 @@ body {
  * Password screen styles
  */
 
-#fxa-password h3 {
+.fxa-password h3 {
   text-align: left;
 }
 
-#fxa-password .forgot-password {
+.fxa-password .forgot-password {
   font-size: 1rem;
 }
 

@@ -4,7 +4,7 @@
 FxaModulePasswordResetSuccess = (function() {
   'use strict';
 
-  var EMAIL_SELECTOR = '#ff_account--password_reset_success--email';
+  var EMAIL_SELECTOR = '#fxa-summary-email';
 
   function $(selector) {
     return document.querySelector(selector);

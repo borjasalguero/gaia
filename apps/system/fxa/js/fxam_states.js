@@ -12,9 +12,9 @@ FxaModuleStates = (function() {
     ENTER_EMAIL: FxaModuleEnterEmail,
     SET_PASSWORD: FxaModuleSetPassword,
     ENTER_PASSWORD: FxaModuleEnterPassword,
-    SIGNUP_SUCCESS: '#ff-account-signup-success-screen',
-    SIGNIN_SUCCESS: '#ff-account-signin-success-screen',
-    PASSWORD_RESET_SUCCESS: '#ff-account-reset-password-screen',
+    SIGNUP_SUCCESS: FxaModuleSignupSuccess,
+    SIGNIN_SUCCESS: FxaModuleSigninSuccess,
+    PASSWORD_RESET_SUCCESS: FxaModulePasswordResetSuccess,
     DONE: null
   };
 }());

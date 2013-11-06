@@ -7,8 +7,8 @@ FxaModuleSetPassword = (function() {
 
   var EMAIL_SELECTOR = '#fxa-user-email';
   var PASSWORD_SELECTOR = '#fxa-pw-input';
-  var SHOW_PASSWORD_SELECTOR = '#fxa-hide-pw';
-  var SHOW_PASSWORD_CHECKBOX_SELECTOR = '#ffx-hide-pw';
+  var SHOW_PASSWORD_SELECTOR = '.pack-checkbox';
+  var SHOW_PASSWORD_CHECKBOX_SELECTOR = '#fxa-hide-pw';
   var INVALID_PASSWORD_ERROR_SELECTOR =
           '#ff-account-password-invalid-error-dialog';
   var PASSWORD_NOT_SET_ERROR_SELECTOR =
@@ -33,6 +33,15 @@ FxaModuleSetPassword = (function() {
     done(false);
   }
 
+  function showRegistering() {
+    // TODO - Hook up to i18n
+    FxaModuleOverlay.show('Registering');
+  }
+
+  function hideRegistering() {
+    FxaModuleOverlay.hide();
+  }
+
   function showPasswordNotSet() {
     return $(PASSWORD_NOT_SET_ERROR_SELECTOR).classList.add('visible');
   }
@@ -45,7 +54,7 @@ FxaModuleSetPassword = (function() {
   }
 
   var Module = {
-    id: 'fxa-password',
+    id: 'fxa-set-password',
     init: function(options) {
       options = options || {};
 
@@ -66,7 +75,9 @@ FxaModuleSetPassword = (function() {
       }
 
       var passwordValue = passwordEl.value;
+      showRegistering();
       setPassword(this.email, passwordValue, function(isPasswordSet) {
+        hideRegistering();
         if ( ! isPasswordSet) {
           return showPasswordNotSet();
         }

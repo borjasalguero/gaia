@@ -32,6 +32,15 @@ FxaModuleEnterPassword = (function() {
     done(false);
   }
 
+  function showCheckingPassword() {
+    // TODO - Hook up to i18n
+    FxaModuleOverlay.show('Authenticating');
+  }
+
+  function hideCheckingPassword() {
+    FxaModuleOverlay.hide();
+  }
+
   function showPasswordMismatch() {
     return $(PASSWORD_MISMATCH_ERROR_SELECTOR).classList.add('visible');
   }
@@ -45,7 +54,7 @@ FxaModuleEnterPassword = (function() {
 
 
   var Module = {
-    id: 'fxa-password',
+    id: 'fxa-enter-password',
     init: function(options) {
       options = options || {};
 
@@ -66,7 +75,9 @@ FxaModuleEnterPassword = (function() {
       }
 
       var passwordValue = passwordEl.value;
+      showCheckingPassword();
       checkPasswordCorrect(this.email, passwordValue, function(isPasswordCorrect) {
+        hideCheckingPassword();
         if ( ! isPasswordCorrect) {
           return showPasswordMismatch();
         }

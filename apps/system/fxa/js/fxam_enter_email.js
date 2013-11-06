@@ -24,6 +24,7 @@ FxaModuleEnterEmail = (function() {
   }
 
   function showCheckingEmail() {
+    // TODO - Hook up to i18n
     FxaModuleOverlay.show('Checking email');
   }
 
@@ -32,11 +33,20 @@ FxaModuleEnterEmail = (function() {
   }
 
   function getNextState(email, done) {
+    // User can abort FTE without entering an email address.
+    if ( ! email) return done(FxaModuleStates.DONE);
+
     showCheckingEmail();
-    // TODO - hook this up to a backend somewhere.
-    setTimeout(function() {
+    isReturningUser(email, function(isReturning) {
       hideCheckingEmail();
-      if ( ! email) return done(FxaModuleStates.DONE);
+      FxaModuleManager.setParam('email', email);
+      done(isReturning ? FxaModuleStates.SET_PASSWORD : FxaModuleStates.ENTER_PASSWORD);
+    });
+  }
+
+  function isReturningUser(email, done) {
+    setTimeout(function() {
+      // TODO - hook this up to a backend somewhere.
       if (email === 'newuser@newuser.com') return done(FxaModuleStates.SET_PASSWORD);
 
       done(FxaModuleStates.ENTER_PASSWORD);
