@@ -6,6 +6,7 @@
     <link href="../shared/style/headers.css" rel="stylesheet" type="text/css">
     <link href="../shared/style/switches.css" rel="stylesheet" type="text/css">
     <link href="../shared/style/buttons.css" rel="stylesheet" type="text/css">
+    <link href="../shared/style/confirm.css" rel="stylesheet" type="text/css">
     <link href="../shared/style/input_areas.css" rel="stylesheet" type="text/css">
     <link href="../shared/style_unstable/progress_activity.css" rel="stylesheet" type="text/css">
     <link href="style/fxa.css" rel="stylesheet" type="text/css">
@@ -27,6 +28,7 @@
     <script src="shared/js/l10n.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/fxam_overlay.js"></script>
+    <script src="js/fxam_error_overlay.js"></script>
     <script src="js/fxam_navigation.js"></script>
     <script src="js/fxam_ui.js"></script>
     <script src="js/fxam_manager.js"></script>
@@ -79,5 +81,15 @@
       <p id="fxa-overlay-msg">Connecting to Firefox</p>
     </section>
 
+    <!-- Error message overlay -->
+    <form role="dialog" data-type="confirm" id="fxa-error-overlay" class="fade-in">
+      <section>
+        <h1 id="fxa-error-title">Error message</h1>
+        <p><small id="fxa-error-msg">Error message.</small></p>
+        <menu>
+          <button class="full" data-l10n-id="OK" id="fxa-error-ok">OK</button>
+        </menu>
+      </section>
+    </form>
   </body>
 </html>

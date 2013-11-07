@@ -5,13 +5,10 @@
 FxaModuleEnterEmail = (function() {
   'use strict';
 
+  var $ = document.querySelector.bind(document);
   var FF_ACCOUNT_EMAIL_SELECTOR = '#fxa-email-input';
   // TODO update for invalid email dialogs.
   var INVALID_EMAIL_ERROR_SELECTOR = '#invalid-email-error-dialog';
-
-  function $(selector) {
-    return document.querySelector(selector);
-  }
 
   function isEmailValid(emailEl) {
     // user can skip ff account creation with no error
@@ -20,7 +17,8 @@ FxaModuleEnterEmail = (function() {
   }
 
   function showInvalidEmail() {
-    return $(INVALID_EMAIL_ERROR_SELECTOR).classList.add('visible');
+    // TODO - Hook up to i18n
+    FxaModuleErrorOverlay.show('Invalid email');
   }
 
   function showCheckingEmail() {

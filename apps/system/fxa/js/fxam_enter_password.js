@@ -3,6 +3,7 @@
 FxaModuleEnterPassword = (function() {
   'use strict';
 
+  var $ = document.querySelector.bind(document);
   var EMAIL_SELECTOR = '#fxa-user-email';
   var PASSWORD_SELECTOR = '#fxa-pw-input';
   var SHOW_PASSWORD_SELECTOR = '.pack-checkbox';
@@ -11,10 +12,6 @@ FxaModuleEnterPassword = (function() {
           '#ff-account-password-invalid-error-dialog';
   var PASSWORD_MISMATCH_ERROR_SELECTOR =
           '#ff-account-password-mismatch-error-dialog';
-
-  function $(selector) {
-    return document.querySelector(selector);
-  }
 
   // only checks whether the password passes input validation
   function isPasswordValid(passwordEl) {

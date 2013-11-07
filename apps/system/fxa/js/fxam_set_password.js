@@ -5,6 +5,7 @@
 FxaModuleSetPassword = (function() {
   'use strict';
 
+  var $ = document.querySelector.bind(document);
   var EMAIL_SELECTOR = '#fxa-user-email';
   var PASSWORD_SELECTOR = '#fxa-pw-input';
   var SHOW_PASSWORD_SELECTOR = '.pack-checkbox';
@@ -13,10 +14,6 @@ FxaModuleSetPassword = (function() {
           '#ff-account-password-invalid-error-dialog';
   var PASSWORD_NOT_SET_ERROR_SELECTOR =
           '#ff-account-password-not-set-error-dialog';
-
-  function $(selector) {
-    return document.querySelector(selector);
-  }
 
   function isPasswordValid(passwordEl) {
     var passwordValue = passwordEl.value;

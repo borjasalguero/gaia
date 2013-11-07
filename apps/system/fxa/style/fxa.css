@@ -225,3 +225,13 @@ body {
 #fxa-overlay.show {
   display: flex;
 }
+
+form[role=dialog] {
+  display: none;
+}
+
+form[role=dialog].show {
+  display: block;
+}
+
+

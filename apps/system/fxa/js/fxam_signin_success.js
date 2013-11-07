@@ -4,11 +4,8 @@
 FxaModuleSigninSuccess = (function() {
   'use strict';
 
+  var $ = document.querySelector.bind(document);
   var EMAIL_SELECTOR = '#fxa-summary-email';
-
-  function $(selector) {
-    return document.querySelector(selector);
-  }
 
   function getNextState(done) {
     return done(FxaModuleStates.DONE);
