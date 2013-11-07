@@ -21,7 +21,8 @@ FxaModuleSetPassword = (function() {
   }
 
   function showInvalidPassword() {
-    return $(INVALID_PASSWORD_ERROR_SELECTOR).classList.add('visible');
+    // TODO - Hook up to i18n
+    FxaModuleErrorOverlay.show('Invalid password');
   }
 
   function setPassword(email, password, done) {
