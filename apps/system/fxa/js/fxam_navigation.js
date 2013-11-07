@@ -2,6 +2,7 @@
 
 var FxaModuleNavigation = {
   view: null,
+  stepsRun: [],
   stepCount: 0,
   currentStep: null,
   maxSteps: null,
@@ -10,48 +11,29 @@ var FxaModuleNavigation = {
     LazyLoader._js('view/view_' + flow + '.js', function loaded() {
       this.view = View;
       this.maxSteps = View.length;
-      this.currentStep = View.start;
 
       FxaModuleUI.setMaxSteps(View.length);
-      FxaModuleUI.loadStep(this.currentStep, 0);
+      this.loadStep(View.start);
     }.bind(this));
   },
   back: function() {
     this.stepCount--;
-    FxaModuleUI.loadStep(this.lastStep, this.stepCount);
+    var lastStep = this.stepsRun.pop();
+    this.loadStep(lastStep);
+  },
+  loadStep: function(step) {
+    this.currentStep = step;
+    FxaModuleUI.loadStep(step, this.stepCount);
   },
   next: function() {
-    /*
-    var futureIndex = this.stepCount + 1;
-    var futureStep = this.view[futureIndex];
-    */
-    // this.currentStep = this.view[++this.stepCount];
-    function loadNextStep(futureStep) {
-      FxaModuleNavigation.lastStep = FxaModuleNavigation.currentStep;
-      FxaModuleNavigation.currentStep = futureStep;
-      FxaModuleNavigation.stepCount++;
-      function callback() {
-        /*
-        FxaModuleNavigation.currentStep.init &&
-        FxaModuleNavigation.currentStep.init(
-          FxaModuleManager.paramsRetrieved
-        );
-        */
-      };
-
-      FxaModuleUI.loadStep(FxaModuleNavigation.currentStep,
-        FxaModuleNavigation.stepCount,
-        callback);
-    };
+    var loadNextStep = function loadNextStep(nextStep) {
+      this.stepCount++;
+      this.stepsRun.push(this.currentStep);
+      this.loadStep(nextStep);
+    }.bind(this);
 
 
-    /*
-    if (!this.currentStep.handler.onNext) {
-      loadNextStep();
-    } else {
-      */
-      this.currentStep.onNext(loadNextStep);
-    /*}*/
+    this.currentStep.onNext(loadNextStep);
   },
   done: function() {
     FxaModuleManager.done();
