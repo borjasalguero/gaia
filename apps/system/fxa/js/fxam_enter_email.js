@@ -51,7 +51,6 @@ FxaModuleEnterEmail = (function() {
   }
 
   var Module = {
-    id: 'fxa-email',
     init: function() {
       // nothing to do here.
       console.log('initialize the fxa-enter-email state');

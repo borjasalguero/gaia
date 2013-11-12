@@ -12,7 +12,6 @@ FxaModulePasswordResetSuccess = (function() {
   }
 
   var Module = {
-    id: 'fxa-password-reset-success',
     init: function(options) {
       options = options || {};
       $(EMAIL_SELECTOR).innerHTML = options.email;

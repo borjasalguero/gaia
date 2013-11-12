@@ -52,7 +52,6 @@ FxaModuleSetPassword = (function() {
   }
 
   var Module = {
-    id: 'fxa-set-password',
     init: function(options) {
       options = options || {};
 

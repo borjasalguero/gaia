@@ -4,5 +4,5 @@
 
 var View = {
   length: 4,
-  start: FxaModuleIntro
+  start: FxaModuleStates.INTRO
 };
