@@ -41,6 +41,27 @@ FxaModuleEnterPassword = (function() {
   }
 
 
+  function requestPasswordReset(done) {
+    // TODO - hook up to IAC Client
+    setTimeout(function() {
+      done(Math.random() >= 0.5);
+    }, 500);
+  }
+
+  function showCouldNotResetPassword() {
+    FxaModuleErrorOverlay.show(_('cannotResetPassword'));
+  }
+
+  function forgotPassword() {
+    requestPasswordReset(function(isRequestHandled) {
+      if ( ! isRequestHandled) {
+        return showCouldNotResetPassword();
+      }
+
+      FxaModuleStates.setState(FxaModuleStates.PASSWORD_RESET_SUCCESS);
+    });
+  }
+
   var Module = Object.create(FxaModule);
   Module.init = function init(options) {
     options = options || {};
@@ -48,7 +69,8 @@ FxaModuleEnterPassword = (function() {
     this.importElements(
       'fxa-user-email',
       'fxa-pw-input',
-      'fxa-show-pw'
+      'fxa-show-pw',
+      'fxa-forgot-password'
     );
 
     this.email = options.email;
@@ -57,6 +79,9 @@ FxaModuleEnterPassword = (function() {
 
     this.fxaShowPw.addEventListener(
         'change', togglePasswordVisibility.bind(this), false);
+
+    this.fxaForgotPassword.addEventListener(
+        'click', forgotPassword.bind(this), false);
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
