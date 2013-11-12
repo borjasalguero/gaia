@@ -39,8 +39,14 @@ var FxaModuleUI = {
     var id = step.id;
     var previousStep = document.getElementsByClassName('current')[0];
     var currentStep = document.getElementById(id);
-    // Lazy load of the panel
-    LazyLoader._html(currentStep, function() {
+    // Lazy load current panel
+    LazyLoader.load(currentStep, function() {
+      // If the panel contains any new script elements,
+      // lazy load those as well.
+      var scripts = [].slice.call(currentStep.querySelectorAll('script'))
+        .map(function(script) { return script.getAttribute('src'); });
+      LazyLoader.load(scripts);
+
       currentStep.classList.add('current');
       if (previousStep) {
         previousStep.classList.remove('current');
