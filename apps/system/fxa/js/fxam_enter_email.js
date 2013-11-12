@@ -10,7 +10,6 @@ FxaModuleEnterEmail = (function() {
   function isEmailValid(emailEl) {
     // user can skip ff account creation with no error
     // if no email is entered.
-    console.log("checkign email validity of: " + emailEl);
     return ! emailEl.value || emailEl.validity.valid;
   }
 

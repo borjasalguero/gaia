@@ -7,9 +7,6 @@ FxaModuleStates = (function() {
   // URL hash of the screen to show. done is a special state that has no
   // corresponding screen.
 
-  window.addEventListener('hashchange', function(event) {
-  });
-
   return {
     INTRO: {
       id: 'fxa-intro',
@@ -48,6 +45,10 @@ FxaModuleStates = (function() {
     DONE: null,
     back: function() {
       window.history.back();
+    },
+    setState: function setState(state) {
+      if ( ! (state in this && state !== setState)) return;
+      document.location.hash = state.id;
     }
   };
 }());
