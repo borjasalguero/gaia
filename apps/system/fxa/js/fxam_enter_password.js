@@ -4,10 +4,6 @@ FxaModuleEnterPassword = (function() {
   'use strict';
 
   var $ = document.querySelector.bind(document);
-  var EMAIL_SELECTOR = '#fxa-user-email';
-  var PASSWORD_SELECTOR = '#fxa-pw-input';
-  var SHOW_PASSWORD_SELECTOR = '.pack-checkbox';
-  var SHOW_PASSWORD_CHECKBOX_SELECTOR = '#fxa-show-pw';
   var PASSWORD_INVALID_ERROR_SELECTOR =
           '#ff-account-password-invalid-error-dialog';
   var PASSWORD_MISMATCH_ERROR_SELECTOR =
@@ -44,10 +40,10 @@ FxaModuleEnterPassword = (function() {
   }
 
   function togglePasswordVisibility() {
-    var showPassword = !!$(SHOW_PASSWORD_CHECKBOX_SELECTOR).checked;
+    var showPassword = !!this.fxaShowPw.checked;
     var passwordFieldType = showPassword ? 'text' : 'password';
 
-    $(PASSWORD_SELECTOR).setAttribute('type', passwordFieldType);
+    this.fxaPwInput.setAttribute('type', passwordFieldType);
   }
 
 
@@ -55,17 +51,22 @@ FxaModuleEnterPassword = (function() {
   Module.init = function init(options) {
     options = options || {};
 
+    this.importElements(
+      'fxa-user-email',
+      'fxa-pw-input',
+      'fxa-show-pw'
+    );
+
     this.email = options.email;
 
-    $(EMAIL_SELECTOR).innerHTML = options.email;
+    this.fxaUserEmail.innerHTML = options.email;
 
-    // TODO - put the binding in ui.js
-    $(SHOW_PASSWORD_SELECTOR).addEventListener(
-        'click', togglePasswordVisibility, false);
+    this.fxaShowPw.addEventListener(
+        'change', togglePasswordVisibility.bind(this), false);
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
-    var passwordEl = $(PASSWORD_SELECTOR);
+    var passwordEl = this.fxaPwInput;
 
     if ( ! isPasswordValid(passwordEl)) {
       return showPasswordInvalid();

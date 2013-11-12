@@ -17,6 +17,13 @@ FxaModule = (function() {
 
     onBack: function() {
       // handle "back" button presses.
+    },
+
+    importElements: function() {
+      var ids = [].slice.call(arguments, 0);
+      ids.forEach(function(id) {
+        this[Utils.camelCase(id)] = document.getElementById(id);
+      }, this);
     }
   };
 
