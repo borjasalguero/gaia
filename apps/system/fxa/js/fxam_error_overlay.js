@@ -1,38 +1,29 @@
-var FxaModuleErrorOverlay = (function() {
-  'use strict';
+'use strict';
 
-  var $ = document.querySelector.bind(document),
-      DIALOG_SELECTOR = '#fxa-error-overlay',
-      TITLE_SELECTOR = '#fxa-error-title',
-      MESSAGE_SELECTOR = '#fxa-error-msg',
-      CLOSE_BUTTON_SELECTOR = '#fxa-error-ok';
+var FxaModuleErrorOverlay = {
+  show: function fxam_error_overlay_show(title, message) {
+    var overlayEl = document.querySelector('#fxa-error-overlay');
+    var titleEl = document.querySelector('#fxa-error-title');
+    var messageEl = document.querySelector('#fxa-error-msg');
 
+    if ( ! (overlayEl && titleEl && messageEl))
+      return;
 
-  return {
-    show: function fxam_error_overlay_show(title, message) {
-      var overlayEl = $(DIALOG_SELECTOR);
-      var titleEl = $(TITLE_SELECTOR);
-      var messageEl = $(MESSAGE_SELECTOR);
+    titleEl.textContent = title;
+    messageEl.textContent = message;
 
-      if ( ! (overlayEl && titleEl && messageEl))
-        return;
+    overlayEl.classList.add('show');
 
-      titleEl.textContent = title;
-      messageEl.textContent = message;
+    Utils.once(document.querySelector('#fxa-error-ok'), 'click', this.hide);
+  },
 
-      overlayEl.classList.add('show');
+  hide: function fxam_overlay_hide() {
+    var overlayEl = document.querySelector('#fxa-error-overlay');
+    if ( ! overlayEl)
+      return;
 
-      Utils.once(CLOSE_BUTTON_SELECTOR, 'click', this.hide);
-    },
-
-    hide: function fxam_overlay_hide() {
-      var overlayEl = $(DIALOG_SELECTOR);
-      if ( ! overlayEl)
-        return;
-
-      overlayEl.classList.remove('show');
-    }
-  };
-}());
+    overlayEl.classList.remove('show');
+  }
+};
 
 
