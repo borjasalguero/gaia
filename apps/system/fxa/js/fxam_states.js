@@ -36,7 +36,11 @@ FxaModuleStates = (function() {
       id: 'fxa-password-reset-success',
       module: 'FxaModulePasswordResetSuccess'
     },
-    DONE: null
+    DONE: null,
+    setState: function setState(state) {
+      if ( ! (state in this && state !== setState)) return;
+      document.location.hash = state.id;
+    }
   };
 }());
 
