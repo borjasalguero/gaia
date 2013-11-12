@@ -52,7 +52,6 @@ FxaModuleEnterPassword = (function() {
 
 
   var Module = {
-    id: 'fxa-enter-password',
     init: function(options) {
       options = options || {};
 

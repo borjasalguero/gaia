@@ -8,13 +8,34 @@ FxaModuleStates = (function() {
   // corresponding screen.
 
   return {
-    INTRO: FxaModuleIntro,
-    ENTER_EMAIL: FxaModuleEnterEmail,
-    SET_PASSWORD: FxaModuleSetPassword,
-    ENTER_PASSWORD: FxaModuleEnterPassword,
-    SIGNUP_SUCCESS: FxaModuleSignupSuccess,
-    SIGNIN_SUCCESS: FxaModuleSigninSuccess,
-    PASSWORD_RESET_SUCCESS: FxaModulePasswordResetSuccess,
+    INTRO: {
+      id: 'fxa-intro',
+      module: 'FxaModuleIntro'
+    },
+    ENTER_EMAIL: {
+      id: 'fxa-email',
+      module: 'FxaModuleEnterEmail'
+    },
+    SET_PASSWORD: {
+      id: 'fxa-set-password',
+      module: 'FxaModuleSetPassword'
+    },
+    ENTER_PASSWORD: {
+      id: 'fxa-enter-password',
+      module: 'FxaModuleEnterPassword'
+    },
+    SIGNUP_SUCCESS: {
+      id: 'fxa-signup-success',
+      module: 'FxaModuleSignupSuccess'
+    },
+    SIGNIN_SUCCESS: {
+      id: 'fxa-signin-success',
+      module: 'FxaModuleSigninSuccess'
+    },
+    PASSWORD_RESET_SUCCESS: {
+      id: 'fxa-password-reset-success',
+      module: 'FxaModulePasswordResetSuccess'
+    },
     DONE: null
   };
 }());
