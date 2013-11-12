@@ -80,7 +80,6 @@ FxaModuleSetPassword = (function() {
         }
 
         this.passwordValue = passwordValue;
-        console.log("set password SUCCESS!", FxaModuleStates.SIGNUP_SUCCESS);
         gotoNextStepCallback(FxaModuleStates.SIGNUP_SUCCESS);
       }.bind(this));
     },

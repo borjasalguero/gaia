@@ -7,7 +7,6 @@ FxaModuleIntro = (function() {
   var Module = {
     init: function() {
       // nothing to do here.
-      console.log('initialize the fxa-intro state');
     },
 
     onNext: function(gotoNextStepCallback) {

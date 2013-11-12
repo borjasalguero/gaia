@@ -34,7 +34,6 @@ FxaModuleEnterEmail = (function() {
     // User can abort FTE without entering an email address.
     if ( ! email) return done(FxaModuleStates.DONE);
 
-    console.log("entered email", email);
     showCheckingEmail();
     isReturningUser(email, function(isReturning) {
       hideCheckingEmail();
@@ -53,7 +52,6 @@ FxaModuleEnterEmail = (function() {
   var Module = {
     init: function() {
       // nothing to do here.
-      console.log('initialize the fxa-enter-email state');
     },
 
     onNext: function(gotoNextStepCallback) {
@@ -68,10 +66,6 @@ FxaModuleEnterEmail = (function() {
     },
 
     onBack: function() {
-    },
-
-    getEmail: function() {
-      return this.emailValue;
     }
   };
 
