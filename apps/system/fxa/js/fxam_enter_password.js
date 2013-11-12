@@ -4,11 +4,6 @@ FxaModuleEnterPassword = (function() {
   'use strict';
 
   var _ = navigator.mozL10n.get;
-  var $ = document.querySelector.bind(document);
-  var PASSWORD_INVALID_ERROR_SELECTOR =
-          '#ff-account-password-invalid-error-dialog';
-  var PASSWORD_MISMATCH_ERROR_SELECTOR =
-          '#ff-account-password-mismatch-error-dialog';
 
   // only checks whether the password passes input validation
   function isPasswordValid(passwordEl) {
@@ -35,7 +30,7 @@ FxaModuleEnterPassword = (function() {
   }
 
   function showPasswordMismatch() {
-    return $(PASSWORD_MISMATCH_ERROR_SELECTOR).classList.add('visible');
+    FxaModuleErrorOverlay.show(_('cannotAuthenticate'));
   }
 
   function togglePasswordVisibility() {

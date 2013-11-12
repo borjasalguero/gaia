@@ -6,11 +6,6 @@ FxaModuleSetPassword = (function() {
   'use strict';
 
   var _ = navigator.mozL10n.get;
-  var $ = document.querySelector.bind(document);
-  var INVALID_PASSWORD_ERROR_SELECTOR =
-          '#ff-account-password-invalid-error-dialog';
-  var PASSWORD_NOT_SET_ERROR_SELECTOR =
-          '#ff-account-password-not-set-error-dialog';
 
   function isPasswordValid(passwordEl) {
     var passwordValue = passwordEl.value;
@@ -36,7 +31,7 @@ FxaModuleSetPassword = (function() {
   }
 
   function showPasswordNotSet() {
-    return $(PASSWORD_NOT_SET_ERROR_SELECTOR).classList.add('visible');
+    FxaModuleErrorOverlay.show(_('cannotCreateAccount'));
   }
 
   function togglePasswordVisibility() {
