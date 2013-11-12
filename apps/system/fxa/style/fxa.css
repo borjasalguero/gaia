@@ -137,11 +137,11 @@ body {
  * Password screen styles
  */
 
-#fxa-password h3 {
+.fxa-password h3 {
   text-align: left;
 }
 
-#fxa-password .forgot-password {
+.fxa-password .forgot-password {
   font-size: 1rem;
 }
 
@@ -225,3 +225,13 @@ body {
 #fxa-overlay.show {
   display: flex;
 }
+
+form[role=dialog] {
+  display: none;
+}
+
+form[role=dialog].show {
+  display: block;
+}
+
+

@@ -2,6 +2,7 @@
 
 var FxaModuleNavigation = {
   view: null,
+  stepsRun: [],
   stepCount: 0,
   currentStep: null,
   maxSteps: null,
@@ -9,42 +10,32 @@ var FxaModuleNavigation = {
     // Load view
     LazyLoader._js('view/view_' + flow + '.js', function loaded() {
       this.view = View;
-      this.maxSteps = Object.keys(View).length;
-      this.currentStep = this.view[0];
+      this.maxSteps = View.length;
 
-      FxaModuleUI.setMaxSteps(Object.keys(View).length);
-      FxaModuleUI.loadStep(this.currentStep.id, 0);
+      FxaModuleUI.setMaxSteps(View.length);
+      this.loadStep(View.start);
     }.bind(this));
   },
   back: function() {
-    this.currentStep = this.view[--this.stepCount];
-    FxaModuleUI.loadStep(this.currentStep.id, this.stepCount);
+    this.stepCount--;
+    var lastStep = this.stepsRun.pop();
+    this.loadStep(lastStep);
+  },
+  loadStep: function(step) {
+    FxaModuleUI.loadStep(step, this.stepCount, function(module) {
+      this.currentModule = module;
+      this.currentStep = step;
+    }.bind(this));
   },
   next: function() {
-    var futureIndex = this.stepCount + 1;
-    var futureStep = this.view[futureIndex];
-    // this.currentStep = this.view[++this.stepCount];
-    function loadNextStep() {
-      FxaModuleNavigation.currentStep = futureStep;
-      FxaModuleNavigation.stepCount++;
-      function callback() {
-        FxaModuleNavigation.currentStep.handler.init &&
-        FxaModuleNavigation.currentStep.handler.init(
-          FxaModuleManager.paramsRetrieved
-        );
-      };
-
-      FxaModuleUI.loadStep(FxaModuleNavigation.currentStep.id,
-        FxaModuleNavigation.stepCount,
-        callback);
-    };
+    var loadNextStep = function loadNextStep(nextStep) {
+      this.stepCount++;
+      this.stepsRun.push(this.currentStep);
+      this.loadStep(nextStep);
+    }.bind(this);
 
 
-    if (!this.currentStep.handler.onNext) {
-      loadNextStep();
-    } else {
-      this.currentStep.handler.onNext(loadNextStep);
-    }
+    this.currentModule.onNext(loadNextStep);
   },
   done: function() {
     FxaModuleManager.done();
