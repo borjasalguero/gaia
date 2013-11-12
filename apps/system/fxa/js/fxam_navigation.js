@@ -19,22 +19,26 @@ var FxaModuleNavigation = {
   back: function() {
     this.stepCount--;
     var lastStep = this.stepsRun.pop();
-    this.loadStep(lastStep);
+    this.loadStep(lastStep, true);
   },
-  loadStep: function(step) {
-    FxaModuleUI.loadStep(step, this.stepCount, function(module) {
-      this.currentModule = module;
-      this.currentStep = step;
-    }.bind(this));
+  loadStep: function(step, back) {
+    FxaModuleUI.loadStep({
+      step: step,
+      count: this.stepCount,
+      back: back,
+      callback: function(module) {
+        this.currentModule = module;
+        this.currentStep = step;
+      }.bind(this)
+    });
   },
   next: function() {
+    var self = this;
     var loadNextStep = function loadNextStep(nextStep) {
-      this.stepCount++;
-      this.stepsRun.push(this.currentStep);
-      this.loadStep(nextStep);
-    }.bind(this);
-
-
+      self.stepCount++;
+      self.stepsRun.push(self.currentStep);
+      self.loadStep(nextStep);
+    };
     this.currentModule.onNext(loadNextStep);
   },
   done: function() {
