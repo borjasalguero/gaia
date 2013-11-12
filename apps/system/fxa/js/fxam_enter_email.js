@@ -5,21 +5,21 @@
 FxaModuleEnterEmail = (function() {
   'use strict';
 
+  var _ = navigator.mozL10n.get;
 
   function isEmailValid(emailEl) {
     // user can skip ff account creation with no error
     // if no email is entered.
+    console.log("checkign email validity of: " + emailEl);
     return ! emailEl.value || emailEl.validity.valid;
   }
 
   function showInvalidEmail() {
-    // TODO - Hook up to i18n
-    FxaModuleErrorOverlay.show('Invalid email');
+    FxaModuleErrorOverlay.show(_('invalidEmail'));
   }
 
   function showCheckingEmail() {
-    // TODO - Hook up to i18n
-    FxaModuleOverlay.show('Checking email');
+    FxaModuleOverlay.show(_('checkingEmail'));
   }
 
   function hideCheckingEmail() {

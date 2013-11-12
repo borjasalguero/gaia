@@ -5,6 +5,7 @@
 FxaModuleSetPassword = (function() {
   'use strict';
 
+  var _ = navigator.mozL10n.get;
   var $ = document.querySelector.bind(document);
   var INVALID_PASSWORD_ERROR_SELECTOR =
           '#ff-account-password-invalid-error-dialog';
@@ -17,8 +18,7 @@ FxaModuleSetPassword = (function() {
   }
 
   function showInvalidPassword() {
-    // TODO - Hook up to i18n
-    FxaModuleErrorOverlay.show('Invalid password');
+    FxaModuleErrorOverlay.show(_('invalidPassword'));
   }
 
   function setPassword(email, password, done) {
@@ -28,8 +28,7 @@ FxaModuleSetPassword = (function() {
   }
 
   function showRegistering() {
-    // TODO - Hook up to i18n
-    FxaModuleOverlay.show('Registering');
+    FxaModuleOverlay.show(_('registering'));
   }
 
   function hideRegistering() {
