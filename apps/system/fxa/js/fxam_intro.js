@@ -4,17 +4,9 @@
 FxaModuleIntro = (function() {
   'use strict';
 
-  var Module = {
-    init: function() {
-      // nothing to do here.
-    },
-
-    onNext: function(gotoNextStepCallback) {
-      gotoNextStepCallback(FxaModuleStates.ENTER_EMAIL);
-    },
-
-    onBack: function() {
-    }
+  var Module = Object.create(FxaModule);
+  Module.onNext = function onNext(gotoNextStepCallback) {
+    gotoNextStepCallback(FxaModuleStates.ENTER_EMAIL);
   };
 
   return Module;

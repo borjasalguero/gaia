@@ -11,19 +11,14 @@ FxaModuleSigninSuccess = (function() {
     return done(FxaModuleStates.DONE);
   }
 
-  var Module = {
-    init: function(options) {
-      options = options || {};
-      $(EMAIL_SELECTOR).innerHTML = options.email;
-    },
+  var Module = Object.create(FxaModule);
+  Module.init = function init(options) {
+    options = options || {};
+    $(EMAIL_SELECTOR).innerHTML = options.email;
+  };
 
-    onNext: function(gotoNextStepCallback) {
-      getNextState(gotoNextStepCallback);
-    },
-
-    onBack: function() {
-    }
-
+  Module.onNext = function(gotoNextStepCallback) {
+    getNextState(gotoNextStepCallback);
   };
 
   return Module;

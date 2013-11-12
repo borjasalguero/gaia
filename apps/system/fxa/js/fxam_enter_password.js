@@ -51,44 +51,38 @@ FxaModuleEnterPassword = (function() {
   }
 
 
-  var Module = {
-    init: function(options) {
-      options = options || {};
+  var Module = Object.create(FxaModule);
+  Module.init = function init(options) {
+    options = options || {};
 
-      this.email = options.email;
+    this.email = options.email;
 
-      $(EMAIL_SELECTOR).innerHTML = options.email;
+    $(EMAIL_SELECTOR).innerHTML = options.email;
 
-      // TODO - put the binding in ui.js
-      $(SHOW_PASSWORD_SELECTOR).addEventListener(
-          'click', togglePasswordVisibility, false);
-    },
+    // TODO - put the binding in ui.js
+    $(SHOW_PASSWORD_SELECTOR).addEventListener(
+        'click', togglePasswordVisibility, false);
+  };
 
-    onNext: function(gotoNextStepCallback) {
-      var passwordEl = $(PASSWORD_SELECTOR);
+  Module.onNext = function onNext(gotoNextStepCallback) {
+    var passwordEl = $(PASSWORD_SELECTOR);
 
-      if ( ! isPasswordValid(passwordEl)) {
-        return showPasswordInvalid();
+    if ( ! isPasswordValid(passwordEl)) {
+      return showPasswordInvalid();
+    }
+
+    var passwordValue = passwordEl.value;
+    showCheckingPassword();
+    checkPasswordCorrect(this.email, passwordValue,
+          function(isPasswordCorrect) {
+      hideCheckingPassword();
+      if ( ! isPasswordCorrect) {
+        return showPasswordMismatch();
       }
 
-      var passwordValue = passwordEl.value;
-      showCheckingPassword();
-      checkPasswordCorrect(this.email, passwordValue, function(isPasswordCorrect) {
-        hideCheckingPassword();
-        if ( ! isPasswordCorrect) {
-          return showPasswordMismatch();
-        }
-
-        this.passwordValue = passwordValue;
-        gotoNextStepCallback(FxaModuleStates.SIGNIN_SUCCESS);
-      }.bind(this));
-    },
-
-    getPassword: function() {
-      return this.passwordValue;
-    },
-
-    togglePasswordVisibility: togglePasswordVisibility
+      this.passwordValue = passwordValue;
+      gotoNextStepCallback(FxaModuleStates.SIGNIN_SUCCESS);
+    }.bind(this));
   };
 
   return Module;

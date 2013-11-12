@@ -51,47 +51,37 @@ FxaModuleSetPassword = (function() {
     $(PASSWORD_SELECTOR).setAttribute('type', passwordFieldType);
   }
 
-  var Module = {
-    init: function(options) {
-      options = options || {};
+  var Module = Object.create(FxaModule);
+  Module.init = function init(options) {
+    options = options || {};
 
-      this.email = options.email;
+    this.email = options.email;
 
-      $(EMAIL_SELECTOR).innerHTML = options.email;
+    $(EMAIL_SELECTOR).innerHTML = options.email;
 
-      // TODO - put the binding in ui.js
-      $(SHOW_PASSWORD_SELECTOR).addEventListener(
-          'click', togglePasswordVisibility, false);
-    },
+    // TODO - put the binding in ui.js
+    $(SHOW_PASSWORD_SELECTOR).addEventListener(
+        'click', togglePasswordVisibility, false);
+  };
 
-    onNext: function(gotoNextStepCallback) {
-      var passwordEl = $(PASSWORD_SELECTOR);
+  Module.onNext = function onNext(gotoNextStepCallback) {
+    var passwordEl = $(PASSWORD_SELECTOR);
 
-      if ( ! isPasswordValid(passwordEl)) {
-        return showInvalidPassword();
+    if ( ! isPasswordValid(passwordEl)) {
+      return showInvalidPassword();
+    }
+
+    var passwordValue = passwordEl.value;
+    showRegistering();
+    setPassword(this.email, passwordValue, function(isPasswordSet) {
+      hideRegistering();
+      if ( ! isPasswordSet) {
+        return showPasswordNotSet();
       }
 
-      var passwordValue = passwordEl.value;
-      showRegistering();
-      setPassword(this.email, passwordValue, function(isPasswordSet) {
-        hideRegistering();
-        if ( ! isPasswordSet) {
-          return showPasswordNotSet();
-        }
-
-        this.passwordValue = passwordValue;
-        gotoNextStepCallback(FxaModuleStates.SIGNUP_SUCCESS);
-      }.bind(this));
-    },
-
-    onBack: function() {
-    },
-
-    getPassword: function() {
-      return this.passwordValue;
-    },
-
-    togglePasswordVisibility: togglePasswordVisibility
+      this.passwordValue = passwordValue;
+      gotoNextStepCallback(FxaModuleStates.SIGNUP_SUCCESS);
+    }.bind(this));
   };
 
   return Module;

@@ -49,24 +49,16 @@ FxaModuleEnterEmail = (function() {
     }, 500);
   }
 
-  var Module = {
-    init: function() {
-      // nothing to do here.
-    },
+  var Module = Object.create(FxaModule);
+  Module.onNext = function onNext(gotoNextStepCallback) {
+    var emailEl = $(FF_ACCOUNT_EMAIL_SELECTOR);
 
-    onNext: function(gotoNextStepCallback) {
-      var emailEl = $(FF_ACCOUNT_EMAIL_SELECTOR);
+    if ( ! isEmailValid(emailEl)) return showInvalidEmail();
 
-      if ( ! isEmailValid(emailEl)) return showInvalidEmail();
+    var emailValue = emailEl.value;
+    this.emailValue = emailValue;
 
-      var emailValue = emailEl.value;
-      this.emailValue = emailValue;
-
-      getNextState(emailValue, gotoNextStepCallback);
-    },
-
-    onBack: function() {
-    }
+    getNextState(emailValue, gotoNextStepCallback);
   };
 
   return Module;
