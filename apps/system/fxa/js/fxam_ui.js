@@ -63,13 +63,13 @@ var FxaModuleUI = {
         this.progress(100 * (params.count + 1) / this.maxSteps);
 
         // the module was just lazy loaded. We can now get a reference to it.
-        var module = window[params.step.module];
+        /*var module = window[params.step.module];
         if (module.init) {
           module.init(FxaModuleManager.paramsRetrieved);
-        }
+        }*/
 
         this._animate(previousStep, currentStep, params.back);
-        params.callback && params.callback(module);
+        params.callback && params.callback();
       }.bind(this));
     }.bind(this));
   },
