@@ -16,6 +16,7 @@ suite('DownloadFormatter', function() {
 
   suiteTeardown(function() {
     navigator.mozL10n = realL10n;
+    realL10n = null;
   });
 
   var l10nSpy;
@@ -35,11 +36,6 @@ suite('DownloadFormatter', function() {
     var params = l10nSpy.args[1][1];
     assert.equal(params.size, 1.50);
     assert.equal(params.unit, 'byteUnit-KB');
-  });
-
-  test(' getPercentage', function() {
-    var percentage = DownloadFormatter.getFormattedPercentage(51.1, 100);
-    assert.equal(percentage, 51.10);
   });
 
   test(' getFileName', function() {
@@ -173,7 +169,7 @@ suite('DownloadFormatter', function() {
   });
 
 
-  test(' getDownloadedPercentage without decimals', function() {
+  test(' getPercentage', function() {
     var total = 1024 * 1024 * 1024; // 1 GB
     var currently = total * 0.5; // 0.5 GB or 50 %
     var mockDownload = new MockDownload(
@@ -182,22 +178,10 @@ suite('DownloadFormatter', function() {
         currentBytes: currently
       }
     );
-    var percentage = DownloadFormatter.getDownloadedPercentage(mockDownload);
+    var percentage = DownloadFormatter.getPercentage(mockDownload);
     assert.equal(percentage, '50');
   });
 
-  test(' getDownloadedPercentage with decimals', function() {
-    var total = 1024 * 1024 * 1024; // 1 GB
-    var currently = total * 0.611; // 0.611 GB or 61.10 %
-    var mockDownload = new MockDownload(
-      {
-        totalBytes: total,
-        currentBytes: currently
-      }
-    );
-    var percentage = DownloadFormatter.getDownloadedPercentage(mockDownload);
-    assert.equal(percentage, '61.10');
-  });
 
   test(' getUUID', function() {
     var now = new Date();

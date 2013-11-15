@@ -7,20 +7,30 @@
   padding: 0;
 }
 
+#downloadList {
+  overflow: none;
+  height: 100%;
+}
+
+#downloadList ul{
+  overflow: auto !important;
+  height: calc(100% - 5rem);
+}
+
 #downloadList strong {
   font-weight: 500;
 }
 
 /* Text */
 .fileName {
-  padding: 1rem 3rem 1rem;
-  pointer-events: none;
+  padding: 1rem 6rem 1rem 3.5rem;
+  -moz-boz-sizing: border-box;
 }
 
 .info {
   font-size: 1.2rem;
-  padding: 0 3rem 0;
-  pointer-events: none;
+  padding: 0 6rem 0 3.5rem;
+  -moz-boz-sizing: border-box;
 }
 
 /* Informative icons */
@@ -49,11 +59,12 @@
 /* List items */
 #downloadList li {
   margin: 0;
+  position: relative;
   pointer-events: none;
 }
 
-#downloadList li[data-state="stopped"] {
-  pointer-events: all !important;
+#downloadList li *{
+  pointer-events: none;
 }
 
 #downloadList ul li progress {
@@ -63,26 +74,31 @@
 /* Graphic content */
 #downloadList aside {
   margin: 1.75rem 0.5rem 0 0;
+  background-position: center;
   position: absolute;
-  pointer-events: none;
+  /*background: red;*/
 }
 
 #downloadList aside.pack-end {
-  margin: 1.75rem 0 0 0.5rem;
-  pointer-events: all;
+  padding: 1.4rem;
+  margin: 0;
+  pointer-events: all !important;
+  right: 0;
 }
 
 /* Progress */
 #downloadList ul > li progress[value] {
-  width: 100% !important;
+  width: calc(100% - 0.2rem) !important;
   height: 0.5rem !important;
   margin: 0;
+  
   background: #e7e7e7;
   border: 0.1rem solid #b6b6b6;
 }
 
 #downloadList ul > li progress[value]::-moz-progress-bar {
-  margin: 1px;
+  margin: .1rem;
+  
   height: calc(100% - 0.2rem);
   border-radius: 0.2rem;
   background-color: #01c5ed;

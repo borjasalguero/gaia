@@ -27,6 +27,11 @@
     var _ = navigator.mozL10n.get;
     var index = parseInt(Math.round(_log1024(bytes)));
     var value = (bytes / Math.pow(1024, index)).toFixed(NUMBER_OF_DECIMALS);
+    // Special case, otherwise will be infinite
+    if (bytes == 0) {
+      index = 0;
+      value = 0;
+    }
 
     return _('fileSize', {
       size: value,
@@ -35,19 +40,22 @@
   }
 
   function _calcPercentage(currently, total) {
-    var percentage = (100 * currently) / total;
-    var noPrecisionNeeded = !((100 * currently) % total);
-    return !noPrecisionNeeded ?
-      percentage.toFixed(NUMBER_OF_DECIMALS) : percentage;
+    if (total == 0) {
+      return 0;
+    }
+    var percentage = parseInt((100 * currently) / total);
+    return percentage;
   }
-
 
   var DownloadFormatter = {
     getFormattedSize: function(bytes) {
       return _getFormattedSize(bytes);
     },
-    getFormattedPercentage: function(partial, total) {
-      return _calcPercentage(partial, total);
+    getPercentage: function(download) {
+      return _calcPercentage(
+                download.currentBytes,
+                download.totalBytes
+              );
     },
     getFileName: function(download) {
       var tmpAnchorElement = document.createElement('a');
@@ -61,11 +69,6 @@
     getDownloadedSize: function(download) {
       var bytes = download.currentBytes;
       return _getFormattedSize(bytes);
-    },
-    getDownloadedPercentage: function(download) {
-      var totalBytes = download.totalBytes;
-      var downloadedBytes = download.currentBytes;
-      return _calcPercentage(downloadedBytes, totalBytes);
     },
     getDate: function(download, callback) {
       var date = download.startTime;

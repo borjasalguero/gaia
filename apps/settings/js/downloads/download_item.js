@@ -12,6 +12,10 @@
 // or update the content if we know the download was modified:
 //
 // DownloadItem.update(li, download);
+//
+// For make it works you need to import
+// "shared/locales/download.ini"
+
 var DownloadItem = (function DownloadItem() {
 
   // Mapp the download status with the classes that the
@@ -24,29 +28,17 @@ var DownloadItem = (function DownloadItem() {
       'asideAction': ['actionCancel', 'pack-end'],
       'progress': []
     },
-    'paused': {
-      'asideStatus': ['hide'],
-      'asideAction': ['actionRetry', 'pack-end'],
-      'progress': ['hide']
-    },
-    'stopped': {
+    // TODO : Check if it would ne needed a 'canceled' state
+    'succeeded': {
       'asideStatus': ['hide'],
       'asideAction': ['hide'],
       'progress': ['hide']
     },
-    'canceled': {
+    'stopped': {
       'asideStatus': ['statusError'],
       'asideAction': ['actionRetry', 'pack-end'],
       'progress': ['hide']
     }
-  };
-
-  // Helper function extract the download name from the url
-  // @param {DomDownload} Download object
-  var getDownloadName = function getDownloadName(download) {
-    var separator = download.url.lastIndexOf('/');
-
-    return separator > 0 ? download.url.substr(separator + 1) : download.url;
   };
 
   // Generates the following DOM, take into account that
@@ -58,7 +50,7 @@ var DownloadItem = (function DownloadItem() {
   //  <aside class="<statusError | >">
   //  </aside>
   //  <aside class="<actionCancel | actionRetry> pack-end"
-  //      data-url="<url>">
+  //      data-id="<downloadId>">
   //  </aside>
   //  <p class="fileName">Filename.doc</p>
   //  <p class="info">57% - 4.1MB of 7MB</p>
@@ -68,16 +60,18 @@ var DownloadItem = (function DownloadItem() {
     var li = document.createElement('li');
     li.dataset.url = download.url;
     li.dataset.state = download.state;
+    // TODO Use ID from API instead
+    li.id = getDownloadId(download);
 
     var asideStatus = document.createElement('aside');
 
     var asideAction = document.createElement('aside');
     asideAction.classList.add('pack-end');
-    asideAction.dataset.url = download.url;
+    asideAction.dataset.id = getDownloadId(download);
 
     var pFileName = document.createElement('p');
     pFileName.classList.add('fileName');
-    pFileName.textContent = getDownloadName(download);
+    pFileName.textContent = DownloadFormatter.getFileName(download);
 
     var pInfo = document.createElement('p');
     pInfo.classList.add('info');
@@ -101,15 +95,12 @@ var DownloadItem = (function DownloadItem() {
   // @param {Dom Element} LI element representing the download
   // @param {DomDownload} Download object
   var update = function update(domElement, download) {
-    if (download.state === 'removed') {
-      // State not updateable
-      return;
-    }
     var styles = STATUS_MAPPING[download.state];
 
     if (styles == null) {
       // The only possible value is for removed, we don't have UI
       // for that
+      console.error('Style not found for download_item');
       return null;
     }
 
@@ -126,36 +117,36 @@ var DownloadItem = (function DownloadItem() {
   //   elements accesible by name
   // @param {DomDownload} Download object
   var updateContent = function updateContent(domNodes, download) {
+    var _ = navigator.mozL10n.get;
+
     if (download.state === 'downloading') {
-      var percentage = Math.floor(
-        download.currentBytes * 100 / download.totalBytes);
-      var current = download.currentBytes / 1024;
-      var total = download.totalBytes / 1024;
-      domNodes['progress'].value = percentage;
-      domNodes['info'].textContent = percentage + '% - ' +
-        current.toFixed(2) + 'MB of ' + total.toFixed(2) + 'MB';
+
+      domNodes['progress'].value =
+        DownloadFormatter.getPercentage(download);
+
+      domNodes['info'].textContent =
+        _('partialResult',
+          {
+            partial: DownloadFormatter.getDownloadedSize(download),
+            total: DownloadFormatter.getTotalSize(download)
+          }
+        );
+
     } else {
-      //XXX: Right now the api docs don't show a timestamp for the
-      // download, but we will need to ask for it
-      var time = 'Just now';
-      var extra = '';
+      var status = '';
       switch (download.state) {
-        case 'paused':
-          extra = navigator.mozL10n.get('stopped') || 'Stopped';
-          break;
-        case 'canceled':
-          // XXX: The api doesnt have a proper download failed, just
-          // canceled
-          extra = navigator.mozL10n.get('donwload_failed') || 'Download failed';
-          break;
         case 'stopped':
-          var total = download.currentBytes / 1024;
-          // XXX: Use proper measurement
-          extra = total.toFixed(2) + 'MB';
+          status = _('stopped');
+          break;
+        case 'succeeded':
+          status = DownloadFormatter.getTotalSize(download);
           break;
       }
+      DownloadFormatter.getDate(download, function(date) {
+        domNodes['info'].textContent =
+          _('summary', {date: date, status: status});
+      });
 
-      domNodes['info'].textContent = time + ' - ' + extra;
     }
   };
 
@@ -207,9 +198,16 @@ var DownloadItem = (function DownloadItem() {
     return domNodes;
   };
 
+  // TODO: Keep this function until the api returns valid dom id
+  // values on the id field.
+  var getDownloadId = function getDownloadId(download) {
+    return download.id.replace(/[=+\\\/]/ig, '');
+  };
+
   return {
     'create': create,
-    'update': update
+    'refresh': update,
+    'getDownloadId': getDownloadId
   };
 
 }());
