@@ -9,17 +9,21 @@ FxaModuleSigninSuccess = (function() {
   }
 
   var Module = Object.create(FxaModule);
-  Module.init = function init(options) {
-    options = options || {};
+  Module.init = function init() {
+    this.initNav();
     this.importElements('fxa-summary-email');
-    this.fxaSummaryEmail.innerHTML = options.email;
+    var self = this;
+    this.onChange('email', function(email) {
+      self.fxaSummaryEmail.innerHTML = email;
+    });
   };
 
-  Module.onNext = function(gotoNextStepCallback) {
-    getNextState(gotoNextStepCallback);
+  Module.onNext = function() {
+    FxaModuleManager.done();
   };
 
   return Module;
 
 }());
 
+FxaModuleSigninSuccess.init();

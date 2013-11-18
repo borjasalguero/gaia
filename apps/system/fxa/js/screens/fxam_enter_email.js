@@ -25,22 +25,21 @@ FxaModuleEnterEmail = (function() {
 
   function _enableNext(emailEl) {
     if (_isEmailValid(emailEl)) {
-      FxaModuleUI.enableNextButton();
+      // document.querySelector('.right').removeAttribute('disabled');
+      // FxaModuleUI.enableNextButton();
     } else {
-      FxaModuleUI.disableNextButton();
+      // document.querySelector('.right').setAttribute('disabled', 'disabled');
+      //FxaModuleUI.disableNextButton();
     }
   }
 
   var Module = Object.create(FxaModule);
   Module.init = function() {
     _ = navigator.mozL10n.get;
+    this.initNav();
 
     // Blocks the navigation until check the condition
     _enableNext(this.fxaEmailInput);
-
-    if (this.initialized) {
-      return;
-    }
 
     // Cache HTML elements
     this.importElements('fxa-email-input');
@@ -49,11 +48,14 @@ FxaModuleEnterEmail = (function() {
       'input',
       function onInput(event) {
         _enableNext(event.target);
-      }
+      }, false
     );
 
-    // Avoid to add listener twice
-    this.initialized = true;
+    var self = this;
+    this.onChange('email', function(email) {
+      if (email)
+        self.fxaEmailInput.value = email;
+    });
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
@@ -61,11 +63,13 @@ FxaModuleEnterEmail = (function() {
 
     var email = this.fxaEmailInput.value;
 
+    var self = this;
     FxModuleServerRequest.checkEmail(
       email,
       function onServerResponse(response) {
         FxaModuleOverlay.hide();
         FxaModuleManager.setParam('email', email);
+        self.set('email', email);
         if (response.registered) {
           _loadSignIn(gotoNextStepCallback);
         } else {
@@ -81,11 +85,8 @@ FxaModuleEnterEmail = (function() {
     );
   };
 
-  Module.onBack = function onBack() {
-    FxaModuleUI.enableNextButton();
-  };
-
   return Module;
 
 }());
 
+FxaModuleEnterEmail.init();

@@ -71,7 +71,8 @@ FxaModuleEnterPassword = (function() {
   }
 
   var Module = Object.create(FxaModule);
-  Module.init = function init(options) {
+  Module.init = function init() {
+    this.initNav();
 
     if (!this.fxaUserEmail) {
       this.importElements(
@@ -82,20 +83,15 @@ FxaModuleEnterPassword = (function() {
       );
     }
 
-    if (!options || !options.email) {
-      console.error('Options are not sent properly. Email not available');
-      return;
-    }
+    var self = this;
+    this.onChange('email', function(email) {
+      self.email = email;
+      self.fxaUserEmail.textContent = email;
+    });
 
     this.fxaPwInput.value = '';
-    this.fxaUserEmail.textContent = options.email;
-    this.email = options.email;
 
     _enableNext(this.fxaPwInput);
-
-    if (this.initialized) {
-      return;
-    }
 
     // Add listeners
     this.fxaPwInput.addEventListener(
@@ -116,8 +112,6 @@ FxaModuleEnterPassword = (function() {
       _forgotPassword.bind(this),
       false
     );
-
-    this.initialized = true;
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
@@ -145,3 +139,4 @@ FxaModuleEnterPassword = (function() {
 
 }());
 
+FxaModuleEnterPassword.init();

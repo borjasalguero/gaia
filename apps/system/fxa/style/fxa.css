@@ -46,6 +46,13 @@ h3 {
   align-items: center;
 }
 
+.vertical {
+  margin: 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
 .navigation {
   position: relative;
   background: rgba(0,0,0,0.05);
@@ -104,25 +111,19 @@ h3 {
  * and lazy load of the views. A view is a set of steps.
  * * * * * * * * * * * * * * * * * * * * * * * */
 
-#step-container {
-  height: calc(100% - 5.3rem - 5rem);
-  position: relative;
-  overflow: hidden;
-}
-
-
-.ff_account,
 .screen {
   font-family: 'Fira Sans', sans-serif;
   font-size: 1.6rem;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 5.3rem);
   position: absolute;
   overflow: scroll;
   display: none;
-  padding: 1rem;
   -moz-box-sizing: border-box;
   text-align: center;
+
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .screen p {
@@ -133,7 +134,16 @@ h3 {
 }
 
 .current {
-  display: block;
+  display: flex;
+}
+
+
+/* Hides irrelevant items from small screens or
+   when keyboard is visible. */
+@media (max-height: 20rem) {
+  .keyboard-hide {
+    display:none;
+  }
 }
 
 /*
@@ -155,7 +165,7 @@ h3 {
 
 /* Animate next screen */
 .currentToLeft {
-  display:block;
+  display:flex;
   animation: currentToLeft 0.4s forwards;
 }
 @keyframes currentToLeft {
@@ -163,7 +173,7 @@ h3 {
   100% { transform: translateX(-100%); }
 }
 .rightToCurrent {
-  display:block;
+  display:flex;
   animation: rightToCurrent 0.4s forwards;
 }
 @keyframes rightToCurrent {
@@ -173,7 +183,7 @@ h3 {
 
 /* Animate prev screen */
 .leftToCurrent {
-  display: block;
+  display: flex;
   animation: leftToCurrent 0.4s forwards;
 }
 @keyframes leftToCurrent {
@@ -181,16 +191,12 @@ h3 {
   100% { transform: translateX(0); }
 }
 .currentToRight {
-  display: block;
+  display: flex;
   animation: currentToRight 0.4s forwards;
 }
 @keyframes currentToRight {
   0% { transform: translateX(0); }
   100% { transform: translateX(100%); }
-}
-
-.current {
-  display: block;
 }
 
 .screen a {
@@ -204,6 +210,7 @@ h3 {
   margin: 0 auto;
   width: 28rem;
   height: 19.4rem;
+  align-self: center;
 }
 
 .fxa-logo.small {
