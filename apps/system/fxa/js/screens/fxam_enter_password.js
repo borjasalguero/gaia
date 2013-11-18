@@ -22,20 +22,6 @@ FxaModuleEnterPassword = (function() {
     }
   }
 
-  function _showAuthenticationError() {
-    FxaModuleErrorOverlay.show(
-      _('fxa-authenticating-error-title'),
-      _('fxa-authenticating-error-message')
-    );
-  }
-
-  function _showPasswordMismatch() {
-    FxaModuleErrorOverlay.show(
-      _('fxa-invalid-password'),
-      _('fxa-cannot-authenticate')
-    );
-  }
-
   function _loadSigninSuccess(done) {
     done(FxaModuleStates.SIGNIN_SUCCESS);
   }
@@ -47,10 +33,9 @@ FxaModuleEnterPassword = (function() {
 
   function _requestPasswordReset(email, done) {
     FxModuleServerRequest.requestPasswordReset(email,
-      function(response) {
+      function onSuccess(response) {
         done(response.success);
-      },
-      done.bind(null, false));
+      }, this.showErrorResponse);
   }
 
   function _showCouldNotResetPassword() {
@@ -59,7 +44,7 @@ FxaModuleEnterPassword = (function() {
 
   function _forgotPassword() {
     FxaModuleOverlay.show(_('fxa-requesting-password-reset'));
-    _requestPasswordReset(this.email, function(isRequestHandled) {
+    _requestPasswordReset.call(this, this.email, function(isRequestHandled) {
       FxaModuleOverlay.hide();
       if (!isRequestHandled) {
         _showCouldNotResetPassword();
@@ -128,17 +113,13 @@ FxaModuleEnterPassword = (function() {
       this.fxaPwInput.value,
       function onServerResponse(response) {
         FxaModuleOverlay.hide();
-        if (response.authenticated) {
-          _loadSigninSuccess(gotoNextStepCallback);
-        } else {
-          _showPasswordMismatch();
+        if (!response.authenticated) {
+          FxaModuleErrorOverlay.show(_('fxa-invalid-password'));
+          return;
         }
-      },
-      function onNetworkError() {
-        FxaModuleOverlay.hide();
-        _showAuthenticationError();
-      }
-    );
+
+        _loadSigninSuccess(gotoNextStepCallback);
+      }, this.showErrorResponse);
   };
 
   return Module;
