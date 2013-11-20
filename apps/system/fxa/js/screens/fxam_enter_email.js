@@ -51,11 +51,11 @@ FxaModuleEnterEmail = (function() {
       }, false
     );
 
-    var self = this;
-    this.onChange('email', function(email) {
-      if (email)
-        self.fxaEmailInput.value = email;
-    });
+  };
+
+  Module.refresh = function refresh(options) {
+    if (options.email)
+      this.fxaEmailInput.value = options.email;
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
@@ -69,7 +69,6 @@ FxaModuleEnterEmail = (function() {
       function onServerResponse(response) {
         FxaModuleOverlay.hide();
         FxaModuleManager.setParam('email', email);
-        self.set('email', email);
         if (response.registered) {
           _loadSignIn(gotoNextStepCallback);
         } else {

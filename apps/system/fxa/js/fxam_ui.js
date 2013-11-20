@@ -29,6 +29,7 @@ var FxaModuleUI = {
     var self = this;
     this._load(nextScreen, function loaded() {
       self._animate(currentScreen, nextScreen, params.back);
+      params.callback && params.callback();
     });
   },
 

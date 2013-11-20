@@ -22,19 +22,24 @@ var FxaModuleNavigation = {
     if (!panel || !panel.classList.contains('screen'))
       return;
 
-    // TODO:(Olav): Add progress step
-    this.loadStep(panel, this.backAnim);
+    var self = this;
+    this.loadStep(panel, this.backAnim, function notifyModule() {
+      var module = self.getModuleById(location.hash);
+      if (module && module.refresh)
+        module.refresh(FxaModuleManager.paramsRetrieved);
+    });
     this.backAnim = false;
 
     return false;
   },
 
-  loadStep: function(panel, back) {
+  loadStep: function(panel, back, callback) {
     if (!panel)
       return;
     FxaModuleUI.loadScreen({
       panel: panel,
-      back: back
+      back: back,
+      callback: callback
     });
   },
 
@@ -45,5 +50,18 @@ var FxaModuleNavigation = {
 
   done: function() {
     FxaModuleManager.done();
+  },
+
+  getModuleById: function(id) {
+    id = id.replace('#', '');
+    var moduleState = Object.keys(FxaModuleStates).map(function(key) {
+      return FxaModuleStates[key];
+    }).filter(function(module) {
+      return module.id === id;
+    }).pop();
+
+    if (moduleState && moduleState.module && window[moduleState.module])
+      return window[moduleState.module];
+    return false;
   }
 };

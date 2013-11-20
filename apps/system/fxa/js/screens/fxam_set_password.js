@@ -53,14 +53,15 @@ FxaModuleSetPassword = (function() {
       'fxa-show-pw'
     );
 
-    var self = this;
-    this.onChange('email', function(email) {
-      self.email = email;
-      self.fxaUserEmail.innerHTML = email;
-    });
-
     this.fxaShowPw.addEventListener(
         'change', togglePasswordVisibility.bind(this), false);
+  };
+
+  Module.refresh = function(options) {
+    if (options.email) {
+      this.email = options.email;
+      this.fxaUserEmail.innerHTML = options.email;
+    }
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {

@@ -66,7 +66,7 @@ FxaModuleEnterPassword = (function() {
         return;
       }
 
-      FxaModuleStates.setState(FxaModuleStates.PASSWORD_RESET_SUCCESS);
+      window.location.hash = FxaModuleStates.PASSWORD_RESET_SUCCESS.id;
     });
   }
 
@@ -82,12 +82,6 @@ FxaModuleEnterPassword = (function() {
         'fxa-forgot-password'
       );
     }
-
-    var self = this;
-    this.onChange('email', function(email) {
-      self.email = email;
-      self.fxaUserEmail.textContent = email;
-    });
 
     this.fxaPwInput.value = '';
 
@@ -112,6 +106,13 @@ FxaModuleEnterPassword = (function() {
       _forgotPassword.bind(this),
       false
     );
+  };
+
+  Module.refresh = function refresh(options) {
+    if (options.email) {
+      this.email = options.email;
+      this.fxaUserEmail.textContent = options.email;
+    }
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {

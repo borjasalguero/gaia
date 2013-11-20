@@ -37,14 +37,6 @@ FxaModuleStates = (function() {
     },
     PP: {
       id: 'fxa-pp'
-    },
-    DONE: null,
-    back: function() {
-      FxaModuleNavigation.back();
-    },
-    setState: function setState(state) {
-      if ((! state in this) || typeof state === 'function') return;
-      document.location.hash = state.id;
     }
   };
 }());

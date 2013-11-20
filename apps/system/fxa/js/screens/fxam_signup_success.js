@@ -12,11 +12,11 @@ FxaModuleSignupSuccess = (function() {
   Module.init = function init() {
     this.initNav();
     this.importElements('fxa-summary-email');
+  };
 
-    var self = this;
-    this.onChange('email', function(email) {
-      self.fxaSummaryEmail.innerHTML = email;
-    });
+  Module.refresh = function refresh(options) {
+    if (options.email)
+      this.fxaSummaryEmail.innerHTML = options.email;
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
