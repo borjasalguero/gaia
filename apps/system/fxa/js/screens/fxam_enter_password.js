@@ -6,7 +6,7 @@
 FxaModuleEnterPassword = (function() {
   'use strict';
 
-  var _ = navigator.mozL10n.get;
+  var _ = null;
 
   // only checks whether the password passes input validation
   function _isPasswordValid(passwordEl) {
@@ -34,10 +34,6 @@ FxaModuleEnterPassword = (function() {
       _('fxa-invalid-password'),
       _('fxa-cannot-authenticate')
     );
-  }
-
-  function _loadSigninSuccess(done) {
-    done(FxaModuleStates.SIGNIN_SUCCESS);
   }
 
   function _togglePasswordVisibility() {
@@ -72,6 +68,8 @@ FxaModuleEnterPassword = (function() {
 
   var Module = Object.create(FxaModule);
   Module.init = function init(options) {
+    _ = navigator.mozL10n.get;
+
 
     if (!this.fxaUserEmail) {
       this.importElements(
@@ -120,7 +118,7 @@ FxaModuleEnterPassword = (function() {
     this.initialized = true;
   };
 
-  Module.onNext = function onNext(gotoNextStepCallback) {
+  Module.onNext = function onNext(done) {
     FxaModuleOverlay.show(_('fxa-authenticating'));
 
     FxModuleServerRequest.signIn(
@@ -128,11 +126,14 @@ FxaModuleEnterPassword = (function() {
       this.fxaPwInput.value,
       function onServerResponse(response) {
         FxaModuleOverlay.hide();
-        if (response.authenticated) {
-          _loadSigninSuccess(gotoNextStepCallback);
-        } else {
+
+        var nextState = FxaModuleStates.SIGNIN_SUCCESS;
+        if (!response.authenticated) {
+          nextState = null;
           _showPasswordMismatch();
         }
+
+        done(nextState);
       },
       function onNetworkError() {
         FxaModuleOverlay.hide();
