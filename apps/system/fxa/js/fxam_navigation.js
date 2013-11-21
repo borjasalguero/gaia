@@ -30,7 +30,8 @@ var FxaModuleNavigation = {
     });
     this.backAnim = false;
 
-    return false;
+    if (this.getProgressById(location.hash))
+      FxaModuleUI.progress(this.getProgressById(location.hash));
   },
 
   loadStep: function(panel, back, callback) {
@@ -52,16 +53,28 @@ var FxaModuleNavigation = {
     FxaModuleManager.done();
   },
 
-  getModuleById: function(id) {
+  _searchModuleState: function(id) {
     id = id.replace('#', '');
-    var moduleState = Object.keys(FxaModuleStates).map(function(key) {
+    return Object.keys(FxaModuleStates).map(function(key) {
       return FxaModuleStates[key];
     }).filter(function(module) {
       return module.id === id;
     }).pop();
+  },
+
+  getModuleById: function(id) {
+    var moduleState = this._searchModuleState(id);
 
     if (moduleState && moduleState.module && window[moduleState.module])
       return window[moduleState.module];
+    return false;
+  },
+
+  getProgressById: function(id) {
+    var moduleState = this._searchModuleState(id);
+
+    if (moduleState)
+      return moduleState.progress;
     return false;
   }
 };

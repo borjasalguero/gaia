@@ -10,7 +10,8 @@ FxaModuleStates = (function() {
   return {
     ENTER_EMAIL: {
       id: 'fxa-email',
-      module: 'FxaModuleEnterEmail'
+      module: 'FxaModuleEnterEmail',
+      progress: 33
     },
     SET_PASSWORD: {
       id: 'fxa-set-password',
@@ -18,7 +19,8 @@ FxaModuleStates = (function() {
     },
     ENTER_PASSWORD: {
       id: 'fxa-enter-password',
-      module: 'FxaModuleEnterPassword'
+      module: 'FxaModuleEnterPassword',
+      progress: 66
     },
     SIGNUP_SUCCESS: {
       id: 'fxa-signup-success',
@@ -26,7 +28,8 @@ FxaModuleStates = (function() {
     },
     SIGNIN_SUCCESS: {
       id: 'fxa-signin-success',
-      module: 'FxaModuleSigninSuccess'
+      module: 'FxaModuleSigninSuccess',
+      progress: 100
     },
     PASSWORD_RESET_SUCCESS: {
       id: 'fxa-password-reset-success',
