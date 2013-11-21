@@ -11,17 +11,17 @@ FxaModule = (function() {
       if (!currentPanel)
         return;
 
-      var nextButton = currentPanel.querySelector('.right');
-      var backButton = currentPanel.querySelector('.left');
+      this.nextButton = currentPanel.querySelector('.right');
+      this.backButton = currentPanel.querySelector('.left');
 
-      nextButton && nextButton
+      this.nextButton && this.nextButton
         .addEventListener('click', this.onNext.bind(this, function(state) {
           //TODO(Olav): No more states, callbacks or gotos!
           // Instead, manipulate the location.hash directly.
           location.hash = state.id;
         }), false);
 
-      backButton && backButton
+      this.backButton && this.backButton
         .addEventListener('click', FxaModuleNavigation.back, false);
     },
 

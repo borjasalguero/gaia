@@ -99,20 +99,5 @@ var FxaModuleUI = {
 
   progress: function(value) {
     document.querySelector('#fxa-progress').value = value;
-  },
-
-  setNextText: function(l10n) {
-    console.log('called');
-    // this.next.textContent = l10n;
-  },
-
-  disableNextButton: function() {
-    console.log('called');
-    // this.next.setAttribute('disabled', 'disabled');
-  },
-
-  enableNextButton: function() {
-    console.log('called');
-    // this.next.removeAttribute('disabled');
   }
 };

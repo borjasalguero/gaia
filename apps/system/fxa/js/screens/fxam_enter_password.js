@@ -14,11 +14,11 @@ FxaModuleEnterPassword = (function() {
     return passwordValue && passwordEl.validity.valid;
   }
 
-  function _enableNext(passwordEl) {
+  function _enableNext(module, passwordEl) {
     if (_isPasswordValid(passwordEl)) {
-      FxaModuleUI.enableNextButton();
+      module.nextButton.removeAttribute('disabled');
     } else {
-      FxaModuleUI.disableNextButton();
+      module.nextButton.setAttribute('disabled', 'disabled');
     }
   }
 
@@ -74,24 +74,23 @@ FxaModuleEnterPassword = (function() {
   Module.init = function init() {
     this.initNav();
 
-    if (!this.fxaUserEmail) {
-      this.importElements(
-        'fxa-user-email',
-        'fxa-pw-input',
-        'fxa-show-pw',
-        'fxa-forgot-password'
-      );
-    }
+    this.importElements(
+      'fxa-user-email',
+      'fxa-pw-input',
+      'fxa-show-pw',
+      'fxa-forgot-password'
+    );
 
     this.fxaPwInput.value = '';
 
-    _enableNext(this.fxaPwInput);
+    _enableNext(this, this.fxaPwInput);
 
     // Add listeners
+    var self = this;
     this.fxaPwInput.addEventListener(
       'input',
       function onInput(event) {
-        _enableNext(event.target);
+        _enableNext(self, event.target);
       }
     );
 
