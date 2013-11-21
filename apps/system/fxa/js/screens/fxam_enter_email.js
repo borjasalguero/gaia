@@ -57,6 +57,11 @@ FxaModuleEnterEmail = (function() {
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
+    if (!_isEmailValid(this.fxaEmailInput)) {
+      FxaModuleErrorOverlay.show(_('fxa-invalid-email'));
+      return;
+    }
+
     FxaModuleOverlay.show(_('fxa-connecting-to-firefox'));
 
     var email = this.fxaEmailInput.value;
