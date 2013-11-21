@@ -140,9 +140,9 @@ h3 {
 
 /* Hides irrelevant items from small screens or
    when keyboard is visible. */
-@media (max-height: 20rem) {
+@media (max-height: 25rem) {
   .keyboard-hide {
-    display:none;
+    display: none;
   }
 }
 
