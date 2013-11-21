@@ -14,15 +14,23 @@ FxaModule = (function() {
       this.nextButton = currentPanel.querySelector('.right');
       this.backButton = currentPanel.querySelector('.left');
 
-      this.nextButton && this.nextButton
-        .addEventListener('click', this.onNext.bind(this, function(state) {
-          //TODO(Olav): No more states, callbacks or gotos!
-          // Instead, manipulate the location.hash directly.
-          location.hash = state.id;
-        }), false);
+      if (this.nextButton) {
+        this.nextButton
+          .addEventListener('tap', this.onNext.bind(this, function(state) {
+            //TODO(Olav): No more states, callbacks or gotos!
+            // Instead, manipulate the location.hash directly.
+            location.hash = state.id;
+          }), false);
 
-      this.backButton && this.backButton
-        .addEventListener('click', FxaModuleNavigation.back, false);
+        new GestureDetector(this.nextButton).startDetecting();
+      }
+
+      if (this.backButton) {
+        this.backButton
+          .addEventListener('tap', FxaModuleNavigation.back, false);
+
+        new GestureDetector(this.backButton).startDetecting();
+      }
     },
 
     onNext: function() {
