@@ -9,12 +9,16 @@ FxaModulePasswordResetSuccess = (function() {
   }
 
   var Module = Object.create(FxaModule);
-  Module.init = function init(options) {
-    options = options || {};
+  Module.init = function init() {
+    this.initNav();
     this.importElements(
       'fxa-summary-email'
     );
-    this.fxaSummaryEmail.innerHTML = options.email;
+  };
+
+  Module.refresh = function refresh(options) {
+    if (options.email)
+      this.fxaSummaryEmail.innerHTML = options.email;
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
@@ -25,3 +29,4 @@ FxaModulePasswordResetSuccess = (function() {
 
 }());
 
+FxaModulePasswordResetSuccess.init();
