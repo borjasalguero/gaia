@@ -7,7 +7,7 @@ var FxaModuleUI = {
   init: function(flow) {
     // Add listeners to the main elements
     [
-      'close', 'navigation'
+      'close'
     ].forEach(function(id) {
       this[Utils.camelCase(id)] = document.getElementById('fxa-module-' + id);
     }, this);
@@ -40,28 +40,21 @@ var FxaModuleUI = {
     var self = this;
     LazyLoader.load(screen, function screenLoaded() {
       screen.classList.add('loaded');
-      var scripts = self._getScripts(screen);
-      if (scripts.length) {
-        LazyLoader.load(scripts, function scriptsLoaded() {
-          callback();
-        });
-      } else {
-        self._handleBack(screen);
-        callback();
-      }
+      self._getScripts(screen, callback);
     });
   },
 
-  _getScripts: function(screen) {
-    return [].slice.call(screen.querySelectorAll('script'))
+  _getScripts: function(screen, callback) {
+    // The script tags inserted through lazy loading DOM elements won't
+    // automatically execute, so we have to explicitly load them.
+    var scripts = [].slice.call(screen.querySelectorAll('script'))
       .map(function(script) { return script.getAttribute('src'); });
-  },
 
-  _handleBack: function(screen) {
-    var button = screen.querySelector('.left');
-    if (!button)
-      return;
-    button.addEventListener('click', FxaModuleNavigation.back, false);
+    // the lazy load callback won't trigger for empty lists.
+    if (scripts.length)
+      LazyLoader.load(scripts, callback);
+    else
+      callback();
   },
 
   _animate: function(from, to, back, callback) {

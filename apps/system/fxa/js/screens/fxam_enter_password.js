@@ -14,14 +14,6 @@ FxaModuleEnterPassword = (function() {
     return passwordValue && passwordEl.validity.valid;
   }
 
-  function _enableNext(module, passwordEl) {
-    if (_isPasswordValid(passwordEl)) {
-      module.nextButton.removeAttribute('disabled');
-    } else {
-      module.nextButton.setAttribute('disabled', 'disabled');
-    }
-  }
-
   function _showAuthenticationError() {
     FxaModuleErrorOverlay.show(
       _('fxa-authenticating-error-title'),
@@ -83,14 +75,14 @@ FxaModuleEnterPassword = (function() {
 
     this.fxaPwInput.value = '';
 
-    _enableNext(this, this.fxaPwInput);
+    this.setEnabledState(this.nextButton, _isPasswordValid(this.fxaPwInput));
 
     // Add listeners
     var self = this;
     this.fxaPwInput.addEventListener(
       'input',
       function onInput(event) {
-        _enableNext(self, event.target);
+        self.setEnabledState(self.nextButton, _isPasswordValid(event.target));
       }
     );
 

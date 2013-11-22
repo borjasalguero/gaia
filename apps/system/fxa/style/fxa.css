@@ -62,7 +62,8 @@ h3 {
 }
 
 /* Overwrite this property from Building Blocks */
-.navigation button{
+.navigation button,
+.navigation a[role=button] {
   margin: 0;
 }
 

@@ -14,21 +14,29 @@ var FxaModuleNavigation = {
   },
 
   _hashChange: function() {
-    console.log(location.hash);
-    if (!location.hash)
+    if (!location.hash) {
+      console.error('fxa did not specify panel');
       return;
+    }
+    if (location.hash.substr(1) === 'back') {
+      this.backAnimation = true;
+      window.history.go(-2);
+      return;
+    }
 
     var panel = document.querySelector(location.hash);
-    if (!panel || !panel.classList.contains('screen'))
+    if (!panel || !panel.classList.contains('screen')) {
+      console.error('fxa navigated to unknown panel:', location.hash);
       return;
+    }
 
     var self = this;
-    this.loadStep(panel, this.backAnim, function notifyModule() {
+    this.loadStep(panel, this.backAnimation, function notifyModule() {
       var module = self.getModuleById(location.hash);
       if (module && module.refresh)
         module.refresh(FxaModuleManager.paramsRetrieved);
     });
-    this.backAnim = false;
+    this.backAnimation = false;
 
     if (this.getProgressById(location.hash))
       FxaModuleUI.progress(this.getProgressById(location.hash));
@@ -42,11 +50,6 @@ var FxaModuleNavigation = {
       back: back,
       callback: callback
     });
-  },
-
-  back: function() {
-    FxaModuleNavigation.backAnim = true;
-    window.history.back();
   },
 
   done: function() {

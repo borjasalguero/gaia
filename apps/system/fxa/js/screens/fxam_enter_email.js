@@ -23,31 +23,25 @@ FxaModuleEnterEmail = (function() {
     done(FxaModuleStates.SET_PASSWORD);
   }
 
-  function _enableNext(module, emailEl) {
-    if (_isEmailValid(emailEl)) {
-      module.nextButton.removeAttribute('disabled');
-    } else {
-      module.nextButton.setAttribute('disabled', 'disabled');
-    }
-  }
-
   var Module = Object.create(FxaModule);
   Module.init = function() {
     _ = navigator.mozL10n.get;
     this.initNav();
-    // Cache HTML elements
 
+    // Cache HTML elements
     this.importElements('fxa-email-input');
 
     // Blocks the navigation until check the condition
-    _enableNext(this, this.fxaEmailInput);
+    this.setEnabledState(this.nextButton, _isEmailValid(this.fxaEmailInput));
 
     // Add listeners
     var self = this;
     this.fxaEmailInput.addEventListener(
       'input',
       function onInput(event) {
-        _enableNext(self, event.target);
+        self.setEnabledState(
+          self.nextButton,
+          _isEmailValid(self.fxaEmailInput));
       }, false
     );
   };
@@ -62,7 +56,6 @@ FxaModuleEnterEmail = (function() {
 
     var email = this.fxaEmailInput.value;
 
-    var self = this;
     FxModuleServerRequest.checkEmail(
       email,
       function onServerResponse(response) {

@@ -27,7 +27,9 @@ FxaModule = (function() {
 
       if (this.backButton) {
         this.backButton
-          .addEventListener('tap', FxaModuleNavigation.back, false);
+          .addEventListener('tap', function() {
+            window.location.hash = 'back';
+          }, false);
 
         new GestureDetector(this.backButton).startDetecting();
       }
@@ -37,6 +39,13 @@ FxaModule = (function() {
       // override this to take care of when the user clicks on the "next"
       // button. Validate any inputs, talk with the backend, do processing.
       // When complete, change url hash to an id from fxam_states.js
+    },
+
+    setEnabledState: function(button, enabled) {
+      if (enabled)
+        button.removeAttribute('disabled');
+      else
+        button.setAttribute('disabled', 'disabled');
     },
 
     importElements: function() {
