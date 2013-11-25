@@ -4,11 +4,10 @@
 'use strict';
 
 var FxaModuleUI = {
-  maxSteps: null,
   init: function(flow) {
     // Add listeners to the main elements
     [
-      'close', 'back', 'next', 'navigation', 'done'
+      'close'
     ].forEach(function(id) {
       this[Utils.camelCase(id)] = document.getElementById('fxa-module-' + id);
     }, this);
@@ -17,61 +16,47 @@ var FxaModuleUI = {
       FxaModuleManager.close();
     });
 
-    this.back.addEventListener('mousedown', function() {
-      FxaModuleNavigation.back();
-    });
-
-    this.next.addEventListener('mousedown', function() {
-      FxaModuleNavigation.next();
-    });
-
-    this.done.addEventListener('click', function() {
-      FxaModuleManager.done();
-    });
-
     FxaModuleNavigation.init(flow);
   },
-  setMaxSteps: function(num) {
-    this.maxSteps = num;
-  },
+
   loadScreen: function(params) {
-    var currentScreen = document.getElementsByClassName('current')[0];
+    var currentScreen = document.querySelector('.current');
     var nextScreen = params.panel;
+    if (this._inTransition(currentScreen) || this._inTransition(nextScreen))
+      return;
+
     // Lazy load current panel
-    LazyLoader.load(nextScreen, function() {
-      // If the panel contains any new script elements,
-      // lazy load those as well.
-      var scripts = [].slice.call(nextScreen.querySelectorAll('script'))
-        .map(function(script) { return script.getAttribute('src'); });
-
-      // Once all scripts are loaded, load the modules/UI
-      LazyLoader.load(scripts, function() {
-        if (params.count > 1 && params.count < FxaModuleUI.maxSteps) {
-          FxaModuleUI.navigation.classList.remove('navigation-single-button');
-          FxaModuleUI.navigation.classList.remove('navigation-back-only');
-
-          if (nextScreen.getAttribute('data-navigation') === 'back') {
-            FxaModuleUI.navigation.classList.add('navigation-back-only');
-          }
-        } else {
-          FxaModuleUI.navigation.classList.add('navigation-single-button');
-          if (params.count === FxaModuleUI.maxSteps) {
-            FxaModuleUI.navigation.classList.add('navigation-done');
-          }
-        }
-        this.progress(100 * params.count / this.maxSteps);
-
-        params.onload && params.onload();
-
-        if (nextScreen) {
-          this._animate(currentScreen,
-                        nextScreen,
-                        params.back,
-                        params.onanimate);
-        }
-      }.bind(this));
-    }.bind(this));
+    var self = this;
+    this._load(nextScreen, function loaded() {
+      self._animate(currentScreen, nextScreen, params.back);
+      params.callback && params.callback();
+    });
   },
+
+  _load: function(screen, callback) {
+    if (screen.classList.contains('loaded'))
+      return callback();
+
+    var self = this;
+    LazyLoader.load(screen, function screenLoaded() {
+      screen.classList.add('loaded');
+      self._getScripts(screen, callback);
+    });
+  },
+
+  _getScripts: function(screen, callback) {
+    // The script tags inserted through lazy loading DOM elements won't
+    // automatically execute, so we have to explicitly load them.
+    var scripts = [].slice.call(screen.querySelectorAll('script'))
+      .map(function(script) { return script.getAttribute('src'); });
+
+    // the lazy load callback won't trigger for empty lists.
+    if (scripts.length)
+      LazyLoader.load(scripts, callback);
+    else
+      callback();
+  },
+
   _animate: function(from, to, back, callback) {
     if (!to)
       return;
@@ -80,9 +65,6 @@ var FxaModuleUI = {
       to.classList.add('current');
       return;
     }
-
-    if (this._inTransition(from) || this._inTransition(to))
-      return;
 
     from.addEventListener('animationend', function fromAnimEnd() {
       from.removeEventListener('animationend', fromAnimEnd, false);
@@ -95,28 +77,20 @@ var FxaModuleUI = {
       to.removeEventListener('animationend', toAnimEnd, false);
       to.classList.remove(back ? 'leftToCurrent' : 'rightToCurrent');
       to.classList.add('current');
-      callback && callback();
     }, false);
 
     from.classList.add(back ? 'currentToRight' : 'currentToLeft');
     to.classList.add(back ? 'leftToCurrent' : 'rightToCurrent');
   },
+
   _inTransition: function(elem) {
-    return elem.classList.contains('currentToRight') ||
+    return elem && (elem.classList.contains('currentToRight') ||
     elem.classList.contains('currentToLeft') ||
     elem.classList.contains('rightToCurrent') ||
-    elem.classList.contains('leftToCurrent') || false;
+    elem.classList.contains('leftToCurrent') || false);
   },
+
   progress: function(value) {
     document.querySelector('#fxa-progress').value = value;
-  },
-  setNextText: function(l10n) {
-    this.next.textContent = l10n;
-  },
-  disableNextButton: function() {
-    this.next.setAttribute('disabled', 'disabled');
-  },
-  enableNextButton: function() {
-    this.next.removeAttribute('disabled');
   }
 };

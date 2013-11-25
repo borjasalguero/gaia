@@ -14,14 +14,6 @@ FxaModuleEnterPassword = (function() {
     return passwordValue && passwordEl.validity.valid;
   }
 
-  function _enableNext(passwordEl) {
-    if (_isPasswordValid(passwordEl)) {
-      FxaModuleUI.enableNextButton();
-    } else {
-      FxaModuleUI.disableNextButton();
-    }
-  }
-
   function _showAuthenticationError() {
     FxaModuleErrorOverlay.show(
       _('fxa-authenticating-error-title'),
@@ -66,42 +58,31 @@ FxaModuleEnterPassword = (function() {
         return;
       }
 
-      FxaModuleStates.setState(FxaModuleStates.PASSWORD_RESET_SUCCESS);
+      window.location.hash = FxaModuleStates.PASSWORD_RESET_SUCCESS.id;
     });
   }
 
   var Module = Object.create(FxaModule);
-  Module.init = function init(options) {
+  Module.init = function init() {
+    this.initNav();
 
-    if (!this.fxaUserEmail) {
-      this.importElements(
-        'fxa-user-email',
-        'fxa-pw-input',
-        'fxa-show-pw',
-        'fxa-forgot-password'
-      );
-    }
-
-    if (!options || !options.email) {
-      console.error('Options are not sent properly. Email not available');
-      return;
-    }
+    this.importElements(
+      'fxa-user-email',
+      'fxa-pw-input',
+      'fxa-show-pw',
+      'fxa-forgot-password'
+    );
 
     this.fxaPwInput.value = '';
-    this.fxaUserEmail.textContent = options.email;
-    this.email = options.email;
 
-    _enableNext(this.fxaPwInput);
-
-    if (this.initialized) {
-      return;
-    }
+    this.setEnabledState(this.nextButton, _isPasswordValid(this.fxaPwInput));
 
     // Add listeners
+    var self = this;
     this.fxaPwInput.addEventListener(
       'input',
       function onInput(event) {
-        _enableNext(event.target);
+        self.setEnabledState(self.nextButton, _isPasswordValid(event.target));
       }
     );
 
@@ -116,8 +97,13 @@ FxaModuleEnterPassword = (function() {
       _forgotPassword.bind(this),
       false
     );
+  };
 
-    this.initialized = true;
+  Module.refresh = function refresh(options) {
+    if (options.email) {
+      this.email = options.email;
+      this.fxaUserEmail.textContent = options.email;
+    }
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
@@ -145,3 +131,4 @@ FxaModuleEnterPassword = (function() {
 
 }());
 
+FxaModuleEnterPassword.init();

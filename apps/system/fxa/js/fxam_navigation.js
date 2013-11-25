@@ -1,91 +1,83 @@
 'use strict';
 
 var FxaModuleNavigation = {
-  stepCount: 0,
-  currentModule: null,
   init: function(flow) {
     // Listen on hash changes for panel changes
-    var self = this;
-    window.addEventListener('hashchange', function() {
-      if (!location.hash)
-        return;
-
-      var panel = document.querySelector(location.hash);
-      if (!panel || !panel.classList.contains('screen'))
-        return;
-
-      if (self.backAnim) {
-        self.backAnim = false;
-        self.stepCount--;
-        self.loadStep(panel, true);
-      } else {
-        self.stepCount++;
-        self.loadStep(panel);
-      }
-    }, false);
+    window.addEventListener('hashchange', this._hashChange.bind(this), false);
 
     // Load view
     LazyLoader.load('view/view_' + flow + '.js', function loaded() {
       // TODO Check how to load maxSteps,
       // do we need this?
-      FxaModuleUI.setMaxSteps(View.length);
       window.location.hash = View.start.id;
-    }.bind(this));
-  },
-  loadStep: function(panel, back) {
-    if (!panel)
-      return;
-    var self = this;
-    FxaModuleUI.loadScreen({
-      panel: panel,
-      count: this.stepCount,
-      back: back,
-      onload: function() {
-        this.currentModule = window[this.moduleById(panel.id)];
-        this.currentModule.init &&
-          this.currentModule.init(FxaModuleManager.paramsRetrieved);
-      }.bind(this),
-      onanimate: function() {
-        this.updatingStep = false;
-      }.bind(this)
     });
   },
-  back: function() {
-    // Avoid multiple taps on 'back' if
-    // screen transition is not over.
-    if (this.updatingStep) {
+
+  _hashChange: function() {
+    if (!location.hash) {
+      console.error('fxa did not specify panel');
       return;
     }
-    this.updatingStep = true;
-    // Execute module back (if is defined)
-    this.currentModule.onBack && this.currentModule.onBack();
-    // Go to previous step
-    this.backAnim = true;
+    if (location.hash.substr(1) === 'back') {
+      this.backAnimation = true;
+      window.history.go(-2);
+      return;
+    }
 
-    window.history.back();
+    var panel = document.querySelector(location.hash);
+    if (!panel || !panel.classList.contains('screen')) {
+      console.error('fxa navigated to unknown panel:', location.hash);
+      return;
+    }
 
+    var self = this;
+    this.loadStep(panel, this.backAnimation, function notifyModule() {
+      var module = self.getModuleById(location.hash);
+      if (module && module.refresh)
+        module.refresh(FxaModuleManager.paramsRetrieved);
+    });
+    this.backAnimation = false;
 
+    if (this.getProgressById(location.hash))
+      FxaModuleUI.progress(this.getProgressById(location.hash));
   },
-  next: function() {
-    // TODO Add shield against multiple taps
-    var loadNextStep = function loadNextStep(nextStep) {
-      if (!nextStep)
-        return;
-      location.hash = nextStep.id;
-    };
-    this.currentModule.onNext(loadNextStep.bind(this));
+
+  loadStep: function(panel, back, callback) {
+    if (!panel)
+      return;
+    FxaModuleUI.loadScreen({
+      panel: panel,
+      back: back,
+      callback: callback
+    });
   },
-  moduleById: function(id) {
-    // TODO (Olav): Make states easier to look up :)
-    var moduleKey = Object.keys(FxaModuleStates).filter(function(module) {
-      return FxaModuleStates[module] &&
-        FxaModuleStates[module].id &&
-        FxaModuleStates[module].id === id;
-    }).pop();
-    if (moduleKey)
-      return FxaModuleStates[moduleKey].module;
-  },
+
   done: function() {
     FxaModuleManager.done();
+  },
+
+  _searchModuleState: function(id) {
+    id = id.replace('#', '');
+    return Object.keys(FxaModuleStates).map(function(key) {
+      return FxaModuleStates[key];
+    }).filter(function(module) {
+      return module.id === id;
+    }).pop();
+  },
+
+  getModuleById: function(id) {
+    var moduleState = this._searchModuleState(id);
+
+    if (moduleState && moduleState.module && window[moduleState.module])
+      return window[moduleState.module];
+    return false;
+  },
+
+  getProgressById: function(id) {
+    var moduleState = this._searchModuleState(id);
+
+    if (moduleState)
+      return moduleState.progress;
+    return false;
   }
 };

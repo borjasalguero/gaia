@@ -1,23 +1,51 @@
-
-
 FxaModule = (function() {
   'use strict';
 
   var Module = {
-    initialized: false,
     init: function() {
-      // override this to do initialization
+      // override ..
     },
 
-    onNext: function(gotoNextStepCallback) {
+    initNav: function() {
+      var currentPanel = document.querySelector(location.hash);
+      if (!currentPanel)
+        return;
+
+      this.nextButton = currentPanel.querySelector('.right');
+      this.backButton = currentPanel.querySelector('.left');
+
+      if (this.nextButton) {
+        this.nextButton
+          .addEventListener('tap', this.onNext.bind(this, function(state) {
+            //TODO(Olav): No more states, callbacks or gotos!
+            // Instead, manipulate the location.hash directly.
+            location.hash = state.id;
+          }), false);
+
+        new GestureDetector(this.nextButton).startDetecting();
+      }
+
+      if (this.backButton) {
+        this.backButton
+          .addEventListener('tap', function() {
+            window.location.hash = 'back';
+          }, false);
+
+        new GestureDetector(this.backButton).startDetecting();
+      }
+    },
+
+    onNext: function() {
       // override this to take care of when the user clicks on the "next"
       // button. Validate any inputs, talk with the backend, do processing.
-      // When complete, call gotoNextStepCallback with the next state from
-      // fxam_states.js
+      // When complete, change url hash to an id from fxam_states.js
     },
 
-    onBack: function() {
-      // handle "back" button presses.
+    setEnabledState: function(button, enabled) {
+      if (enabled)
+        button.removeAttribute('disabled');
+      else
+        button.setAttribute('disabled', 'disabled');
     },
 
     importElements: function() {
@@ -31,4 +59,3 @@ FxaModule = (function() {
   return Module;
 
 }());
-

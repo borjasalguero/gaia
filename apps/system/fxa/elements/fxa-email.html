@@ -1,17 +1,20 @@
 <element name="fxa-email" extends="section">
   <template>
     <section class="vertical">
-      <div class="fxa-logo"></div>
+      <div class="fxa-logo keyboard-hide"></div>
       <p class="keyboard-hide" data-l10n-id="fxa-use-email-to-sign-in">
         Use your email address to create an account or sign in.
       </p>
       <input id="fxa-email-input" data-l10n-id="fxa-email-input" type="email" placeholder="Email" required="">
       <p data-l10n-id="fxa-agree-to-tos-pp">
-        By proceeding, you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a>.
+        By proceeding, you agree to our <a href="#fxa-tos">Terms of Service</a> and <a href="#fxa-pp">Privacy Policy</a>.
       </p>
     </section>
+    <nav role="navigation" class="horizontal navigation">
+      <button class="recommend right" data-l10n-id="fxa-next">
+        Next
+      </button>
+    </nav>
     <script src='js/screens/fxam_enter_email.js'></script>
   </template>
 </element>
-
-

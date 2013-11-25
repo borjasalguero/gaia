@@ -44,8 +44,8 @@ FxaModuleSetPassword = (function() {
   }
 
   var Module = Object.create(FxaModule);
-  Module.init = function init(options) {
-    options = options || {};
+  Module.init = function init() {
+    this.initNav();
 
     this.importElements(
       'fxa-user-email',
@@ -53,12 +53,15 @@ FxaModuleSetPassword = (function() {
       'fxa-show-pw'
     );
 
-    this.email = options.email;
-
-    this.fxaUserEmail.innerHTML = options.email;
-
     this.fxaShowPw.addEventListener(
         'change', togglePasswordVisibility.bind(this), false);
+  };
+
+  Module.refresh = function(options) {
+    if (options.email) {
+      this.email = options.email;
+      this.fxaUserEmail.innerHTML = options.email;
+    }
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
@@ -86,3 +89,4 @@ FxaModuleSetPassword = (function() {
 
 }());
 
+FxaModuleSetPassword.init();

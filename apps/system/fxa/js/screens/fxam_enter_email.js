@@ -23,37 +23,32 @@ FxaModuleEnterEmail = (function() {
     done(FxaModuleStates.SET_PASSWORD);
   }
 
-  function _enableNext(emailEl) {
-    if (_isEmailValid(emailEl)) {
-      FxaModuleUI.enableNextButton();
-    } else {
-      FxaModuleUI.disableNextButton();
-    }
-  }
-
   var Module = Object.create(FxaModule);
   Module.init = function() {
     _ = navigator.mozL10n.get;
-
-    // Blocks the navigation until check the condition
-    _enableNext(this.fxaEmailInput);
-
-    if (this.initialized) {
-      return;
-    }
+    this.initNav();
 
     // Cache HTML elements
     this.importElements('fxa-email-input');
+
+    // Blocks the navigation until check the condition
+    this.setEnabledState(this.nextButton, _isEmailValid(this.fxaEmailInput));
+
     // Add listeners
+    var self = this;
     this.fxaEmailInput.addEventListener(
       'input',
       function onInput(event) {
-        _enableNext(event.target);
-      }
+        self.setEnabledState(
+          self.nextButton,
+          _isEmailValid(self.fxaEmailInput));
+      }, false
     );
+  };
 
-    // Avoid to add listener twice
-    this.initialized = true;
+  Module.refresh = function refresh(options) {
+    if (options.email)
+      this.fxaEmailInput.value = options.email;
   };
 
   Module.onNext = function onNext(gotoNextStepCallback) {
@@ -81,11 +76,8 @@ FxaModuleEnterEmail = (function() {
     );
   };
 
-  Module.onBack = function onBack() {
-    FxaModuleUI.enableNextButton();
-  };
-
   return Module;
 
 }());
 
+FxaModuleEnterEmail.init();
