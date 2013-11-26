@@ -13,7 +13,9 @@
 
         onsuccess && onsuccess(params);
       } else {
-        onerror && onerror();
+        onerror && onerror({
+          error: 'SERVER_ERROR'
+        });
       }
 
     }, 1000);

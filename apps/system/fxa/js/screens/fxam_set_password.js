@@ -20,8 +20,7 @@ FxaModuleSetPassword = (function() {
     FxModuleServerRequest.signUp(email, password,
       function onSuccess(response) {
         done(response.accountCreated);
-      },
-      done.bind(null, false));
+      }, this.showErrorResponse);
   }
 
   function _showRegistering() {
@@ -71,8 +70,10 @@ FxaModuleSetPassword = (function() {
 
     var password = passwordEl.value;
     _showRegistering();
-    _requestCreateAccount(this.email, password, function(isAccountCreated) {
+    _requestCreateAccount.call(
+        this, this.email, password, function(isAccountCreated) {
       _hideRegistering();
+
       if (! isAccountCreated) {
         _showUserNotCreated();
         return;
