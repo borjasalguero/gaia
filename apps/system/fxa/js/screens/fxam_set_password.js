@@ -5,11 +5,20 @@
 FxaModuleSetPassword = (function() {
   'use strict';
 
-  var _ = navigator.mozL10n.get;
+  var _ = null;
 
-  function isPasswordValid(passwordEl) {
+  // only checks whether the password passes input validation
+  function _isPasswordValid(passwordEl) {
     var passwordValue = passwordEl.value;
     return passwordValue && passwordEl.validity.valid;
+  }
+
+  function _enableNext(passwordEl) {
+    if (_isPasswordValid(passwordEl)) {
+      FxaModuleUI.enableNextButton();
+    } else {
+      FxaModuleUI.disableNextButton();
+    }
   }
 
   function _showInvalidPassword() {
@@ -47,6 +56,8 @@ FxaModuleSetPassword = (function() {
   Module.init = function init(options) {
     options = options || {};
 
+    _ = navigator.mozL10n.get;
+
     this.importElements(
       'fxa-user-email',
       'fxa-pw-input',
@@ -55,7 +66,16 @@ FxaModuleSetPassword = (function() {
 
     this.email = options.email;
 
-    this.fxaUserEmail.innerHTML = options.email;
+    this.fxaUserEmail.textContent = options.email;
+
+    _enableNext(this.fxaPwInput);
+
+    this.fxaPwInput.addEventListener(
+      'input',
+      function onInput(event) {
+        _enableNext(event.target);
+      }
+    );
 
     this.fxaShowPw.addEventListener(
         'change', togglePasswordVisibility.bind(this), false);
@@ -64,8 +84,9 @@ FxaModuleSetPassword = (function() {
   Module.onNext = function onNext(gotoNextStepCallback) {
     var passwordEl = this.fxaPwInput;
 
-    if (! isPasswordValid(passwordEl)) {
+    if (! _isPasswordValid(passwordEl)) {
       _showInvalidPassword();
+      gotoNextStepCallback(null);
       return;
     }
 
@@ -75,6 +96,7 @@ FxaModuleSetPassword = (function() {
       _hideRegistering();
       if (! isAccountCreated) {
         _showUserNotCreated();
+        gotoNextStepCallback(null);
         return;
       }
 

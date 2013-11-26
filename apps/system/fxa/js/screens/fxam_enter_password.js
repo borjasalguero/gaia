@@ -120,7 +120,7 @@ FxaModuleEnterPassword = (function() {
     this.initialized = true;
   };
 
-  Module.onNext = function onNext(gotoNextStepCallback) {
+  Module.onNext = function onNext(done) {
     FxaModuleOverlay.show(_('fxa-authenticating'));
 
     FxModuleServerRequest.signIn(
@@ -129,7 +129,7 @@ FxaModuleEnterPassword = (function() {
       function onServerResponse(response) {
         FxaModuleOverlay.hide();
         if (response.authenticated) {
-          _loadSigninSuccess(gotoNextStepCallback);
+          _loadSigninSuccess(done);
         } else {
           _showPasswordMismatch();
         }
