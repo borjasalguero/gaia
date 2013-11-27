@@ -55,7 +55,7 @@ var FxAccountsManager = {
   },
 
   onPortMessage: function fxa_mgmt_onPortMessage(event) {
-    if (!event || !event.detail || !event.detail.data) {
+    if (!event || !event.detail) {
       console.error('Wrong event');
       return;
     }
@@ -70,7 +70,7 @@ var FxAccountsManager = {
       port.postMessage({ error: error });
     };
 
-    var message = event.detail.data;
+    var message = event.detail;
 
     switch (message.name) {
       case 'getAccounts':
