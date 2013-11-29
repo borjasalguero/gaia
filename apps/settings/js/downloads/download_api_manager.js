@@ -62,7 +62,10 @@
             onsuccess(downloads, oncomplete);
           };
           request.onerror = function(e) {
-            onerror && onerror();
+            // Append to the Dictionary
+            _appendDownloadsToCache(apiDownloads);
+            onsuccess(apiDownloads, oncomplete);
+            // onerror && onerror();
           };
         }.bind(this),
         onerror

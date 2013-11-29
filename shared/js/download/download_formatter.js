@@ -78,7 +78,7 @@
       });
     },
     getUUID: function(download) {
-      return this.getFileName(download) + download.startTime.getTime();
+      return Math.random();
     }
   };
 

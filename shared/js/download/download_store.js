@@ -127,7 +127,7 @@ var DownloadStore = (function() {
     navigator.getDataStores(DATASTORE_NAME).then(function(ds) {
       if (ds.length < 1) {
         console.error('Download Store: Cannot get access to the DataStore');
-        fail(e);
+        fail();
         return;
       }
 
