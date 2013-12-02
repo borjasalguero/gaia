@@ -1,10 +1,14 @@
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
+/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+
+'use strict';
+
 /**
  * Module checks the validity of password given email address, and if valid,
  * determine which screen to go to next.
  */
 
-FxaModuleEnterPassword = (function() {
-  'use strict';
+var FxaModuleEnterPassword = (function() {
 
   var _;
 
@@ -77,7 +81,6 @@ FxaModuleEnterPassword = (function() {
   Module.init = function init(options) {
 
     if (!this.initialized) {
-      console.log('Se ha inicializado ENTER password');
       // l10n handling
       _ = navigator.mozL10n.get;
       // Cache DOM elements

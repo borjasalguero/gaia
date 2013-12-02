@@ -1,24 +1,37 @@
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
+/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+
 'use strict';
 
 var FxaModuleOverlay = {
+    init: function fxam_overlay_init() {
+      if (this.fxaOverlay)
+        return;
+
+      FxaModule.importElements.call(this,
+        'fxa-overlay',
+        'fxa-overlay-msg'
+      );
+    },
 
     show: function fxam_overlay_show(string) {
-      var overlay = document.querySelector('#fxa-overlay');
-      var message = document.querySelector('#fxa-overlay-msg');
-      if (!overlay || !message)
+      this.init();
+
+      if (!(this.fxaOverlay && this.fxaOverlayMsg))
         return;
 
-      message.textContent = string;
-      overlay.classList.add('show');
+      this.fxaOverlayMsg.textContent = string;
+      this.fxaOverlay.classList.add('show');
     },
+
     hide: function fxam_overlay_hide() {
-      var overlay = document.querySelector('#fxa-overlay');
-      if (!overlay)
+      this.init();
+
+      if (!this.fxaOverlay)
         return;
 
-      overlay.classList.remove('show');
+      this.fxaOverlay.classList.remove('show');
     }
-
 };
 
 
