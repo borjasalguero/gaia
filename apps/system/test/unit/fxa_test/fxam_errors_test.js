@@ -1,6 +1,8 @@
 'use strict';
 
 requireApp('/system/test/unit/mock_l10n.js');
+requireApp('system/fxa/js/utils.js');
+requireApp('system/fxa/js/fxam_module.js');
 requireApp('system/fxa/js/fxam_errors.js');
 
 suite('Error manager', function() {

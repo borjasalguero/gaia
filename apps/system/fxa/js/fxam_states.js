@@ -1,6 +1,9 @@
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
+/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
-FxaModuleStates = (function() {
-  'use strict';
+'use strict';
+
+var FxaModuleStates = (function() {
 
   // Define the states of the firefox accounts signup/signin flow.
   // The object key defines the state name, the value is the

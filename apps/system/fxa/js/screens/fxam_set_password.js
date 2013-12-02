@@ -1,9 +1,13 @@
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
+/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+
+'use strict';
+
 /**
  * Takes care of a new user's set password screen. If password is valid,
  * attempt to stage the user.
  */
-FxaModuleSetPassword = (function() {
-  'use strict';
+var FxaModuleSetPassword = (function() {
 
   var _;
 
@@ -49,7 +53,6 @@ FxaModuleSetPassword = (function() {
   Module.init = function init(options) {
 
     if (!this.initialized) {
-      console.log('Se ha inicializado SET password');
       // l10n manager
       _ = navigator.mozL10n.get;
       // Cache DOM elements
@@ -76,7 +79,7 @@ FxaModuleSetPassword = (function() {
     options = options || {};
 
     this.email = options.email;
-    this.fxaUserSetEmail.innerHTML = options.email;
+    this.fxaUserSetEmail.textContent = options.email;
 
     _cleanForm(
       this.fxaPwSetInput,
