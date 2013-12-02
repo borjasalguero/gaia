@@ -33,7 +33,7 @@ var FxUI = {
     this.loadFlow('delete');
   },
   // Method which close the Dialog
-  close: function fxa_ui_end() {
+  close: function fxa_ui_close() {
     var self = this;
     this.panel.addEventListener('animationend', function closeAnimationEnd() {
       self.panel.removeEventListener('animationend', closeAnimationEnd, false);

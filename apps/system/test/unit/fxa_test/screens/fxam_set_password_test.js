@@ -66,7 +66,7 @@ suite('Screen: Set password', function() {
     var fxamUIDisableSpy, fxamUIEnableSpy;
     var inputEvent;
     setup(function() {
-      passwordInput = document.getElementById('fxa-pw-input');
+      passwordInput = document.getElementById('fxa-pw-set-input');
       fxamUIDisableSpy = this.sinon.spy(FxaModuleUI, 'disableNextButton');
       fxamUIEnableSpy = this.sinon.spy(FxaModuleUI, 'enableNextButton');
       inputEvent = new CustomEvent(

@@ -1,13 +1,14 @@
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
+/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+
+'use strict';
+
 /**
  * Module checks the validity of an email address, and if valid,
  * determine which screen to go to next.
  */
 
-
-
-FxaModuleEnterEmail = (function() {
-  'use strict';
-
+var FxaModuleEnterEmail = (function() {
 
   var _ = null;
 
@@ -32,7 +33,7 @@ FxaModuleEnterEmail = (function() {
   }
 
   var Module = Object.create(FxaModule);
-  Module.init = function() {
+  Module.init = function init() {
     _ = navigator.mozL10n.get;
 
     // Blocks the navigation until check the condition
