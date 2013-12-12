@@ -5,10 +5,10 @@
 
 var FxaModuleErrorOverlay = {
   init: function fxam_error_overlay_init() {
-    if (this.fxaErrorOverlay)
+    if (this.initialized)
       return;
 
-    FxaModule.importElements.call(this,
+    Utils.importElements(this,
       'fxa-error-overlay',
       'fxa-error-title',
       'fxa-error-msg',
@@ -17,13 +17,12 @@ var FxaModuleErrorOverlay = {
 
     this.fxaErrorOk.addEventListener('click', this.hide.bind(this));
     this.fxaErrorOverlay.addEventListener('submit', this.prevent);
+
+    this.initialized = true;
   },
 
   show: function fxam_error_overlay_show(title, message) {
     this.init();
-
-    if (! this.fxaErrorOverlay)
-      return;
 
     this.fxaErrorTitle.textContent = title || '';
     this.fxaErrorMsg.textContent = message || '';
@@ -33,9 +32,6 @@ var FxaModuleErrorOverlay = {
 
   hide: function fxam_overlay_hide() {
     this.init();
-
-    if (! this.fxaErrorOverlay)
-      return;
 
     this.fxaErrorOverlay.classList.remove('show');
   },

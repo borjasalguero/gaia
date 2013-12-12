@@ -5,20 +5,19 @@
 
 var FxaModuleOverlay = {
     init: function fxam_overlay_init() {
-      if (this.fxaOverlay)
+      if (this.initialized)
         return;
 
-      FxaModule.importElements.call(this,
+      Utils.importElements(this,
         'fxa-overlay',
         'fxa-overlay-msg'
       );
+
+      this.initialized = true;
     },
 
     show: function fxam_overlay_show(string) {
       this.init();
-
-      if (!(this.fxaOverlay && this.fxaOverlayMsg))
-        return;
 
       this.fxaOverlayMsg.textContent = string;
       this.fxaOverlay.classList.add('show');
@@ -26,9 +25,6 @@ var FxaModuleOverlay = {
 
     hide: function fxam_overlay_hide() {
       this.init();
-
-      if (!this.fxaOverlay)
-        return;
 
       this.fxaOverlay.classList.remove('show');
     }

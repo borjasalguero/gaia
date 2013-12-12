@@ -3,7 +3,7 @@
 
 'use strict';
 
-var FxaModuleErrors = (function(exports) {
+(function(exports) {
 
   var Errors = {
     CANNOT_CREATE_ACCOUNT: {
@@ -78,5 +78,5 @@ var FxaModuleErrors = (function(exports) {
     }
   };
 
-  return FxaModuleErrors;
-}());
+  exports.FxaModuleErrors = FxaModuleErrors;
+}(this));
