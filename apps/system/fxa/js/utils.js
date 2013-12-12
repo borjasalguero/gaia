@@ -1,8 +1,9 @@
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
+'use strict';
+
 (function(exports) {
-  'use strict';
   var rdashes = /-(.)/g;
   var Utils = {
     camelCase: function ut_camelCase(str) {
@@ -19,6 +20,17 @@
         element.removeEventListener(eventName, handlerDecorator, false);
         handler.call(this, event);
       }, false);
+    },
+
+    // import elements into context. The first argument
+    // is the context to import into, each subsequent
+    // argument is the id of an element to import.
+    // Elements can be accessed using the camelCased id
+    importElements: function importElements(context) {
+      var ids = [].slice.call(arguments, 1);
+      ids.forEach(function(id) {
+        context[Utils.camelCase(id)] = document.getElementById(id);
+      });
     }
   };
 

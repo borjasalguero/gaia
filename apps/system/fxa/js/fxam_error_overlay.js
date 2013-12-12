@@ -1,33 +1,39 @@
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
+/* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+
 'use strict';
 
 var FxaModuleErrorOverlay = {
-  show: function fxam_error_overlay_show(title, message) {
-    var overlayEl = document.querySelector('#fxa-error-overlay');
-    var titleEl = document.querySelector('#fxa-error-title');
-    var messageEl = document.querySelector('#fxa-error-msg');
-
-    if (! (overlayEl && titleEl && messageEl))
+  init: function fxam_error_overlay_init() {
+    if (this.initialized)
       return;
 
-    titleEl.textContent = title || '';
-    messageEl.textContent = message || '';
-
-    overlayEl.classList.add('show');
-
-    Utils.once(document.querySelector('#fxa-error-ok'), 'click', this.hide);
-    Utils.once(
-      document.querySelector('#fxa-error-overlay'),
-      'submit',
-      this.prevent
+    Utils.importElements(this,
+      'fxa-error-overlay',
+      'fxa-error-title',
+      'fxa-error-msg',
+      'fxa-error-ok'
     );
+
+    this.fxaErrorOk.addEventListener('click', this.hide.bind(this));
+    this.fxaErrorOverlay.addEventListener('submit', this.prevent);
+
+    this.initialized = true;
+  },
+
+  show: function fxam_error_overlay_show(title, message) {
+    this.init();
+
+    this.fxaErrorTitle.textContent = title || '';
+    this.fxaErrorMsg.textContent = message || '';
+
+    this.fxaErrorOverlay.classList.add('show');
   },
 
   hide: function fxam_overlay_hide() {
-    var overlayEl = document.querySelector('#fxa-error-overlay');
-    if (! overlayEl)
-      return;
+    this.init();
 
-    overlayEl.classList.remove('show');
+    this.fxaErrorOverlay.classList.remove('show');
   },
 
   prevent: function(event) {

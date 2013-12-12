@@ -5,18 +5,18 @@
 
 var FxaModuleManager = {
   paramsRetrieved: {},
-  init: function() {
+  init: function fxamm_init() {
     var flow = window.location.hash.replace('#', '');
     FxaModuleUI.init(flow);
   },
-  setParam: function(key, value) {
+  setParam: function fxamm_set_param(key, value) {
     this.paramsRetrieved[key] = value;
   },
-  done: function() {
+  done: function fxamm_done() {
    // Send params to the System
    window.parent.FxAccountsUI.done(this.paramsRetrieved);
   },
-  close: function(error) {
+  close: function fxamm_close(error) {
     window.parent.FxAccountsUI.error(error);
   }
 };

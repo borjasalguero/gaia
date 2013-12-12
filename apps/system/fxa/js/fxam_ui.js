@@ -46,17 +46,17 @@ var FxaModuleUI = {
 
       // Once all scripts are loaded, load the modules/UI
       LazyLoader.load(scripts, function() {
-        if (params.count > 1 && params.count < FxaModuleUI.maxSteps) {
-          FxaModuleUI.navigation.classList.remove('navigation-single-button');
-          FxaModuleUI.navigation.classList.remove('navigation-back-only');
+        if (params.count > 1 && params.count < this.maxSteps) {
+          this.navigation.classList.remove('navigation-single-button');
+          this.navigation.classList.remove('navigation-back-only');
 
           if (nextScreen.getAttribute('data-navigation') === 'back') {
-            FxaModuleUI.navigation.classList.add('navigation-back-only');
+            this.navigation.classList.add('navigation-back-only');
           }
         } else {
-          FxaModuleUI.navigation.classList.add('navigation-single-button');
-          if (params.count === FxaModuleUI.maxSteps) {
-            FxaModuleUI.navigation.classList.add('navigation-done');
+          this.navigation.classList.add('navigation-single-button');
+          if (params.count === this.maxSteps) {
+            this.navigation.classList.add('navigation-done');
           }
         }
         this.progress(100 * params.count / this.maxSteps);
