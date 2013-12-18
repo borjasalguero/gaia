@@ -8,35 +8,33 @@ requireApp('communications/ftu/test/unit/mock_navigator_moz_settings.js');
 suite('RingtoneCustomizer >', function() {
   var ringtoneParams = { uri: '/ftu/test/unit/resources/ringtone.ogg',
                          name: 'ringtone' };
-  var createLockSpy, realSettings, resourcesSpy;
+  var realSettings;
 
   suiteSetup(function() {
     realSettings = navigator.mozSettings;
     navigator.mozSettings = MockNavigatorSettings;
-    createLockSpy = sinon.spy(MockNavigatorSettings, 'createLock');
-//    resourcesSpy = sinon.spy(Resources, "load")
   });
 
   suiteTeardown(function() {
     navigator.mozSettings = realSettings;
     realSettings = null;
+  });
+
+  test(' request the right ringtone blob > ', function() {
+    var resourcesSpy = sinon.spy(Resources, 'load');
+    ringtoneCustomizer.set(ringtoneParams);
+    sinon.assert.calledOnce(resourcesSpy);
+    sinon.assert.calledWith(resourcesSpy, ringtoneParams.uri, 'blob');
+    resourcesSpy.restore();
+  });
+
+  test(' set the ringtone > ', function() {
+    var createLockSpy = sinon.spy(navigator.mozSettings, 'createLock');
+    this.sinon.stub(Resources, 'load', function(uri, type, onsuccess) {
+      onsuccess('ABC');
+    });
+    ringtoneCustomizer.set(ringtoneParams);
+    sinon.assert.calledOnce(createLockSpy);
     createLockSpy.restore();
-  });
-
-  setup(function() {
-    createLockSpy.reset();
-  });
-
-/*  test(' set > ', function() {
-    ringtoneCustomizer.set(ringtoneParams);
-    assert.isTrue(resourcesSpy.calledOnce);
-    assert.equal(ringtoneParams.uri, resourcesSpy.getCall(0).args[0]);
-    assert.equal('blob', resourcesSpy.getCall(0).args[1]);
-  });*/
-
-  test(' tes > ', function() {
-    var stub = sinon.stub(Resources, 'load').yields();
-    ringtoneCustomizer.set(ringtoneParams);
-    assert.isTrue(createLockSpy.calledOnce);
   });
 });
