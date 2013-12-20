@@ -6,7 +6,7 @@
 var FxaModuleNavigation = {
   stepCount: 0,
   currentModule: null,
-  init: function(flow) {
+  init: function fxam_nav_init(flow) {
     // Listen on hash changes for panel changes
     window.addEventListener(
       'hashchange',
@@ -16,22 +16,20 @@ var FxaModuleNavigation = {
 
     // Load view
     LazyLoader.load('view/view_' + flow + '.js', function loaded() {
-      // TODO Check how to load maxSteps,
-      // do we need this?
       FxaModuleUI.setMaxSteps(View.length);
       window.location.hash = View.start.id;
     }.bind(this));
   },
-  hashchangeHandler: function() {
-    if (!location.hash)
-        return;
+  hashchangeHandler: function fxam_nav_hashchangeHandler() {
+    if (!location.hash) {
+      return;
+    }
 
     var panel = document.querySelector(location.hash);
     if (!panel || !panel.classList.contains('screen'))
       return;
 
     if (this.backAnim) {
-      this.backAnim = false;
       this.stepCount--;
       this.loadStep(panel, true);
     } else {
@@ -39,27 +37,26 @@ var FxaModuleNavigation = {
       this.loadStep(panel);
     }
   },
-  loadStep: function(panel, back) {
+  loadStep: function fxam_nav_loadStep(panel, back) {
     if (!panel)
       return;
-    var self = this;
     FxaModuleUI.loadScreen({
       panel: panel,
       count: this.stepCount,
-      back: back,
+      back: this.backAnim,
       onload: function() {
         this.currentModule = window[this.moduleById(panel.id)];
         this.currentModule.init &&
           this.currentModule.init(FxaModuleManager.paramsRetrieved);
       }.bind(this),
       onanimate: function() {
+        this.backAnim = false;
         this.updatingStep = false;
       }.bind(this)
     });
   },
-  back: function() {
-    // Avoid multiple taps on 'back' if
-    // screen transition is not over.
+  back: function fxam_nav_back() {
+    // Avoid multiple taps on 'back' if screen transition is not over.
     if (this.updatingStep) {
       return;
     }
@@ -70,20 +67,18 @@ var FxaModuleNavigation = {
     this.backAnim = true;
 
     window.history.back();
-
-
   },
-  next: function() {
-    // TODO Add shield against multiple taps
+  next: function fxam_nav_next() {
     var loadNextStep = function loadNextStep(nextStep) {
-      if (!nextStep)
+      if (!nextStep || !nextStep.id) {
         return;
+      }
+
       location.hash = nextStep.id;
     };
     this.currentModule.onNext(loadNextStep.bind(this));
   },
-  moduleById: function(id) {
-    // TODO (Olav): Make states easier to look up :)
+  moduleById: function fxam_nav_moduleById(id) {
     var moduleKey = Object.keys(FxaModuleStates).filter(function(module) {
       return FxaModuleStates[module] &&
         FxaModuleStates[module].id &&
@@ -92,7 +87,7 @@ var FxaModuleNavigation = {
     if (moduleKey)
       return FxaModuleStates[moduleKey].module;
   },
-  done: function() {
+  done: function fxam_nav_done() {
     FxaModuleManager.done();
   }
 };

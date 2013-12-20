@@ -3,7 +3,6 @@
 
 'use strict';
 
-
 var FxaModule = (function() {
 
   var Module = {

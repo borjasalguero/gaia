@@ -90,18 +90,6 @@ suite('Error manager', function() {
     );
   });
 
-  test('Internal error, no client', function() {
-    response.error = 'INTERNAL_ERROR_NO_CLIENT';
-    FxaModuleErrors.responseToParams(response);
-
-    assert.ok(l10nSpy.calledWith(
-      'fxa-' + errorsObject[response.error] + '-title')
-    );
-    assert.ok(l10nSpy.calledWith(
-      'fxa-' + errorsObject[response.error] + '-message')
-    );
-  });
-
   test('There is a user already signed', function() {
     response.error = 'ALREADY_SIGNED_IN_USER';
     FxaModuleErrors.responseToParams(response);

@@ -18,7 +18,10 @@ html, body {
 
 html, body * {
   -moz-user-select: none;
-  user-select: none;
+}
+
+.vertical {
+  width: 100%;
 }
 
 section[role="region"] {
@@ -149,6 +152,20 @@ h3 {
 #fxa-intro p {
   margin-top: 4rem;
 }
+
+#fxa-hello-user {
+  width: 100%;
+}
+
+#fxa-user-email,
+#fxa-user-set-email {
+  display: inline-block;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 
 
 /*

@@ -7,25 +7,27 @@ var FxaModuleUI = {
   maxSteps: null,
   init: function(flow) {
     // Add listeners to the main elements
-    [
-      'close', 'back', 'next', 'navigation', 'done'
-    ].forEach(function(id) {
-      this[Utils.camelCase(id)] = document.getElementById('fxa-module-' + id);
-    }, this);
+    Utils.importElements(this,
+      'fxa-module-close',
+      'fxa-module-back',
+      'fxa-module-next',
+      'fxa-module-navigation',
+      'fxa-module-done'
+    );
 
-    this.close.addEventListener('click', function() {
+    this.fxaModuleClose.addEventListener('click', function() {
       FxaModuleManager.close('DIALOG_CLOSED_BY_USER');
     });
 
-    this.back.addEventListener('mousedown', function() {
+    this.fxaModuleBack.addEventListener('mousedown', function() {
       FxaModuleNavigation.back();
     });
 
-    this.next.addEventListener('mousedown', function() {
+    this.fxaModuleNext.addEventListener('mousedown', function() {
       FxaModuleNavigation.next();
     });
 
-    this.done.addEventListener('click', function() {
+    this.fxaModuleDone.addEventListener('click', function() {
       FxaModuleManager.done();
     });
 
@@ -47,16 +49,16 @@ var FxaModuleUI = {
       // Once all scripts are loaded, load the modules/UI
       LazyLoader.load(scripts, function() {
         if (params.count > 1 && params.count < this.maxSteps) {
-          this.navigation.classList.remove('navigation-single-button');
-          this.navigation.classList.remove('navigation-back-only');
+          this.fxaModuleNavigation.classList.remove('navigation-single-button');
+          this.fxaModuleNavigation.classList.remove('navigation-back-only');
 
           if (nextScreen.getAttribute('data-navigation') === 'back') {
-            this.navigation.classList.add('navigation-back-only');
+            this.fxaModuleNavigation.classList.add('navigation-back-only');
           }
         } else {
-          this.navigation.classList.add('navigation-single-button');
+          this.fxaModuleNavigation.classList.add('navigation-single-button');
           if (params.count === this.maxSteps) {
-            this.navigation.classList.add('navigation-done');
+            this.fxaModuleNavigation.classList.add('navigation-done');
           }
         }
         this.progress(100 * params.count / this.maxSteps);
@@ -111,12 +113,12 @@ var FxaModuleUI = {
     document.querySelector('#fxa-progress').value = value;
   },
   setNextText: function(l10n) {
-    this.next.textContent = l10n;
+    this.fxaModuleNext.textContent = l10n;
   },
   disableNextButton: function() {
-    this.next.setAttribute('disabled', 'disabled');
+    this.fxaModuleNext.setAttribute('disabled', 'disabled');
   },
   enableNextButton: function() {
-    this.next.removeAttribute('disabled');
+    this.fxaModuleNext.removeAttribute('disabled');
   }
 };

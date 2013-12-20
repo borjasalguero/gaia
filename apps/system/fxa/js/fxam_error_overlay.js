@@ -36,10 +36,8 @@ var FxaModuleErrorOverlay = {
     this.fxaErrorOverlay.classList.remove('show');
   },
 
-  prevent: function(event) {
+  prevent: function fxam_prevent(event) {
     event.preventDefault();
     event.stopPropagation();
   }
 };
-
-

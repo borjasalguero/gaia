@@ -22,10 +22,6 @@
       title: 'fxa-invalid-password-title',
       message: 'fxa-invalid-password-message'
     },
-    INTERNAL_ERROR_NO_CLIENT: {
-      title: 'fxa-generic-error-title',
-      message: 'fxa-generic-error-message'
-    },
     ALREADY_SIGNED_IN_USER: {
       title: 'fxa-already-signed-in-title',
       message: 'fxa-already-signed-in-message'
@@ -47,8 +43,8 @@
       message: 'fxa-generic-error-message'
     },
     OFFLINE: {
-      title: 'fxa-generic-error-title',
-      message: 'fxa-generic-error-message'
+      title: 'fxa-offline-error-title',
+      message: 'fxa-offline-error-message'
     }
   };
 
@@ -61,18 +57,13 @@
     };
   }
 
-
-
   var FxaModuleErrors = {
-    responseToParams: function(response) {
+    responseToParams: function fxame_responseToParams(response) {
       var config;
-      // TODO Check from server all error messages
       if (response && response.error && !response.info) {
         console.warn('Error is ' + response.error);
         config = _getError(response.error);
-      }
-
-      if (!config) {
+      } else {
         console.warn('Invalid response sent to responseToParams');
         // If there is no config, just display the response to the user
         config = _getError('GENERIC_ERROR');

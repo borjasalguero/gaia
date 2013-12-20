@@ -29,5 +29,3 @@ var FxaModuleOverlay = {
       this.fxaOverlay.classList.remove('show');
     }
 };
-
-

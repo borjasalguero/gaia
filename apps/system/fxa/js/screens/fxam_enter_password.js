@@ -4,8 +4,8 @@
 'use strict';
 
 /**
- * Module checks the validity of password given email address, and if valid,
- * determine which screen to go to next.
+ * This module checks the validity of password given email address, and if
+ * valid, determine which screen to go next.
  */
 
 var FxaModuleEnterPassword = (function() {
@@ -81,7 +81,6 @@ var FxaModuleEnterPassword = (function() {
   Module.init = function init(options) {
 
     if (!this.initialized) {
-      // l10n handling
       _ = navigator.mozL10n.get;
       // Cache DOM elements
       this.importElements(
@@ -97,7 +96,8 @@ var FxaModuleEnterPassword = (function() {
           _enableNext(event.target);
         }
       );
-
+      // Ensure that pressing 'ENTER' (keycode 13) we send the form
+      // as expected
       this.fxaPwInput.addEventListener(
         'keypress',
         function onKeypress(event) {

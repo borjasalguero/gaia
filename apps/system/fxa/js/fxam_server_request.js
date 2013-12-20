@@ -19,23 +19,21 @@
   };
 
   var FxModuleServerRequest = {
-    checkEmail: function(email, onsuccess, onerror) {
-      window.parent.LazyLoader.load('../js/fxa_client.js', function() {
+    checkEmail: function fxmsr_checkEmail(email, onsuccess, onerror) {
+      _ensureFxaClient(function() {
         window.parent.FxAccountsClient.queryAccount(
                 email,
                 onsuccess,
                 onerror);
       });
     },
-    signIn: function(email, password, onsuccess, onerror) {
+    signIn: function fxmsr_signIn(email, password, onsuccess, onerror) {
 
       function successHandler(response) {
         _setAccountDetails(response);
         var authenticated =
           (response && response.user && response.user.verified) || false;
         onsuccess && onsuccess({
-          // use the response code as specified in
-          // https://id.etherpad.mozilla.org/fxa-on-fxos-architecture
           authenticated: authenticated
         });
       }
@@ -53,7 +51,7 @@
       });
 
     },
-    signUp: function(email, password, onsuccess, onerror) {
+    signUp: function fxmsr_signUp(email, password, onsuccess, onerror) {
       function successHandler(response) {
         _setAccountDetails(response);
         onsuccess && onsuccess(response);
@@ -67,9 +65,9 @@
                 onerror);
       });
     },
-    requestPasswordReset: function(email, onsuccess, onerror) {
-      // TODO Implement this call to the Client
-      // when ready.
+    requestPasswordReset:
+      function fxmsr_requestPasswordReset(email, onsuccess, onerror) {
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=945365
       onsuccess && onsuccess();
     }
   };

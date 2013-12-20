@@ -4,8 +4,8 @@
 'use strict';
 
 /**
- * Module checks the validity of an email address, and if valid,
- * determine which screen to go to next.
+ * This module checks the validity of an email address, and if valid,
+ * determines which screen to go next.
  */
 
 var FxaModuleEnterEmail = (function() {
@@ -52,7 +52,8 @@ var FxaModuleEnterEmail = (function() {
         _enableNext(event.target);
       }
     );
-
+    // Ensure that pressing 'ENTER' (keycode 13) we send the form
+    // as expected
     this.fxaEmailInput.addEventListener(
       'keypress',
       function onKeypress(event) {
