@@ -59,17 +59,8 @@
 
   var FxaModuleErrors = {
     responseToParams: function fxame_responseToParams(response) {
-      var config;
-      if (response && response.error && !response.info) {
-        console.warn('Error is ' + response.error);
-        config = _getError(response.error);
-      } else {
-        console.warn('Invalid response sent to responseToParams');
-        // If there is no config, just display the response to the user
-        config = _getError('GENERIC_ERROR');
-      }
-
-      return config;
+      return response && response.error ?
+        _getError(response.error) : _getError('GENERIC_ERROR');
     }
   };
 

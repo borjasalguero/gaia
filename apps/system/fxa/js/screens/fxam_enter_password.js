@@ -10,7 +10,7 @@
 
 var FxaModuleEnterPassword = (function() {
 
-  var _;
+  var _ = null;
 
   function _isPasswordValid(passwordEl) {
     var passwordValue = passwordEl.value;

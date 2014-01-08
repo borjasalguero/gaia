@@ -75,16 +75,18 @@ var FxaModuleUI = {
     }.bind(this));
   },
   _animate: function(from, to, back, callback) {
-    if (!to)
+    if (!to) {
       return;
+    }
 
     if (!from) {
       to.classList.add('current');
       return;
     }
 
-    if (this._inTransition(from) || this._inTransition(to))
+    if (this._inTransition(from) || this._inTransition(to)) {
       return;
+    }
 
     from.addEventListener('animationend', function fromAnimEnd() {
       from.removeEventListener('animationend', fromAnimEnd, false);

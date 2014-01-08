@@ -3,6 +3,12 @@
 
 'use strict';
 
+/*
+ * This code controls the navigation between modules. When tapping on
+ * next/back, we load the next/previous module, loading resources and
+ * updating the UI. Transitions are based on hash change.
+ */
+
 var FxaModuleNavigation = {
   stepCount: 0,
   currentModule: null,
@@ -26,8 +32,9 @@ var FxaModuleNavigation = {
     }
 
     var panel = document.querySelector(location.hash);
-    if (!panel || !panel.classList.contains('screen'))
+    if (!panel || !panel.classList.contains('screen')) {
       return;
+    }
 
     if (this.backAnim) {
       this.stepCount--;
@@ -38,8 +45,10 @@ var FxaModuleNavigation = {
     }
   },
   loadStep: function fxam_nav_loadStep(panel, back) {
-    if (!panel)
+    if (!panel) {
       return;
+    }
+
     FxaModuleUI.loadScreen({
       panel: panel,
       count: this.stepCount,
@@ -68,15 +77,15 @@ var FxaModuleNavigation = {
 
     window.history.back();
   },
-  next: function fxam_nav_next() {
-    var loadNextStep = function loadNextStep(nextStep) {
-      if (!nextStep || !nextStep.id) {
-        return;
-      }
+  loadNextStep: function fxam_loadNextStep(nextStep) {
+    if (!nextStep || !nextStep.id) {
+      return;
+    }
 
-      location.hash = nextStep.id;
-    };
-    this.currentModule.onNext(loadNextStep.bind(this));
+    location.hash = nextStep.id;
+  },
+  next: function fxam_nav_next() {
+    this.currentModule.onNext(this.loadNextStep.bind(this));
   },
   moduleById: function fxam_nav_moduleById(id) {
     var moduleKey = Object.keys(FxaModuleStates).filter(function(module) {
@@ -84,8 +93,9 @@ var FxaModuleNavigation = {
         FxaModuleStates[module].id &&
         FxaModuleStates[module].id === id;
     }).pop();
-    if (moduleKey)
+    if (moduleKey) {
       return FxaModuleStates[moduleKey].module;
+    }
   },
   done: function fxam_nav_done() {
     FxaModuleManager.done();

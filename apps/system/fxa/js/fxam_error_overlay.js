@@ -3,6 +3,12 @@
 
 'use strict';
 
+/*
+ * FxaModuleErrorOverlay shows an error prompt to the user with the info
+ * retrieved after getting an error.
+ * As params, we can define Title and Message.
+ */
+
 var FxaModuleErrorOverlay = {
   init: function fxam_error_overlay_init() {
     if (this.initialized)

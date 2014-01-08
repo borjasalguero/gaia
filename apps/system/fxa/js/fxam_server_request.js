@@ -3,6 +3,11 @@
 
 'use strict';
 
+/*
+ * FxModuleServerRequest wraps the functionality exposed by the server,
+ * letting our code to be shielded against changes in the API of FxA.
+ */
+
 (function(exports) {
 
   function _setAccountDetails(response) {

@@ -3,6 +3,12 @@
 
 'use strict';
 
+/*
+ * FxaModuleManager is in charge of communication with the core of
+ * FxAccounts, sending the info retrieved during the process if the
+ * process was succeeded.
+ */
+
 var FxaModuleManager = {
   paramsRetrieved: null,
   init: function fxamm_init() {
@@ -27,4 +33,7 @@ var FxaModuleManager = {
   }
 };
 
-Utils.once(window, 'load', FxaModuleManager.init.bind(FxaModuleManager));
+window.addEventListener('load', function managerLoaded() {
+  window.removeEventListener('load', managerLoaded);
+  FxaModuleManager.init.bind(FxaModuleManager);
+});

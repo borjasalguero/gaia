@@ -3,10 +3,17 @@
 
 'use strict';
 
+/*
+ * FxaModuleOverlay shows an loading prompt to the user.
+ * As params, we can only a message which will be shown with
+ * a spinner of 'loading'.
+ */
+
 var FxaModuleOverlay = {
     init: function fxam_overlay_init() {
-      if (this.initialized)
+      if (this.initialized) {
         return;
+      }
 
       Utils.importElements(this,
         'fxa-overlay',
