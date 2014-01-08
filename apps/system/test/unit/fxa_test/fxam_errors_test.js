@@ -11,7 +11,6 @@ suite('Error manager', function() {
     'RESET_PASSWORD_ERROR': 'reset-password-error',
     'INVALID_ACCOUNTID': 'invalid-email',
     'INVALID_PASSWORD': 'invalid-password',
-    'INTERNAL_ERROR_NO_CLIENT': 'generic-error',
     'ALREADY_SIGNED_IN_USER': 'already-signed-in',
     'INTERNAL_ERROR_INVALID_USER': 'generic-error',
     'SERVER_ERROR': 'generic-error',
