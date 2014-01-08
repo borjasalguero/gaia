@@ -35,5 +35,5 @@ var FxaModuleManager = {
 
 window.addEventListener('load', function managerLoaded() {
   window.removeEventListener('load', managerLoaded);
-  FxaModuleManager.init.bind(FxaModuleManager);
+  FxaModuleManager.init();
 });
