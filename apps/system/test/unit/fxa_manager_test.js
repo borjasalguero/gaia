@@ -1,32 +1,28 @@
 'use strict';
 
 requireApp('system/js/fxa_manager.js');
-requireApp('system/js/fxa_client.js');
 requireApp('system/test/unit/mock_fxa_client.js');
 requireApp('system/test/unit/mock_fxa_ui.js');
 requireApp('system/test/unit/mock_iac_handler.js');
 
 require('/shared/test/unit/mocks/mock_lazy_loader.js');
 
-mocha.globals(['FxAccountsUI',
-               'IACHandler',
-               'LazyLoader',
-               'dispatchEvent']);
-
 var MockEventListener = {};
 function MockAddEventListener(event, listener) {
   MockEventListener[event] = listener;
 }
 
+var mocksHelperFxAManager = new MocksHelper([
+  'FxAccountsClient',
+  'FxAccountsUI',
+  'IACHandler',
+  'LazyLoader'
+]).init();
+
 suite('system/FxAccountManager >', function() {
   var stubAddEventListener;
 
-  new MocksHelper([
-    'FxAccountsClient',
-    'FxAccountsUI',
-    'IACHandler',
-    'LazyLoader'
-  ]).attachTestHelpers();
+  mocksHelperFxAManager.attachTestHelpers();
 
   setup(function() {
     stubAddEventListener = this.sinon.stub(window, 'addEventListener',
@@ -58,9 +54,7 @@ suite('system/FxAccountManager >', function() {
       FxAccountsClient._successMsg = 'success';
       FxAccountsManager.onPortMessage({
         'detail': {
-          'data': {
-            'name': 'getAccounts'
-           }
+          'name': 'getAccounts'
         }
       });
     });
@@ -89,9 +83,7 @@ suite('system/FxAccountManager >', function() {
       FxAccountsClient._errorMsg = 'error';
       FxAccountsManager.onPortMessage({
         'detail': {
-          'data': {
-            'name': 'getAccounts'
-           }
+          'name': 'getAccounts'
         }
       });
     });
@@ -120,9 +112,7 @@ suite('system/FxAccountManager >', function() {
       FxAccountsClient._successMsg = 'success';
       FxAccountsManager.onPortMessage({
         'detail': {
-          'data': {
-            'name': 'logout'
-           }
+          'name': 'logout'
         }
       });
     });
@@ -151,9 +141,7 @@ suite('system/FxAccountManager >', function() {
       FxAccountsClient._errorMsg = 'error';
       FxAccountsManager.onPortMessage({
         'detail': {
-          'data': {
-            'name': 'logout'
-           }
+          'name': 'logout'
         }
       });
     });
@@ -182,9 +170,7 @@ suite('system/FxAccountManager >', function() {
       FxAccountsUI._successMsg = 'success';
       FxAccountsManager.onPortMessage({
         'detail': {
-          'data': {
-            'name': 'openFlow'
-           }
+          'name': 'openFlow'
         }
       });
     });
@@ -213,9 +199,7 @@ suite('system/FxAccountManager >', function() {
       FxAccountsUI._errorMsg = 'error';
       FxAccountsManager.onPortMessage({
         'detail': {
-          'data': {
-            'name': 'openFlow'
-           }
+          'name': 'openFlow'
         }
       });
     });
