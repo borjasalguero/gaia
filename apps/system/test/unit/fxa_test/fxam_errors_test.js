@@ -1,8 +1,6 @@
 'use strict';
 
-requireApp('/system/test/unit/mock_l10n.js');
-requireApp('system/fxa/js/utils.js');
-requireApp('system/fxa/js/fxam_module.js');
+requireApp('system/test/unit/mock_l10n.js');
 requireApp('system/fxa/js/fxam_errors.js');
 
 suite('Error manager', function() {
@@ -17,16 +15,14 @@ suite('Error manager', function() {
     'NO_TOKEN_SESSION': 'generic-error',
     'GENERIC_ERROR': 'generic-error'
   };
-  var errors, response;
+  var response;
   var realL10n;
   suiteSetup(function() {
-    errors = Object.keys(errorsObject);
     realL10n = navigator.mozL10n;
     navigator.mozL10n = MockL10n;
   });
 
   suiteTeardown(function() {
-    errors = null;
     navigator.mozL10n = realL10n;
   });
 

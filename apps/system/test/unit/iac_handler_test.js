@@ -120,7 +120,7 @@ suite('IACHandler > ', function() {
 
   suite('IACHandler can store ports', function() {
 
-    test('IACHandler has two ports', function() {
+    test('IACHandler has three ports', function() {
       assert.equal(Object.keys(IACHandler._ports).length, 3);
     });
 
