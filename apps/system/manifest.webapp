@@ -102,9 +102,7 @@
     "fxa-mgmt": {
       "description": "Firefox Accounts management API",
       "rules": {
-        "manifestURLs": ["app://communications.gaiamobile.org/manifest.webapp",
-                         "app://settings.gaiamobile.org/manifest.webapp",
-                         "app://test-fxa-client.gaiamobile.org/manifest.webapp"]
+        "minimumAccessLevel": "certified"
       }
     }
   },

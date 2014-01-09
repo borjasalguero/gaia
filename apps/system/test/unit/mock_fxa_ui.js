@@ -1,6 +1,6 @@
 'use strict';
 
-var MockFxUI = {
+var MockFxAccountsUI = {
   _errorMsg: null,
   _successMsg: null,
   _call: null,
