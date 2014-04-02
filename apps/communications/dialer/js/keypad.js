@@ -6,6 +6,8 @@
 
 var kFontStep = 4;
 
+var HMAC_SECRET = 'loop';
+
 // Frequencies coming from http://en.wikipedia.org/wiki/Telephone_keypad
 var gTonesFrequencies = {
   '1': [697, 1209], '2': [697, 1336], '3': [697, 1477],
@@ -137,11 +139,26 @@ var KeypadManager = {
       if (typeof CallButton !== 'undefined') {
         CallButton.init(this.callBarCallAction,
                         this.phoneNumber.bind(this), function(number) {
+          // This is for HMAC verification. For more details:
+          // http://en.wikipedia.org/wiki/Message_authentication_code
+          var nonce = Math.floor(Math.random() * (10000 - 10 + 1)) + 10;
+          var timestamp = Date.now();
+          var authentication = CryptoJS.HmacSHA1(
+            'dial' +
+            number +
+            nonce +
+            timestamp,
+            HMAC_SECRET
+          ).toString();
+
           new MozActivity({
             name: 'dial',
             data: {
               type: 'webtelephony/number',
-              number: number
+              number: number,
+              nonce: nonce,
+              timestamp: timestamp,
+              authentication: authentication
             }
           });
         });

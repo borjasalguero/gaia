@@ -1,6 +1,8 @@
 'use strict';
 
 var CallHandler = (function callHandler() {
+  var HMAC_SECRET = 'loop';
+  var MAX_AGE = 4000;
   var COMMS_APP_ORIGIN = document.location.protocol + '//' +
     document.location.host;
   var callScreenWindow = null;
@@ -17,7 +19,8 @@ var CallHandler = (function callHandler() {
     // Workaround here until the bug 787415 is fixed
     // Gecko is sending an activity event in every multiple entry point
     // instead only the one that the href match.
-    if (activity.source.name != 'dial') {
+    var activityName = activity.source.name;
+    if (activityName != 'dial') {
       return;
     }
 
@@ -25,7 +28,35 @@ var CallHandler = (function callHandler() {
 
     var number = activity.source.data.number;
     if (number) {
-      call(number);
+
+      // This is HMAC verification. For more details:
+      // http://en.wikipedia.org/wiki/Message_authentication_code
+      // This is checking as well the timestamp to ensure
+      // the security of the request
+      var activityData = activity.source.data;
+
+      var isPrivilegedActivity = (
+        // Check timestamp and shield
+        activityData.timestamp &&
+        (Date.now() < activityData.timestamp + MAX_AGE) &&
+        // Check HMAC
+        activityData.authentication && activityData.nonce &&
+        (CryptoJS.HmacSHA1(
+          activityName + activityData.number +
+          activityData.nonce + activityData.timestamp, HMAC_SECRET
+          ).toString() === activityData.authentication));
+
+      // If the action is privileged, so we can identify the
+      // requester as 'certified', we call directly.
+      if (!isPrivilegedActivity) {
+        console.log('Estamos en modo manual');
+        KeypadManager.updatePhoneNumber(number, 'begin', false);
+        if (window.location.hash != '#keyboard-view') {
+          window.location.hash = '#keyboard-view';
+        }
+      } else {
+        call(number);
+      }
     }
   }
 
