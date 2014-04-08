@@ -8,6 +8,9 @@
 
 var kFontStep = 4;
 
+
+var HMAC_SECRET = 'loop';
+
 // Frequencies coming from http://en.wikipedia.org/wiki/Telephone_keypad
 var gTonesFrequencies = {
   '1': [697, 1209], '2': [697, 1336], '3': [697, 1477],
@@ -186,30 +189,33 @@ var KeypadManager = {
     // The keypad call bar is only included in the normal version and
     // the emergency call version of the keypad.
     if (this.callBarCallAction) {
-      if (typeof MultiSimActionButton !== 'undefined') {
-        if (navigator.mozMobileConnections &&
-            navigator.mozMobileConnections.length > 1) {
-          // Use LazyL10n to load l10n.js. Single SIM devices will be slowed
-          // down by the cost of loading l10n.js in the startup path if we don't
-          // do this.
-          var self = this;
-          LazyL10n.get(function localized(_) {
-            self.multiSimActionButton =
-              new MultiSimActionButton(self.callBarCallAction,
-                                       CallHandler.call,
-                                       'ril.telephony.defaultServiceId',
-                                       self.phoneNumber.bind(self));
-          });
-        } else {
-          this.multiSimActionButton =
-            new MultiSimActionButton(this.callBarCallAction,
-                                     CallHandler.call,
-                                     'ril.telephony.defaultServiceId',
-                                     this.phoneNumber.bind(this));
-        }
-      }
-      this.callBarCallAction.addEventListener('click',
-                                              this.fetchLastCalled.bind(this));
+
+      // if (typeof MultiSimActionButton !== 'undefined') {
+      //   if (navigator.mozMobileConnections &&
+      //       navigator.mozMobileConnections.length > 1) {
+      //     // Use LazyL10n to load l10n.js. Single SIM devices will be slowed
+      //     // down by the cost of loading l10n.js in the startup
+      //     // path if we don't do this.
+      //     var self = this;
+      //     LazyL10n.get(function localized(_) {
+      //       self.multiSimActionButton =
+      //         new MultiSimActionButton(self.callBarCallAction,
+      //                                  CallHandler.call,
+      //                                  'ril.telephony.defaultServiceId',
+      //                                  self.phoneNumber.bind(self));
+      //     });
+      //   } else {
+      //     this.multiSimActionButton =
+      //       new MultiSimActionButton(this.callBarCallAction,
+      //                                CallHandler.call,
+      //                                'ril.telephony.defaultServiceId',
+      //                                this.phoneNumber.bind(this));
+      //   }
+      // }
+      this.callBarCallAction.addEventListener(
+        'click',
+        this.callButtonHandler.bind(this)
+      );
     }
 
     // The keypad cancel bar is only the emergency call version of the keypad.
@@ -286,11 +292,41 @@ var KeypadManager = {
     return this._phoneNumber;
   },
 
-  fetchLastCalled: function hk_fetchLastCalled() {
+  callButtonHandler: function hk_fetchLastCalled() {
     if (this._phoneNumber !== '') {
+      // This is for HMAC verification. For more details:
+      // http://en.wikipedia.org/wiki/Message_authentication_code
+      // Why this is needed? We need to open the door to new apps
+      // to make calls. However, we want to deal with an activity
+      // request in a different way from core apps (because security
+      // reasons), and let our apps to call directly if requested.
+      // For achieving this, we are going to use a HMAC mechanism.
+
+      var activityName = 'dial';
+      var nonce = Math.floor(Math.random() * (10000 - 10 + 1)) + 10;
+      var timestamp = Date.now();
+      var authentication =
+        CryptoJS.HmacSHA1(
+          activityName +
+          this._phoneNumber +
+          nonce +
+          timestamp,
+          HMAC_SECRET
+        ).toString();
+      // Make Activity request
+      new MozActivity({
+        name: activityName,
+        data: {
+          type: 'webtelephony/number',
+          number: this._phoneNumber,
+          nonce: nonce,
+          timestamp: timestamp,
+          authentication: authentication
+        }
+      });
       return;
     }
-
+    // If not, we try to retrieve the last one called
     var self = this;
     CallLogDBManager.getGroupAtPosition(1, 'lastEntryDate', true, 'dialing',
       function hk_ggap_callback(result) {
@@ -518,7 +554,8 @@ var KeypadManager = {
     // get the device's IMEI as soon as the user enters the last # key from
     // the "*#06#" MMI string. See bug 857944.
     if (key === '#' && this._phoneNumber === '*#06#') {
-      this.multiSimActionButton.performAction();
+      // this.multiSimActionButton.performAction();
+      CallsHandler.call(this._phoneNumber);
       return;
     }
 

@@ -7,16 +7,18 @@
 /* global fb */
 /* global LazyLoader */
 /* global MmiManager */
-/* global MozActivity */
-/* global MultiSimActionButton */
-/* global Normalizer */
-/* global SCALE_RATIO */
 /* global TelephonyHelper */
+/* global MultiSimManager */
+/* global MozActivity */
+/* global Normalizer */
+/* global CryptoJS */
+/* global SCALE_RATIO */
 /* global utils */
 
 var contacts = window.contacts || {};
 
 contacts.Details = (function() {
+  const HMAC_SECRET = 'loop';
   var photoPos = 7;
   var initMargin = 8;
   var DEFAULT_TEL_TYPE = 'other';
@@ -492,11 +494,53 @@ contacts.Details = (function() {
           MmiManager.isMMI(number)) {
         button.addEventListener('click', onMMICode);
       } else if (navigator.mozTelephony) {
-        LazyLoader.load(['/shared/js/multi_sim_action_button.js'], function() {
-          new MultiSimActionButton(button, call,
-                                   'ril.telephony.defaultServiceId',
-                                   function() { return number; });
-        });
+        button.addEventListener(
+          'click',
+          function() {
+            // This is for HMAC verification. For more details:
+            // http://en.wikipedia.org/wiki/Message_authentication_code
+            
+            var activityName = 'dial';
+            var nonce = Math.floor(Math.random() * (10000 - 10 + 1)) + 10;
+            var timestamp = Date.now();
+            var authentication =
+              CryptoJS.HmacSHA1(
+                activityName +
+                number +
+                nonce +
+                timestamp,
+                HMAC_SECRET
+              ).toString();
+            // Make Activity request
+            new MozActivity({
+              name: activityName,
+              data: {
+                type: 'webtelephony/number',
+                number: number,
+                nonce: nonce,
+                timestamp: timestamp,
+                authentication: authentication
+              }
+            });
+          }
+        );
+
+        button.addEventListener(
+          'contextmenu',
+          function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            console.log('longpress');
+            if (!MultiSimManager.isMultiSIM) {
+              return;
+            }
+            // Delegate to MultiSimManager
+            MultiSimManager.selectSIM(
+              number,
+              call
+            );
+          }
+        );
       }
     });
   }

@@ -1,6 +1,8 @@
 'use strict';
 
 var CallHandler = (function callHandler() {
+  var HMAC_SECRET = 'loop';
+  var MAX_AGE = 4000;
   var COMMS_APP_ORIGIN = document.location.protocol + '//' +
     document.location.host;
   var callScreenWindow = null;
@@ -17,9 +19,12 @@ var CallHandler = (function callHandler() {
     // Workaround here until the bug 787415 is fixed
     // Gecko is sending an activity event in every multiple entry point
     // instead only the one that the href match.
-    if (activity.source.name != 'dial')
+    var activityName = activity.source.name;
+    if (activityName != 'dial') {
       return;
+    }
 
+    // Keep current activity in memory
     currentActivity = activity;
 
     var number = activity.source.data.number;
@@ -28,6 +33,40 @@ var CallHandler = (function callHandler() {
       if (window.location.hash != '#keyboard-view') {
         window.location.hash = '#keyboard-view';
       }
+      setTimeout(function() {
+        // This is HMAC verification. For more details:
+        // http://en.wikipedia.org/wiki/Message_authentication_code
+        // This is checking as well the timestamp to ensure
+        // the security of the request
+        var activityData = activity.source.data;
+
+        var hmac_validation = (
+          // Check timestamp and shield
+          activityData.timestamp &&
+          (Date.now() < activityData.timestamp + MAX_AGE) &&
+          // Check HMAC
+          activityData.authentication && activityData.nonce &&
+          (CryptoJS.HmacSHA1(
+            activityName + activityData.number +
+            activityData.nonce + activityData.timestamp, HMAC_SECRET
+          ).toString() === activityData.authentication)
+        );
+
+        if (hmac_validation) {
+          console.log('MultiSimManager.isMultiSIM ' +
+            MultiSimManager.isMultiSIM);
+          if (!MultiSimManager.isMultiSIM) {
+            CallHandler.call(number);
+            return;
+          }
+          console.log('DELEGO EN MULTISIMMANAGER');
+          // Delegate to MultiSimManager
+          MultiSimManager.executeActionBySIM(
+            number,
+            CallHandler.call
+          );
+        }
+      }, 200);
     }
   }
 
