@@ -1,0 +1,37 @@
+{
+  "name": "LoopTest",
+  "description": "Loop Test",
+  "launch_path": "/index.html",
+  "type": "certified",
+  "orientation": "portrait",
+  "developer": {
+    "name": "Gaia Team",
+    "url": "https://github.com/mozilla-b2g/gaia"
+  },
+  "locales": {
+    "es": {
+      "name": "Loop test",
+      "description": "Aplicación para probar recursos necesarios para Loop"
+    },
+    "en-US": {
+      "name": "Loop test",
+      "description": "Testing resources needed for Loop"
+    }
+  },
+  "permissions": {
+    "telephony":{},
+    "mobileconnection":{},
+    "attention":{},
+    "audio-channel-telephony":{},
+    "idle":{},
+    "phonenumberservice": {}
+  },
+  "messages": [
+    { "notification": "/index.html" }
+  ],
+  "default_locale": "en-US",
+  "icons": {
+    "128": "/icons/128.jpg",
+    "60": "/icons/60.jpg"
+  }
+}
