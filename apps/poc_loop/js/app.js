@@ -41,6 +41,7 @@ window.addEventListener('localized', function localized() {
   var ring = new Audio();
   ring.mozAudioChannelType = 'ringer';
   ring.src = 'js/resources/movistar_ringtone.ogg';
+  ring.loop = true;
   document.getElementById('play_ringer').addEventListener(
     'click',
     function playRinger() {
@@ -56,6 +57,7 @@ window.addEventListener('localized', function localized() {
   var telephony = new Audio();
   telephony.mozAudioChannelType = 'telephony';
   telephony.src = 'js/resources/phone1.wav';
+  telephony.loop = true;
   document.getElementById('play_telephony').addEventListener(
     'click',
     function playTelephony() {
@@ -71,6 +73,7 @@ window.addEventListener('localized', function localized() {
   var telephony2 = new Audio();
   telephony2.mozAudioChannelType = 'telephony';
   telephony2.src = 'js/resources/phone2.wav';
+  telephony2.loop = true;
   document.getElementById('play_telephony2').addEventListener(
     'click',
     function playTelephony() {
@@ -86,6 +89,7 @@ window.addEventListener('localized', function localized() {
   var music = new Audio();
   music.mozAudioChannelType = 'normal';
   music.src = 'js/resources/music.ogg';
+  music.loop = true;
   document.getElementById('play_music').addEventListener(
     'click',
     function playMusic() {
