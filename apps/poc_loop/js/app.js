@@ -10,6 +10,7 @@ var playingRingtone = false;
 var playingTelephony = false;
 var playingTelephony2 = false;
 var playingMusic = false;
+var playingNormal = false;
 
 
 window.addEventListener('localized', function localized() {
@@ -87,7 +88,7 @@ window.addEventListener('localized', function localized() {
   );
 
   var music = new Audio();
-  music.mozAudioChannelType = 'normal';
+  music.mozAudioChannelType = 'content';
   music.src = 'js/resources/music.ogg';
   music.loop = true;
   document.getElementById('play_music').addEventListener(
@@ -99,6 +100,22 @@ window.addEventListener('localized', function localized() {
         music.pause();
       }
       playingMusic = !playingMusic;
+    }
+  );
+
+  var normal = new Audio();
+  normal.mozAudioChannelType = 'normal';
+  normal.src = 'js/resources/normal.ogg';
+  normal.loop = true;
+  document.getElementById('play_normal').addEventListener(
+    'click',
+    function playNormal() {
+      if (!playingNormal) {
+        normal.play();
+      } else {
+        normal.pause();
+      }
+      playingNormal = !playingNormal;
     }
   );
 

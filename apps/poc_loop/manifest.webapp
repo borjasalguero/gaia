@@ -25,6 +25,7 @@
     "audio-channel-telephony":{},
     "audio-channel-ringer":{},
     "audio-channel-normal":{},
+    "audio-channel-content":{},
     "idle":{},
     "phonenumberservice": {}
   },
