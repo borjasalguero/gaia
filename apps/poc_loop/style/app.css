@@ -86,12 +86,15 @@ input {
   text-align: center;
 }
 
-
-/*#launch_regular_attention {
-  margin-bottom: 5rem;
-}*/
-
 .tests-container {
   width: 100%;
   border-bottom: .2rem solid white;
+}
+
+.tests-container:last-child {
+  margin-bottom: 2rem;
+}
+
+button::-moz-focus-inner {
+  border: 0;
 }
