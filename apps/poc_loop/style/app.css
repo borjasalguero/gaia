@@ -67,6 +67,7 @@ button {
   font-size: 1.8rem;
   border-radius: .5rem;
   margin-bottom: 1rem;
+  margin-top: 1rem;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -86,6 +87,11 @@ input {
 }
 
 
-#launch_regular_attention {
+/*#launch_regular_attention {
   margin-bottom: 5rem;
+}*/
+
+.tests-container {
+  width: 100%;
+  border-bottom: .2rem solid white;
 }

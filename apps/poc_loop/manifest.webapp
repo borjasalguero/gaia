@@ -23,6 +23,8 @@
     "mobileconnection":{},
     "attention":{},
     "audio-channel-telephony":{},
+    "audio-channel-ringer":{},
+    "audio-channel-normal":{},
     "idle":{},
     "phonenumberservice": {}
   },
