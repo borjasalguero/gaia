@@ -159,6 +159,25 @@ window.addEventListener('localized', function localized() {
     }
   );
 
+  document.getElementById('launch_loop').addEventListener(
+    'click',
+    function launch_activity() {
+      var activity = new MozActivity({
+        name: 'voice-service/loop.gaiamobile.org',
+        data: {
+          type: 'webtelephony/number',
+          number: '612123123'
+        }
+      });
+      activity.onsuccess = function() {
+        console.log('Activity was working properly. Store in Calllog');
+      };
+      activity.onerror = function() {
+        console.log('Error when launching an activity');
+      };
+    }
+  );
+
   
 
   initialized = true;
