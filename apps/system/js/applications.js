@@ -52,12 +52,57 @@
 
       var getAllApps = function getAllApps() {
         navigator.mozApps.mgmt.getAll().onsuccess = function mozAppGotAll(evt) {
+          var commsApps = [];
           var apps = evt.target.result;
           apps.forEach(function(app) {
             self.installedApps[app.manifestURL] = app;
             // TODO Followup for retrieving homescreen & comms app
+            if (app.manifest.role === 'comms') {
+              console.log('================');
+              console.log('Tengo una app de comms ' + JSON.stringify(app.manifest));
+              console.log('================');
+            }
           });
 
+          if (commsApps.length > 0 || !localStorage.ds) {
+            navigator.getDataStores('comms-provider')
+            .then(
+              function(stores) {
+                if (stores.length !== 1) {
+                  console.error('More 0 or more than one comms-provider DS');
+                  return;
+                }
+                // Ensure that Im the owner
+                var req = navigator.mozApps.getSelf();
+                req.onsuccess = function() {
+                  if (!req.result || !req.result.manifestURL) {
+                    console.error('I cant not get my app name');
+                    return;
+                  }
+                  
+                  var commsDS = stores[0];
+                  if (commsDS.owner !== req.result.manifestURL) {
+                    console.error('Comms provider DS is not from System!');
+                    return;
+                  }
+                  commsDS.add({
+                    providers: commsApps
+                  }).then(function() {
+                    console.log('Todo actualizado!!!')
+                  })
+
+                  localStorage.ds = true;
+                };
+                req.onerror = function() {
+                  console.error('I cant not get my app name ' + req.error.name);
+                };
+              },
+              function(error) {
+                console.error('Error getting datastores ' + error.name);
+              }
+            );
+          }
+          
           self.ready = true;
           self.fireApplicationReadyEvent();
         };
