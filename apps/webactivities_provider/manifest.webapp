@@ -1,0 +1,21 @@
+{
+  "name": "Loop",
+  "launch_path": "/index.html",
+  "role": "system",
+  "activities": {
+    "dial": {
+      "filters": {
+        "name": {
+          "required": "true",
+          "value": "Loop"
+        }
+      },
+      "href": "/index.html",
+      "disposition": "inline",
+      "returnValue": true
+    }
+  },
+  "icons": {
+    "60": "/icon/icon_60.png"
+  }
+}

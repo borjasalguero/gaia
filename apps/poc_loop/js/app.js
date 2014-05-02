@@ -119,6 +119,46 @@ window.addEventListener('localized', function localized() {
     }
   );
 
+  // Activities
+  document.getElementById('launch_activity').addEventListener(
+    'click',
+    function launch_activity() {
+      var activity = new MozActivity({
+        name: 'dial',
+        data: {
+          type: 'webtelephony/number',
+          number: '612123123'
+        }
+      });
+      activity.onsuccess = function() {
+        console.log('Activity was working properly. Store in Calllog');
+      };
+      activity.onerror = function() {
+        console.log('Error when launching an activity');
+      };
+    }
+  );
+
+  document.getElementById('launch_direct_activity').addEventListener(
+    'click',
+    function launch_direct_activity() {
+      var activity = new MozActivity({
+        name: 'dial',
+        data: {
+          type: 'webtelephony/number',
+          number: '612123123',
+          name: 'Loop'
+        }
+      });
+      activity.onsuccess = function() {
+        console.log('Activity was working properly. Store in Calllog');
+      };
+      activity.onerror = function() {
+        console.log('Error when launching an activity');
+      };
+    }
+  );
+
   
 
   initialized = true;
