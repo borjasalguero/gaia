@@ -58,9 +58,7 @@
             self.installedApps[app.manifestURL] = app;
             // TODO Followup for retrieving homescreen & comms app
             if (app.manifest.role === 'comms') {
-              console.log('================');
-              console.log('Tengo una app de comms ' + JSON.stringify(app.manifest));
-              console.log('================');
+              commsApps.push(app.manifest);
             }
           });
 
@@ -88,7 +86,7 @@
                   commsDS.add({
                     providers: commsApps
                   }).then(function() {
-                    console.log('Todo actualizado!!!')
+                    console.log('All working!!!');
                   })
 
                   localStorage.ds = true;

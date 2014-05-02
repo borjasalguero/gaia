@@ -1,7 +1,7 @@
 {
   "name": "Loop",
   "launch_path": "/index.html",
-  "role": "voice-service",
+  "role": "comms",
   "activities": {
     "dial": {
       "filters": {
@@ -14,12 +14,12 @@
       "disposition": "inline",
       "returnValue": true
     },
-    "voice-service/loop.gaiamobile.org": {
+    "loop.gaiamobile.org/voice": {
       "href": "/index.html",
       "disposition": "inline",
       "returnValue": true
     },
-    "messaging-service/loop.gaiamobile.org": {
+    "loop.gaiamobile.org/messaging": {
       "href": "/index.html",
       "disposition": "inline",
       "returnValue": true

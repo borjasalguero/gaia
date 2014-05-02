@@ -36,5 +36,11 @@
   "icons": {
     "128": "/icons/128.jpg",
     "60": "/icons/60.jpg"
+  },
+  "datastores-access": {
+    "comms-provider": {
+      "readonly": true,
+      "description": "Third party comms provider"
+    }
   }
 }

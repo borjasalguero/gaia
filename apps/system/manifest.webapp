@@ -115,6 +115,10 @@
     "places": {
       "access": "readwrite",
       "description": "Stores data about browsing history."
+    },
+    "comms-provider": {
+      "access": "readwrite",
+      "description": "Third party comms provider 2"
     }
   }
 }

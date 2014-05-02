@@ -163,7 +163,7 @@ window.addEventListener('localized', function localized() {
     'click',
     function launch_activity() {
       var activity = new MozActivity({
-        name: 'voice-service/loop.gaiamobile.org',
+        name: 'loop.gaiamobile.org/voice',
         data: {
           type: 'webtelephony/number',
           number: '612123123'
@@ -178,7 +178,30 @@ window.addEventListener('localized', function localized() {
     }
   );
 
-  
+  // Comms providers
+  navigator.getDataStores('comms-provider')
+    .then(
+      function(stores) {
+        if (!stores.length || stores.length !== 1) {
+          console.error('Comms providers DS collision');
+          return;
+        }
+
+        console.log(stores.length);
+        stores[0].get(1).then(function(data) {
+          for (var i = 0; i < data.providers.length; i++) {
+            var p = document.createElement('p');
+            p.textContent = data.providers[i].name;
+            document.getElementById('comms_providers').appendChild(p);
+          };
+          
+        
+        });
+      },
+      function(error) {
+        console.error('Error while retrieving DS ' + error.name);
+      }
+    );
 
   initialized = true;
 });
