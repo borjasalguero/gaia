@@ -1,0 +1,30 @@
+{
+  "name": "Loop",
+  "launch_path": "/boot.html",
+  "role": "comms",
+  "type": "certified",
+  "activities": {
+    "loop.gaiamobile.org/voice": {
+      "href": "/boot.html",
+      "disposition": "window"
+    },
+    "loop.gaiamobile.org/messaging": {
+      "href": "/boot.html",
+      "disposition": "window"
+    }
+  },
+  "orientation": "default",
+  "permissions": {
+    "telephony": {},
+    "video-capture": {},
+    "audio-capture": {},
+    "attention":{},
+    "audio-channel-telephony":{},
+    "audio-channel-ringer":{},
+    "audio-channel-normal":{},
+    "audio-channel-content":{}
+  },
+  "icons": {
+    "60": "/icon/webrtc-icon.png"
+  }
+}

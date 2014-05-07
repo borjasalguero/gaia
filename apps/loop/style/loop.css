@@ -1,0 +1,258 @@
+html, body {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: 10px;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  font-family: 'MozTT', sans-serif;
+}
+
+/*
+ * Remove the styles by default
+ */
+button {
+  border-radius: 0;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/*
+ * Hangout button
+ */
+
+#hang-out {
+  height: 5rem;
+  width: 100%;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  z-index: 10;
+  
+  background: rgba(255, 0, 0, .7);
+  background-image: url(images/call.png);
+  background-size: auto 5rem;
+  background-repeat: no-repeat;
+  background-position: center 70%;
+  
+  border: none;
+}
+
+/*
+ * Remote buble. We show a picture of the contact we are calling to.
+ * This will dissapear if the other will answer.
+ */
+
+.remote-bubble {
+  height: 12rem;
+  width: 12rem;
+  
+  position: absolute;
+  border-radius: 6rem;
+  top: -3rem;
+  left: -2rem;
+  z-index: 10;
+  
+  border: .5rem solid white;
+  box-sizing: border-box;
+  
+  background-image: url(images/image.jpg);
+  background-size: auto 100% ;
+  background-repeat: no-repeat;
+  background-position: center 1rem;
+}
+
+/*
+ * Actions and contact info.
+ */
+
+.actions-panel {
+  height: 14rem;
+  width: 100%;
+
+  position: absolute;
+  bottom: 5rem;
+  left: 0;
+  z-index: 10;
+
+  background: rgba(0,0,0,.5);
+  text-align: center;
+}
+
+.oncall-actions{
+  background: black;
+  margin: 0;
+  height: 4rem;
+  opacity: .7;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.oncall-action {
+  width: 25%;
+  margin: 0;
+  border: none;
+  padding: 0;
+  float: left;
+  height: 100%;
+}
+
+.oncall-action[disabled] {
+  opacity: 0.3;
+}
+
+#mute-action {
+  background: none;
+  background-image: url(images/mute.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#mute-action.active {
+  background: rgba(255, 255, 255, 0.3);
+  background-image: url(images/mute.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#speaker-action {
+  background: none;
+  background-image: url(images/speaker.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#speaker-action.active {
+  background: rgba(255, 255, 255, 0.3);
+  background-image: url(images/speaker.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#video-action {
+  background: none;
+  background-image: url(images/video.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#video-action.active {
+  background: rgba(255, 255, 255, 0.3);
+  background-image: url(images/video.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#add-action {
+  background: none;
+  background-image: url(images/addcontact.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#add-action.active {
+  background: rgba(255, 255, 255, 0.3);
+  background-image: url(images/addcontact.png);
+  background-size: auto 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/*
+ * Main info extracted from the Contact
+ */
+
+.actions-panel h1{
+  padding: .5rem 1rem 0 1rem;
+  box-sizing:border-box;
+  margin: 0;
+  margin-top: 2rem;
+  
+  font-size: 3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 100;
+  color: rgba(255,255,255,.8);
+}
+
+.actions-panel h3{
+  padding: .2rem 2rem;
+  box-sizing:border-box;
+  margin: 0;
+  
+  line-height: 2rem;
+  font-size: 1.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 100;
+  color: rgba(255,255,255,.8);
+}
+
+/*
+ * Wrapper to the video one
+ */
+
+.video-wrapper {
+  height: 100%;
+  width: 100%;
+  background: white;
+  background-image: url(images/wallpaper.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+
+/*
+ * Status bar of the call screen
+ */
+
+.panel {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: blue;
+}
+
+footer {
+  text-align: center;
+  line-height: 4rem;
+  font-size: 2rem;
+  color: white;
+  font-weight: 300;
+  display: none;
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background: green;
+  height: 4rem;
+}
+
+
+body.status footer {
+  display: block;
+}
+
+video.fullscreen {
+  height: 100%;
+  left: -50%;
+  position: absolute;
+}

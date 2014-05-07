@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link href="style/loop.css" rel="stylesheet" type="text/css">
+    <script defer src="scripts/call.js"></script>
+   	<title>LoopCall</title>
+  </head>
+  <body role="application">
+    <div class="panel">
+      <section class="actions-panel">
+        <h1>Robert Lorem Ipsum</h1>
+        <h3 id="contact-phone-details">Telefónica - +346XX123123</h3>
+        <div id="actions-panel" class="oncall-actions">
+          <button id="mute-action" class="oncall-action" data-action="mute">
+          </button>
+          <button id="video-action" class="oncall-action mute-action active" data-action="video">
+          </button>
+          <button id="speaker-action" class="oncall-action" data-action="speaker">
+          </button>
+          <button id="add-action" class="oncall-action" disabled data-action="add-contact">
+          </button>
+        </div>
+      </section>
+      <div class="remote-bubble">
+      </div>
+      <section class="video-wrapper">
+        <video id="fullscreen-video" autoplay class="fullscreen" src=""></video>
+      </section>
+      <button id="hang-out">
+
+      </button>
+    </div>
+  	<footer>
+      Loop: call in progress
+  	</footer>
+  </body>
+</html>
