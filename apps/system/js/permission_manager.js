@@ -139,6 +139,7 @@
      */
     handleEvent: function pm_handleEvent(evt) {
       var detail = evt.detail;
+      console.log('*********** ' + JSON.stringify(detail));
       switch (detail.type) {
         case 'permission-prompt':
           this.cleanDialog();
@@ -182,8 +183,10 @@
 
           // Not show remember my choice option in gUM
           if (this.isAudio || this.isVideo) {
-            this.rememberSection.style.display = 'none';
-
+            if (!this.isApp) {
+              this.rememberSection.style.display = 'none';
+            }
+            
             // Set default options
             this.currentPermissions = detail.permissions;
             for (var permission2 in detail.permissions) {

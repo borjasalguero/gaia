@@ -9,23 +9,32 @@ var App = (function App() {
     button = document.getElementById('call_loop');
     // Add listeners
     button.addEventListener('click', function handleClick() {
+      // var videoSources = [];
+      // MediaStreamTrack.getSources(function(sources) {
+      //   sources.forEach(function(source) {
+      //     source.kind === 'video' && videoSources.push(source);
+      //   })
+      //   console.log(JSON.stringify(videoSources));
+      // });
 
-      // navigator.mozGetUserMedia(
-      //   {
-      //     video: true,
-      //     audio: true
-      //   },
-      //   function(stream) {
+
+
+      navigator.mozGetUserMedia(
+        {
+          video: true,
+          audio: true
+        },
+        function(stream) {
           console.log('Tenemos video y audio al arrncar');
-          var host = document.location.host;
-          var protocol = document.location.protocol;
-          var urlBase = protocol + '//' + host + '/call.html?id=123123';
-          window.open(urlBase, 'call_screen', 'attention');
-      //   },
-      //   function(err) {
-      //     console.log("An error occured! " + err);
-      //   }
-      // );
+          // var host = document.location.host;
+          // var protocol = document.location.protocol;
+          // var urlBase = protocol + '//' + host + '/call.html?id=123123';
+          // window.open(urlBase, 'call_screen', 'attention');
+        },
+        function(err) {
+          console.log("An error occured! " + err);
+        }
+      );
 
       
     });
@@ -49,6 +58,9 @@ var App = (function App() {
     // setTimeout(function() {
     //   telephony.play();
     // }, 1000);
+    if (!window.navigator.mozSetMessageHandler) {
+      return;
+    }
 
     window.navigator.mozSetMessageHandler('activity', function(activityRequest) {
       activity = activityRequest;
