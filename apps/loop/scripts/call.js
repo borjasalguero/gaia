@@ -1,6 +1,6 @@
 window.onload = function() {
   var STATUS_BAR_HEIGHT = 40;
-  
+  var currentStream = null;
   // Handle status bar
   window.addEventListener('resize', function() {
     if (document.body.clientHeight <= STATUS_BAR_HEIGHT) {
@@ -21,26 +21,31 @@ window.onload = function() {
     }
   }
 
+  // Video mockup
+  var fullscreenVideo = document.getElementById('fullscreen-video');
+  fullscreenVideo.mozAudioChannelType = 'telephony';
   navigator.mozGetUserMedia(
     {
-      video: true,
       audio: true
     },
     function(stream) {
       console.log('Audio & Video retrieved!');
+      currentStream = stream;
+      if (navigator.mozGetUserMedia) {
+        fullscreenVideo.mozSrcObject = stream;
+      } else {
+        var vendorURL = window.URL || window.webkitURL;
+        fullscreenVideo.src = vendorURL.createObjectURL(stream);
+      }
+      // fullscreenVideo.src = 'scripts/resources/big-buck-bunny_trailer.webm';
+      // fullscreenVideo.loop = true;
+      // fullscreenVideo.autoplay = true;
+      fullscreenVideo.play();
     },
     function(err) {
       console.log("An error occured! " + err);
     }
   );
-  
-
-  // Video mockup
-  var fullscreenVideo = document.getElementById('fullscreen-video');
-  fullscreenVideo.mozAudioChannelType = 'content';
-  fullscreenVideo.src = 'scripts/resources/big-buck-bunny_trailer.webm';
-  fullscreenVideo.loop = true;
-  fullscreenVideo.autoplay = true;
   
   var speakerEnabled = true;
   var videoEnabled = true;
@@ -52,25 +57,27 @@ window.onload = function() {
       switch(event.target.dataset.action) {
         case 'mute':
           fullscreenVideo.muted = !fullscreenVideo.muted;
-          telephony.muted = !telephony.muted;
           break;
         case 'speaker':
           if (speakerEnabled) {
             console.log('Vamos a usar el earphone');
             fullscreenVideo.pause();
-            fullscreenVideo.src = '';
+            fullscreenVideo.mozSrcObject = null;
             speakerEnabled = false;
             fullscreenVideo.mozAudioChannelType = 'telephony';
-            fullscreenVideo.src = 'scripts/resources/big-buck-bunny_trailer.webm';
-            fullscreenVideo.autoplay = true;
+            fullscreenVideo.mozSrcObject = currentStream;
+            // fullscreenVideo.src = 'scripts/resources/big-buck-bunny_trailer.webm';
+            // fullscreenVideo.autoplay = true;
+            fullscreenVideo.play();
           } else {
             console.log('Vamos a usar el SPEAKER');
             fullscreenVideo.pause();
-            fullscreenVideo.src = '';
+            fullscreenVideo.mozSrcObject = null;
             speakerEnabled = true;
             fullscreenVideo.mozAudioChannelType = 'content';
-            fullscreenVideo.src = 'scripts/resources/big-buck-bunny_trailer.webm';
-            fullscreenVideo.autoplay = true;
+            fullscreenVideo.mozSrcObject = currentStream;
+            // fullscreenVideo.src = 'scripts/resources/big-buck-bunny_trailer.webm';
+            fullscreenVideo.play();
           }
           
           break;

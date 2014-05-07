@@ -183,9 +183,7 @@
 
           // Not show remember my choice option in gUM
           if (this.isAudio || this.isVideo) {
-            if (!this.isApp) {
-              this.rememberSection.style.display = 'none';
-            }
+            
             
             // Set default options
             this.currentPermissions = detail.permissions;
@@ -198,6 +196,12 @@
                 }
               }
             }
+            if (detail.isApp) {
+              this.rememberSection.style.display = 'block';
+            } else {
+              this.rememberSection.style.display = 'none';
+            }
+            
           } else {
             this.rememberSection.style.display = 'block';
           }
