@@ -109,6 +109,9 @@ var UIManager = {
   init: function ui_init() {
     _ = navigator.mozL10n.get;
 
+    // Preload the tutorial config
+    Tutorial.loadConfig();
+
     // Initialization of the DOM selectors
     this.domSelectors.forEach(function createElementRef(name) {
       this[toCamelCase(name)] = document.getElementById(name);
@@ -209,6 +212,8 @@ var UIManager = {
       WifiManager.finish();
       UIManager.activationScreen.classList.remove('show');
       UIManager.finishScreen.classList.remove('show');
+      // Tutorial config is probably preloaded by now, but init could be
+      // async if it is still loading
       Tutorial.init();
     });
 
