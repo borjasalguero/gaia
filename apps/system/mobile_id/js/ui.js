@@ -12,7 +12,6 @@
       countryCodesSelect, verificationPanel,
       msisdnSelectionPanel;
 
-  // var isVerificationCode = false;
   var isVerified = false;
   var isManualMSISDN = false;
   var buttonCurrentStatus;
@@ -161,7 +160,7 @@
       if (optionChecked.dataset.identificationType === 'msisdn') {
         identity =  {
           prefix: null,
-          mcc: null,
+          mcc: optionChecked.dataset.mcc,
           phoneNumber: optionChecked.value
         };
       } else {
@@ -285,6 +284,7 @@
         radio.type = 'radio';
         radio.dataset.identificationType =
           identifications[i].msisdn ? 'msisdn':'serviceid';
+        radio.dataset.mcc = identifications[i].mcc;
         radio.value =
           identifications[i].msisdn || identifications[i].serviceId;
         radioMask.className = 'radio-mask';
@@ -325,17 +325,25 @@
     },
     onerror: function ui_onError(error) {
       console.error('onerror ' + error);
-      // Enable all the fields
-      _enablePanel('msisdn');
-      _enablePanel('verification');
-      // Enable the right button
-      if (buttonCurrentStatus === 'sending') {
-        _setMultibuttonStep('allow');
-        _fieldErrorDance(msisdnInput);
-      } else {
-        _setMultibuttonStep('verify');
-        // Show animation to the field which is wrong
-        _fieldErrorDance(verificationCodeInput);
+
+      // TODO: process all possible errors.
+      switch (error) {
+        case 'VERIFICATION_CODE_TIMEOUT':
+          _setMultibuttonStep('resend');
+          _disablePanel('verification');
+          break;
+        case 'INVALID_PHONE_NUMBER':
+          _enablePanel('msisdn');
+          _setMultibuttonStep('allow');
+          // TODO: What if the phone number that is wrong belongs to
+          //       an inserted SIM? We need to make the SIM dance too.
+          _fieldErrorDance(msisdnInput);
+          break;
+        case 'INVALID_VERIFICATION_CODE':
+          _enablePanel('verification');
+          _setMultibuttonStep('verify');
+          _fieldErrorDance(verificationCodeInput);
+          break;
       }
     },
     setScroll: function ui_setScroll() {
