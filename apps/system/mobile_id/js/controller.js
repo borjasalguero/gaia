@@ -34,7 +34,7 @@
     handleEvent: function c_handleEvent(e) {
       switch(e.type) {
         case 'init':
-          UI.render(e.detail);
+          UI.render(e.detail.phoneNumberInfo);
           break;
         case 'shown':
           UI.setScroll(e.detail);
