@@ -26,7 +26,7 @@
       'translate(' + ((step - 1) * 100) + '%)';
   }
 
-  function _setStep(value) {
+  function _setStep(value, callback) {
     // If value is bigger than the max, show finish screen
     var stepIndex = value - 1;
     if (stepIndex >= stepsConfig.steps.length) {
@@ -43,8 +43,12 @@
       stepData.l10nKey
     );
 
+    if (typeof callback === 'function') {
+      dom.tutorialStepImage.querySelector('img').onload = callback;
+    }
     // Update the image
     dom.tutorialStepImage.querySelector('img').src = stepData.image;
+
     _setProgressBarStep(currentStep);
   }
 
@@ -62,7 +66,7 @@
     // A configuration object.
     config: null,
 
-    init: function(stepsKey) {
+    init: function(stepsKey, onLoaded) {
       if (initialized) {
         return;
       }
@@ -72,7 +76,7 @@
       }, this);
 
       this.ensureConfig().then(function() {
-        if (stepsKey === undefined) {
+        if (!stepsKey) {
           stepsKey = 'default';
         }
         if (!this.config) {
@@ -88,9 +92,13 @@
 
         // Set the first step
         currentStep = 1;
-        _setStep(currentStep);
-        // Show the panel
-        dom.tutorial.classList.add('show');
+        _setStep(currentStep, function onFirstResourceLoaded() {
+          if (typeof onLoaded === 'function') {
+            onLoaded();
+          }
+          // Show the panel
+          dom.tutorial.classList.add('show');
+        });
       }.bind(this), function Tutorial_configLoadError(err) {
         throw new Error('Tutorial config load error: ' + err.statusText);
       });

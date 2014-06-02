@@ -210,11 +210,13 @@ var UIManager = {
     this.letsGoButton.addEventListener('click', function() {
       // Stop Wifi Manager
       WifiManager.finish();
-      UIManager.activationScreen.classList.remove('show');
-      UIManager.finishScreen.classList.remove('show');
+      
       // Tutorial config is probably preloaded by now, but init could be
       // async if it is still loading
-      Tutorial.init();
+      Tutorial.init(null, function onTutorialLoaded() {
+        UIManager.activationScreen.classList.remove('show');
+        UIManager.finishScreen.classList.remove('show');
+      });
     });
 
     // Enable sharing performance data (saving to settings)
