@@ -17,6 +17,7 @@ apps/fl
 apps/gallery
 apps/keyboard
 apps/music
+apps/dongle_app
 apps/pdfjs
 apps/video
 apps/wallpaper

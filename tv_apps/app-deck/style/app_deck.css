@@ -1,5 +1,5 @@
 html {
-  font-size: 10px;
+  font-size: 5px !important;
   /* We have Fira Sans as default font in real device. But it isn't default in
    * browser. That's the main reason this line is here.*/
   font-family: "Fira Sans";
