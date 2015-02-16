@@ -1,0 +1,240 @@
+body, html {
+  width: 100%;
+  height: 100%;
+  font-size: 10px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background:  url(img/firefox-os.png), -moz-linear-gradient(top, rgba(0,147,221,1) 0%, rgba(0,82,159,1) 100%);
+  background-repeat: no-repeat;
+  background-position: bottom 5% right 5%;
+  background-size: 35%, auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 4rem;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+button {
+  box-sizing: border-box;
+  width: 100%;
+  height: 5rem;
+  line-height: 5rem;
+  margin-bottom: .5rem;
+  font-size: 2rem;
+  border-radius: 1rem;
+  padding: 0;
+  margin: 0;
+  border: none;
+  transition: transform 0.1s;
+}
+
+button:active{
+  transform: scale(0.9);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+#qr-container {
+  width: 20rem;
+  height: 20rem;
+  background: rgba(255,255,255, 0.85);
+  position: relative;
+  border-radius: 50%;
+  margin-left: 4rem;
+  box-shadow: 0px 1.1rem 0.9rem 0px rgba(50, 50, 50, 0.6);
+}
+
+#qrcode {
+  position: absolute;
+  width: 86%;
+  height: 86%;
+  top: 10%;
+  left: 10%;
+}
+
+.brand {
+  color: #fff;
+  position: absolute;
+  top: 1.4rem;
+  left: 2rem;
+  font-size: 2rem;
+}
+
+.brand span {
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.balloon {
+  max-width: 50rem;
+  position: relative;
+  background: rgba(255,255,255,0.85);
+  min-height: 6rem;
+  border-radius: 2rem;
+  color: #4D4E53;
+  padding: 2rem;
+  box-sizing: border-box;
+  box-shadow: 0 1.1rem 0.9rem 0 rgba(50, 50, 50, 0.6);
+  margin: 0 4rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+#wrapper-browser {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s, transform 0.5s;
+}
+
+#wrapper-browser.close {
+  opacity: 0;
+  transform: scale(0.1);
+}
+
+#wrapper-browser #browser {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+#wrapper-browser > button#exit-button {
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  color: #000;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  border-radius: 50%;
+  opacity: 1;
+  background: url("img/close.svg") no-repeat scroll center center / 2rem auto rgba(255, 255, 255, 0.85);
+  transition: opacity 0.5s 0.7s;
+}
+
+#wrapper-browser.close > button#exit-button {
+  opacity: 0;
+}
+
+.balloon .title {
+  color: #E66000;
+  font-weight: 600;
+  display: block;
+  font-size: 3.2rem;
+}
+
+.balloon .text {
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+}
+
+.arrow {
+  width: 3rem;
+  height: 3rem;
+  overflow: hidden;
+  position: absolute;
+  transform: rotate(90deg);
+  top: calc(50% - 1.5rem);
+  left: -3rem;
+}
+.arrow:after {
+  content: "";
+  background: rgba(255,255,255,0.85);
+  position: absolute;
+  left: 0;
+  top: -1.8rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  transform: rotate(45deg);
+}
+
+#tool-buttons {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+#tool-buttons button {
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.85);
+  float: right;
+  border-radius: 50%;
+  margin-right: 1rem;
+  padding: 0 1rem;
+  color: #000;
+}
+
+#tool-buttons button#regenerate {
+  background: url("img/remove.svg") no-repeat scroll center center / 2.2rem auto rgba(255, 255, 255, 0.85);
+}
+
+#tool-buttons button#create {
+  background: url("img/demo.svg") no-repeat scroll center center / 2.2rem auto rgba(255, 255, 255, 0.85);
+}
+
+#not-online {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #FFF;
+  font-size: 2.5rem;
+  z-index: 1000;
+  padding: 7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s;
+  transform: translateY(-100%);
+}
+
+body.no-connection #not-online {
+  transform: translateY(0%);
+}
+
+@media (min-width: 1000px) {
+  #qr-container{
+    height: 30rem;
+    width: 30rem;
+  }
+}
+
+@media (min-width: 1500px) {
+  #qr-container{
+    height: 40rem;
+    width: 40rem;
+  }
+}

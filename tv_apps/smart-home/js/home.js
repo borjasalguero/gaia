@@ -6,7 +6,7 @@
 
 (function(exports) {
 
-  const FULLSIZED_ICON = 100 * (window.devicePixelRatio || 1);
+  const FULLSIZED_ICON = 336 * (window.devicePixelRatio || 1);
   const DEFAULT_ICON = 'url("/style/images/appic_developer.png")';
   const DEFAULT_BGCOLOR = 'rgba(0, 0, 0, 0.5)';
   const DEFAULT_BGCOLOR_ARRAY = [0, 0, 0, 0.5];

@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>FoxCast: Dongle App</title>
+    <script defer type="text/javascript" src="libs/async_storage.js"></script>
+    <script defer type="text/javascript" src="libs/simple_push.js"></script>
+    <script defer type="text/javascript" src="libs/foxcast.js"></script>
+    <script defer type="text/javascript" src="libs/qrencoder.js"></script>
+    <script defer type="text/javascript" src="libs/fox_player.js"></script>
+    <script defer type="text/javascript" src="js/app.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/app.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <h1 class="brand">Fox<span>Cast</span></h1>
+    <div id="tool-buttons">
+      <button id="create"></button>
+      <button id="regenerate"></button>
+    </div>
+    <div id="qr-container">     
+      <canvas id="qrcode"></canvas>
+    </div>
+    <p class="balloon">
+      <span class="title">SCAN ME</span>
+      <span class="text">Scan this code for starting to share content between your phone and the TV.</span>
+      <span class="arrow"></span>
+    </p>
+    <section id="wrapper-browser" class="close" hidden>
+      <button id="exit-button"></button>
+    </section>
+    <div id="not-online">
+      You don't have internet connection, turn it on, please.
+    </div>
+  </body>
+</html>

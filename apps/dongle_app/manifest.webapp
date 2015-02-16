@@ -1,0 +1,45 @@
+{
+  "name": "FoxCast",
+  "description": "FoxCast",
+  "launch_path": "/index.html",
+  "type": "privileged",
+  "developer": {
+    "name": "The FoxCast Team",
+    "url": "https://github.com/borjasalguero/foxcast"
+  },
+  "permissions": {
+    "desktop-notification":{
+      "description": "Allow FoxCast to launch notifications to the tray"
+    },
+    "push": {
+      "description": "Allow FoxCast to receive push notifications for playing media"
+    },
+    "systemXHR": {
+      "description": "Allow FoxCast to make requests to external services as FoxCast server"
+    },
+    "browser": {
+      "description": "Allow FoxCast to embed the player of vimeo or youtube"
+    }
+  },
+  "messages": [
+     { "push": "/index.html" },
+     { "notification": "/index.html" }
+  ],
+  "orientation": "landscape",
+  "locales": {
+    "en-US": {
+      "name": "FoxCastTV",
+      "description": "Dongle App"
+    },
+    "es": {
+      "name": "FoxCastTV",
+      "description": "Dongle App"
+    }
+  },
+  "default_locale": "en-US",
+  "icons": {
+    "64": "/style/icons/64.png",
+    "128": "/style/icons/128.png"
+  },
+  "version": "1"
+}
