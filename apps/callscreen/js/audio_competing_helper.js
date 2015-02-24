@@ -1,12 +1,15 @@
 /* -*- Mode: js; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- /
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
-/* exported AudioCompetingHelper */
+/* exported AudioChannelCompetition */
 
 /* globals AudioContext */
 
 (function(exports) {
   'use strict';
+
+
+  var debug = true;
 
   /** App name competing for the telephony audio channel. */
   var _appName = null;
@@ -17,36 +20,12 @@
   /** Buffer source we use for competing for the telephony audio channel. */
   var _silenceBufferSource = null;
 
-  /** onmozinterruptbegin event handler reference. */
-  var _onmozinterruptbegin = null;
+  /** Object with all handlers to AudioChannels events */
+  var _listeners = {};
 
-  /** _onmozinterruptend event handler reference*/
-  var _onmozinterruptend = null;
-
-  /** Array of listener function to be called once the app is muted/unmute. */
-  var _listeners = {
-    mozinterruptbegin: [],
-    mozinterruptend: []
-  };
-
-  /** Flag */
-  var _addListenersBeforeCompeting = true;
-
-  /**
-   * Fire the given event on the audio competing helper.
-   *
-   * @param {String} type A string representing the event type being fired.
-   */
-  function _fireEvent(type) {
-    if (!_listeners[type]) {
-      return;
-    }
-
-    for (var i = 0; i <_listeners[type].length; i++) {
-      if(_listeners[type][i] && (typeof _listeners[type][i] === 'function')) {
-        _listeners[type][i].call(null);
-      }
-    }
+  function _executeListener(event) {
+    var handler = _listeners[event.type];
+    handler && handler();
   }
 
   /**
@@ -55,95 +34,85 @@
    * audio channel on a LIFO basis which means apps might be muted by other
    * apps trying to use the telephony audio channel.
    */
-  var AudioCompetingHelper = {
-    /**
-     * Init function.
-     */
-    init: function ach_init(appName) {
-      _appName = appName;
+  var AudioChannelCompetition = {
+
+    on: function(events) {
+      debug && console.log('AudioChannelCompetition.on');
+      console.log('******** ' + Object.getOwnPropertyNames(events));
+
+      Object.getOwnPropertyNames(events).forEach(function(val) {
+        console.log(val);
+        console.log(events[val]);
+        _listeners[val] = events[val];
+      })
     },
 
-    /**
-     * Request the helper to start competing for the use of the telephony audio
-     * channel.
-     */
-    compete: function ach_compete() {
-      _ac = new AudioContext('telephony');
+    start: function(channel) {
+      debug && console.log('AudioChannelCompetition.start ' + _listeners['mozinterruptbegin']);
+      if (_ac) {
+        return;
+      }
 
+      if (!channel ||
+          typeof channel !== 'string' ||
+          channel.length === 0) {
+        channel = 'normal';
+      }
+
+      // Let's create the AudioContext using the channel defined as a param.
+      // By default we will use the low priority one, in this case 'normal'
+      // For more info check [1]
+      //
+      // [1] https://developer.mozilla.org/en-US/docs/Web/API/AudioChannels_API/
+      // Using_the_AudioChannels_API
+      _ac = new AudioContext(channel);
+
+      _ac.addEventListener('mozinterruptbegin', _executeListener);
+      _ac.addEventListener('mozinterruptend', _executeListener);
+
+      // After landing bug [2] AudioContext is going to be started automatically
+      // However, we will keep a buffer in order to stop & resume when requested
+      // without creating a new AudioContext
+      //
+      // [2] https://bugzilla.mozilla.org/show_bug.cgi?id=1041594
       _silenceBufferSource = _ac.createBufferSource();
       _silenceBufferSource.buffer = _ac.createBuffer(1, 2048, _ac.sampleRate);
       _silenceBufferSource.connect(_ac.destination);
       _silenceBufferSource.loop = true;
-
-      if (_addListenersBeforeCompeting) {
-        _onmozinterruptbegin = _fireEvent.bind(null, 'mozinterruptbegin');
-        _ac.addEventListener('mozinterruptbegin', _onmozinterruptbegin);
-        _onmozinterruptend = _fireEvent.bind(null, 'mozinterruptend');
-        _ac.addEventListener('mozinterruptend', _onmozinterruptend);
-        _addListenersBeforeCompeting = false;
-      }
-
       _silenceBufferSource.start(0);
+
     },
 
-    /**
-     * Request the helper to leave the competition for the use of the telephony
-     * audio channel.
-     */
-    leaveCompetition: function ach_leaveCompetition() {
+    stop: function(events) {
+      debug && console.log('AudioChannelCompetition.stop');
       if (!_silenceBufferSource) {
         return;
       }
       _silenceBufferSource.stop(0);
-      _ac.removeEventListener('mozinterruptbegin', _onmozinterruptbegin);
-      _ac.removeEventListener('mozinterruptend', _onmozinterruptend);
-      _addListenersBeforeCompeting = true;
-      _silenceBufferSource.buffer = null;
-      _silenceBufferSource = null;
+    },
+
+    resume: function(events) {
+      debug && console.log('AudioChannelCompetition.resume');
+      if (!_silenceBufferSource) {
+        return;
+      }
+      _silenceBufferSource.stop(0);
+      _silenceBufferSource.start(0);
+    },
+
+    leave: function(events) {
+      debug && console.log('AudioChannelCompetition.leave');
+      // Stop competing
+      _silenceBufferSource.stop(0);
+      // Remove listeners
+      _ac.removeEventListener('mozinterruptbegin', _executeListener);
+      _ac.removeEventListener('mozinterruptend', _executeListener);
+      // Clean all vars
       _ac = null;
-    },
-
-    /**
-     * Register the specified listener on the audio competing helper.
-     *
-     * @param {String} type A string representing the event type to listen for.
-     * @param {Function} listener The function that receives a notification when
-     *                            an event of the specified type occurs.
-     */
-    addListener: function ach_addEventListener(type, listener) {
-      if ((type !== 'mozinterruptbegin') && (type !== 'mozinterruptend') ) {
-        // TODO: Should we throw an exception?
-        return;
-      }
-      if (listener && (typeof listener !== 'function')) {
-        // TODO: Should we throw an exception?
-        return;
-      }
-      _listeners[type].push(listener);
-    },
-
-    /**
-     * Clear the event listeners previously registered with
-     * AudioCompetingHelper.addEventListener.
-     *
-     * @param {String} type A string representing the event type being removed.
-     */
-    clearListeners: function ach_clearListeners(type) {
-      if (type) {
-        _listeners[type] = [];
-        return;
-      }
-      _listeners.mozinterruptbegin = [];
-      _listeners.mozinterruptend = [];
-    },
-
-    /**
-     * Getter function.
-     */
-    get audioContext() {
-      return _ac;
+      _silenceBufferSource = null;
+      _listeners = {};
     }
   };
 
-  exports.AudioCompetingHelper = AudioCompetingHelper;
+  exports.AudioChannelCompetition = AudioChannelCompetition;
 })(this);

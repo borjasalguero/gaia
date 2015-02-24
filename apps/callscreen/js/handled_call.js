@@ -1,4 +1,4 @@
-/* globals AudioCompetingHelper, CallsHandler, CallScreen,
+/* globals AudioChannelCompetition, CallsHandler, CallScreen,
            ConferenceGroupHandler, Contacts, ContactPhotoHelper,
            FontSizeManager, LazyL10n, Utils, Voicemail, TonePlayer */
 
@@ -90,28 +90,36 @@ HandledCall.prototype._wasUnmerged = function hc_wasUnmerged() {
          this.call.state != 'disconnected';
 };
 
+
+
 HandledCall.prototype.handleEvent = function hc_handle(evt) {
   CallsHandler.updatePlaceNewCall();
   CallsHandler.updateMergeAndOnHoldStatus();
   switch (evt.call.state) {
+    case 'alerting':
+      AudioChannelCompetition.start('telephony');
+      break;
     case 'connected':
       // The dialer agent in the system app plays and stops the ringtone once
       // the call state changes. If we play silence right after the ringtone
       // stops then a mozinterrupbegin event is fired. This is a race condition
       // we could easily avoid with a 1-second-timeout fix.
       window.setTimeout(function onTimeout() {
-        AudioCompetingHelper.compete();
+        AudioChannelCompetition.start('telephony');
       }, 1000);
       CallScreen.render('connected');
       this.connected();
       break;
     case 'disconnected':
-      AudioCompetingHelper.leaveCompetition();
+      AudioChannelCompetition.leave();
       this.disconnected();
       break;
     case 'held':
-      AudioCompetingHelper.leaveCompetition();
+      AudioChannelCompetition.stop();
       this.node.classList.add('held');
+      break;
+    case 'resuming':
+      AudioChannelCompetition.resume();
       break;
   }
 };

@@ -9,7 +9,6 @@ function onLoadCallScreen(evt) {
   window.removeEventListener('load', onLoadCallScreen);
 
   CallsHandler.setup();
-  AudioCompetingHelper.init('callscreen');
   CallScreen.init();
   KeypadManager.init(/* oncall */ true);
 }

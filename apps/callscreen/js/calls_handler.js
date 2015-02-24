@@ -1,4 +1,4 @@
-/* globals AudioCompetingHelper, BluetoothHelper, CallScreen,
+/* globals AudioChannelCompetition, BluetoothHelper, CallScreen,
            ConferenceGroupHandler, Contacts, HandledCall, KeypadManager,
            LazyL10n, SimplePhoneMatcher, TonePlayer, Utils */
 
@@ -6,7 +6,7 @@
 
 /* globals BluetoothHelper, CallScreen, Contacts, FontSizeManager, HandledCall,
            KeypadManager, LazyL10n, SimplePhoneMatcher, TonePlayer, Utils,
-           AudioCompetingHelper */
+           AudioChannelCompetition */
 
 var CallsHandler = (function callsHandler() {
   // Changing this will probably require markup changes
@@ -75,8 +75,10 @@ var CallsHandler = (function callsHandler() {
     navigator.mozSetMessageHandler('headset-button', handleHSCommand);
     navigator.mozSetMessageHandler('bluetooth-dialer-command', handleBTCommand);
 
-    AudioCompetingHelper.clearListeners();
-    AudioCompetingHelper.addListener('mozinterruptbegin', onMozInterrupBegin);
+    AudioChannelCompetition.on({
+      mozinterruptbegin: onMozInterruptBegin
+    });
+    // AudioChannelCompetition.addListener('mozinterruptbegin', onMozInterruptBegin);
   }
 
   /* === Handled calls === */
@@ -824,14 +826,13 @@ var CallsHandler = (function callsHandler() {
    * of the telephony audio channel.
    */
   function forceAnAudioCompetitionWin() {
-    AudioCompetingHelper.leaveCompetition();
-    AudioCompetingHelper.compete();
+    AudioChannelCompetition.resume();
   }
 
   /**
-   * onmozinterrupbegin event handler.
+   * onmozinterruptbegin event handler.
    */
-  function onMozInterrupBegin() {
+  function onMozInterruptBegin() {
     var openLines =
       telephony.calls.length + (telephony.conferenceGroup.calls.length ? 1 : 0);
 
