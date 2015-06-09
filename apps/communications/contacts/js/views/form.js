@@ -15,10 +15,11 @@
 /* global ICEData */
 /* global MergeHelper */
 /* global ContactsService */
+/* exported Form */
 
 var contacts = window.contacts || {};
 
-contacts.Form = (function() {
+(function(exports) {
   var counters = {
     'tel': 0,
     'email': 0,
@@ -166,8 +167,8 @@ contacts.Form = (function() {
     };
   };
 
-  var init = function cf_init(tags, currentDom) {
-    dom = currentDom || document;
+  var init = function cf_init() {
+    dom = document;
 
     _ = navigator.mozL10n.get;
     initContainers();
@@ -243,7 +244,88 @@ contacts.Form = (function() {
   }
 
   var newField = function newField(evt) {
-    return contacts.Form.onNewFieldClicked(evt);
+    onNewFieldClicked(evt);
+  };
+
+  var addExtrasToContact = function addExtrasToContact(currentContact, extrasString) {
+    try {
+      var extras = JSON.parse(decodeURIComponent(extrasString));
+      for (var type in extras) {
+        var extra = extras[type];
+        if (currentContact[type]) {
+          if (Array.isArray(currentContact[type])) {
+            var joinArray = currentContact[type].concat(extra);
+            currentContact[type] = joinArray;
+          } else {
+            currentContact[type] = extra;
+          }
+        } else {
+          currentContact[type] = Array.isArray(extra) ? extra : [extra];
+        }
+      }
+    } catch (e) {
+      console.error('Extras malformed');
+      return null;
+    }
+  };
+
+  var renderContact = function(contact, callback) {
+    if (contact && fb.isFbContact(contact)) {
+      var fbContact = new fb.Contact(contact);
+      var req = fbContact.getDataAndValues();
+
+      req.onsuccess = function() {
+        render(contact, callback, req.result);
+      };
+
+      req.onerror = function() {
+        render(contact, callback);
+      };
+    }
+    else {
+      render(contact, callback);
+    }
+  }
+
+  var renderContactFromActivity = function(params, callback) {
+    ContactsService.get(params.id, function onSuccess(savedContact) {
+      // Check if we have extra parameters to render
+      if ('extras' in params) {
+        addExtrasToContact(savedContact, params.extras);
+      }
+      if (fb.isFbContact(savedContact)) {
+        var fbContact = new fb.Contact(savedContact);
+        var req = fbContact.getDataAndValues();
+        req.onsuccess = function() {
+          render(
+            savedContact,
+            callback,
+            req.result,
+            params.fromUpdateActivity
+          );
+        };
+        req.onerror = function() {
+          console.error('Error retrieving FB information');
+          render(
+            savedContact,
+            callback,
+            null,
+            params.fromUpdateActivity
+          );
+        };
+      }
+      else {
+        render(
+          savedContact,
+          callback,
+          null,
+          params.fromUpdateActivity
+        );
+      }
+    }, function onError() {
+      console.error('Error retrieving contact to be edited');
+      render(null, callback);
+    });
   };
 
   var render = function cf_render(contact, callback, pFbContactData,
@@ -317,6 +399,7 @@ contacts.Form = (function() {
   }
 
   var showEdit = function showEdit(contact, fromUpdateActivity) {
+    console.log('> Estamos en EDIT');
     mode = 'edit';
     if (!contact || !contact.id) {
       return;
@@ -381,6 +464,7 @@ contacts.Form = (function() {
   }
 
   var showAdd = function showAdd(params) {
+    console.log('> Estamos en ADD');
     mode = 'add';
     formView.classList.remove('skin-organic');
     if (!params || params == -1 || !params.id) {
@@ -443,7 +527,7 @@ contacts.Form = (function() {
     // What we are avoiding with this condition is removing / restoring
     // a field when the event is simulated by a ENTER Keyboard click
     if (evt.explicitOriginalTarget === evt.target) {
-        contacts.Form.insertField(type, null, [
+        insertField(type, null, [
           'inserted',
           'displayed'
         ]);
@@ -1479,11 +1563,16 @@ contacts.Form = (function() {
     };
   }
 
-  return {
+  exports.Form = {
     'init': init,
     'render': render,
+    'renderContact': renderContact,
+    'renderContactFromActivity': renderContactFromActivity,
     'insertField': insertField,
     'saveContact': saveContact,
     'onNewFieldClicked': onNewFieldClicked
   };
-})();
+}(window));
+
+Form.init();
+

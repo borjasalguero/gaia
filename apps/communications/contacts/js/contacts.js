@@ -14,7 +14,7 @@
 /* global TAG_OPTIONS */
 /* global utils */
 /* global ContactsService */
-
+/* global Form */
 
 /* exported COMMS_APP_ORIGIN */
 /* exported SCALE_RATIO */
@@ -72,16 +72,8 @@ var Contacts = (function() {
 
   var contactsList;
   var contactsDetails;
-  var contactsForm;
 
   var customTag, customTagReset, tagDone, tagHeader, lazyLoadedTagsDom = false;
-
-  // Shows the edit form for the current contact being in an update activity
-  // It receives an array of two elements with the facebook data && values
-  function showEditForm(facebookData, params) {
-    contactsForm.render(currentContact, goToForm,
-                        facebookData, params.fromUpdateActivity);
-  }
 
   var checkUrl = function checkUrl() {
     var hasParams = window.location.hash.split('?');
@@ -134,40 +126,18 @@ var Contacts = (function() {
         break;
       case 'view-contact-form':
         initForm(function onInitForm() {
+          // If we are in an Activity, we retrieve the contact and send it
+          // to 'edit' mode
           if (params.mozContactParam) {
-            contactsForm.render(ActivityHandler.mozContactParam, goToForm);
+            Form.render(ActivityHandler.mozContactParam, goToForm);
             ActivityHandler.mozContactParam = null;
-          } else if (params == -1 || !(params.id)) {
-            contactsForm.render(params, goToForm);
+          }
+          // If there is just paramID
+          else if (params.id) {
+            // When 'adding to an existing contact'
+            Form.renderContactFromActivity(params, goToForm);
           } else {
-            // Editing existing contact
-            if (params.id) {
-              var id = params.id;
-              ContactsService.get(id, function onSuccess(savedContact) {
-                currentContact = savedContact;
-                // Check if we have extra parameters to render
-                if ('extras' in params) {
-                  addExtrasToContact(params.extras);
-                }
-                if (fb.isFbContact(savedContact)) {
-                  var fbContact = new fb.Contact(savedContact);
-                  var req = fbContact.getDataAndValues();
-                  req.onsuccess = function() {
-                    showEditForm(req.result, params);
-                  };
-                  req.onerror = function() {
-                    console.error('Error retrieving FB information');
-                    showEditForm(null, params);
-                  };
-                }
-                else {
-                  showEditForm(null, params);
-                }
-              }, function onError() {
-                console.error('Error retrieving contact to be edited');
-                contactsForm.render(null, goToForm);
-              });
-            }
+            Form.render(params, goToForm);
           }
         });
         break;
@@ -190,28 +160,6 @@ var Contacts = (function() {
         break;
     }
 
-  };
-
-  var addExtrasToContact = function addExtrasToContact(extrasString) {
-    try {
-      var extras = JSON.parse(decodeURIComponent(extrasString));
-      for (var type in extras) {
-        var extra = extras[type];
-        if (currentContact[type]) {
-          if (Array.isArray(currentContact[type])) {
-            var joinArray = currentContact[type].concat(extra);
-            currentContact[type] = joinArray;
-          } else {
-            currentContact[type] = extra;
-          }
-        } else {
-          currentContact[type] = Array.isArray(extra) ? extra : [extra];
-        }
-      }
-    } catch (e) {
-      console.error('Extras malformed');
-      return null;
-    }
   };
 
   var initContainers = function initContainers() {
@@ -571,7 +519,9 @@ var Contacts = (function() {
   };
 
   var showAddContact = function showAddContact() {
-    showForm();
+    initForm(function onInit() {
+      Form.render(null, goToForm);
+    });
   };
 
   var loadFacebook = function loadFacebook(callback) {
@@ -597,18 +547,10 @@ var Contacts = (function() {
     if (formReady) {
       callback();
     } else {
-      initDetails(function onDetails() {
-        LazyLoader.load([
-          SHARED_UTILS_PATH + '/misc.js',
-          '/shared/js/contacts/utilities/image_thumbnail.js'],
-        function() {
-          Contacts.view('Form', function viewLoaded() {
-            formReady = true;
-            contactsForm = contacts.Form;
-            contactsForm.init(TAG_OPTIONS);
-            callback();
-          });
-        });
+      // This is just for lazyloading form.js
+      Contacts.view('Form', function viewLoaded() {
+        formReady = true;
+        callback();
       });
     }
   };
@@ -654,31 +596,11 @@ var Contacts = (function() {
     }
   };
 
-  var showForm = function c_showForm(edit, contact) {
-    currentContact = contact || currentContact;
+  // It's only called from Detail.js
+  var showForm = function c_showForm(contact) {
     initForm(function onInit() {
-      doShowForm(edit);
+      Form.renderContact(contact, goToForm);
     });
-  };
-
-  var doShowForm = function c_doShowForm(edit) {
-    var contact = edit ? currentContact : null;
-
-    if (contact && fb.isFbContact(contact)) {
-      var fbContact = new fb.Contact(contact);
-      var req = fbContact.getDataAndValues();
-
-      req.onsuccess = function() {
-        contactsForm.render(contact, goToForm, req.result);
-      };
-
-      req.onerror = function() {
-        contactsForm.render(contact, goToForm);
-      };
-    }
-    else {
-      contactsForm.render(contact, goToForm);
-    }
   };
 
   var setCurrent = function c_setCurrent(contact) {
@@ -1070,6 +992,8 @@ var Contacts = (function() {
     'checkCancelableActivity': checkCancelableActivity,
     'isEmpty': isEmpty,
     'getLength': getLength,
+    // Just called from Details.js for showing the 'edit' mode
+    // given a contact
     'showForm': showForm,
     'setCurrent': setCurrent,
     'onLocalized': onLocalized,

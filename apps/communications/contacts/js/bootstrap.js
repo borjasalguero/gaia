@@ -33,7 +33,10 @@
        '/shared/js/contacts/import/utilities/config.js',
        '/contacts/js/utilities/extract_params.js',
        '/contacts/js/utilities/cookie.js',
-       '/shared/js/contact_photo_helper.js'].forEach((src) => {
+       '/shared/js/contact_photo_helper.js',
+       // These 2 files were from Form, but should be loaded before
+       '/shared/js/contacts/import/utilities/misc.js',
+       '/shared/js/contacts/utilities/image_thumbnail.js'].forEach((src) => {
         var scriptNode = document.createElement('script');
         scriptNode.src = src;
         scriptNode.setAttribute('defer', true);
