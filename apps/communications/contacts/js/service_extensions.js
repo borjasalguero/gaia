@@ -41,13 +41,13 @@
 
   extServices.match = function(contactId) {
     closeRequested = canClose = true;
-    extensionFrame.src = currentURI = 'matching_contacts.html?contactId=' +
+    extensionFrame.src = currentURI = '/contacts/matching_contacts.html?contactId=' +
                                                                     contactId;
   };
 
   extServices.showDuplicateContacts = function() {
     closeRequested = canClose = true;
-    extensionFrame.src = currentURI = 'matching_contacts.html';
+    extensionFrame.src = currentURI = '/contacts/matching_contacts.html';
   };
 
   function loadService(serviceName) {
