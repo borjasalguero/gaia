@@ -81,6 +81,9 @@
   };
 
   var close = function() {
+    if (_activity) {
+      window.close();
+    }
     window.history.back();
   };
 
@@ -1044,9 +1047,6 @@
 
   function setActivity(activity) {
     _activity = activity;
-    close = function() {
-      window.close();
-    }
   }
 
   exports.Form = {

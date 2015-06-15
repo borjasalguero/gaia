@@ -557,8 +557,13 @@ var Contacts = (function() {
     }
   };
 
-  var showAddContact = function showAddContact() {
-    window.location.href = '/contacts/views/detail.html';
+  var showAddContact = function showAddContact(e) {
+    window.AnimationsHelper.saveTarget(e);
+    window.AnimationsHelper.animateInFromTarget().then(() => {
+      window.location.href = '/contacts/views/detail.html';
+    });
+
+
     // showForm();
   };
 
@@ -771,6 +776,8 @@ var Contacts = (function() {
       '/shared/js/text_normalizer.js',
       SHARED_UTILS_PATH + '/status.js',
       '/shared/js/contacts/utilities/dom.js',
+      '/contacts/views/dom-scheduler.js',
+      '/contacts/views/animations.js',
       '/shared/js/confirm.js',
       document.getElementById('confirmation-message')
     ];
