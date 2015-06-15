@@ -558,7 +558,8 @@ var Contacts = (function() {
   };
 
   var showAddContact = function showAddContact() {
-    showForm();
+    window.location.href = '/contacts/views/detail.html';
+    // showForm();
   };
 
   var loadFacebook = function loadFacebook(callback) {
@@ -828,6 +829,20 @@ var Contacts = (function() {
 
 
   ContactsService.addListener('contactchange', oncontactchange);
+
+  window.addEventListener('pageshow', function(event) {
+    var contactID = sessionStorage.getItem('contactID');
+    var reason = sessionStorage.getItem('reason');
+    if (!contactID || (contactID.length && contactID.length ===0)) {
+      return;
+    }
+    performOnContactChange({
+      contactID: contactID,
+      reason: reason
+    });
+    sessionStorage.setItem('contactID', null);
+    sessionStorage.setItem('reason', null)
+  });
 
   var performOnContactChange = function performOnContactChange(event) {
     // To be on the safe side for now we evict the cache everytime a

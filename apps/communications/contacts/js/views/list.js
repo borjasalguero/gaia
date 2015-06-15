@@ -2216,7 +2216,7 @@ contacts.List = (function() {
         remove(id);
       }
     });
-    Cache.evict(false /* undo applied cache */,
+    window.Cache && Cache.evict(false /* undo applied cache */,
                 true /* instant eviction */);
   }
 

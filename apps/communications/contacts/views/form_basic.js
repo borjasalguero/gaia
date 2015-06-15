@@ -80,6 +80,10 @@
     }
   };
 
+  var close = function() {
+    window.history.back();
+  };
+
   var contactForm,
       thumb,
       thumbAction,
@@ -195,10 +199,7 @@
       '#contact-form-header': [
         {
           event: 'action',
-          handler:  function cancel() {
-            // TODO Add 'cancel' option in the render
-            window.close();
-          }
+          handler: close
         }
       ],
       '#save-button': saveContact,
@@ -552,14 +553,26 @@
               });
 
               doMerge(contact, list, function finished() {
-                _activity.postResult({ contact: contact });
+                if (!_activity) {
+                  window.postMessage({
+                    type: 'duplicate_contacts_merged',
+                    data: ids
+                  }, fb.CONTACTS_APP_ORIGIN);
+
+                  setTimeout(function() {
+                    // alert(window.history.length);
+                    window.history.go(-1);
+                  }, 1000);
+
+                } else {
+                  _activity.postResult({ contact: contact });
+                }
               });
 
             break;
 
             case 'ready':
               // The list of duplicate contacts has been loaded
-              // formHeader.removeEventListener('action', cancelHandler);
               Throbber.hide();
               break;
 
@@ -654,6 +667,15 @@
     // we edit current contact. We will use this information below.
     var isNew = contact.id !== 'undefined';
 
+    if (!_activity) {
+      ContactsService.addListener('contactchange', function oncontactchange(event) {
+        sessionStorage.setItem('contactID', event.contactID);
+        sessionStorage.setItem('reason', event.reason);
+        ContactsService.removeListener('contactchange', oncontactchange);
+        window.history.back();
+      });
+    }
+
     ContactsService.save(
       utils.misc.toMozContact(contact),
       function(e) {
@@ -664,6 +686,9 @@
         }
         Throbber.hide();
         // Sent the success of the activity
+        if (!_activity) {
+          return;
+        }
         _activity.postResult({contact: contact});
       }
     );
@@ -1019,6 +1044,9 @@
 
   function setActivity(activity) {
     _activity = activity;
+    close = function() {
+      window.close();
+    }
   }
 
   exports.Form = {

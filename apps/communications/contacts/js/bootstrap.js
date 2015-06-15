@@ -8,7 +8,6 @@
 (function(exports) {
 
   /** Script loader **/
-
   function loadScripts() {
     var dependencies = [
      '/contacts/services/contacts.js',

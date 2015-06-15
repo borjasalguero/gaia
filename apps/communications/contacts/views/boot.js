@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', function() {
     LazyLoader.load([
       document.getElementById('view-contact-form')
     ], function() {
-      console.log('> Traducido');
+      // TODO Add if needed
     });
   });
 });
@@ -14,7 +14,7 @@ window.onload = function() {
   var dependencies = [
     '/contacts/services/contacts.js',
     '/shared/js/contacts/utilities/event_listeners.js',
-    '/contacts/js/views/list.js',
+    // '/contacts/js/views/list.js',
     '/shared/js/l10n_date.js',
     '/shared/js/async_storage.js',
     '/shared/js/contacts/import/utilities/config.js',
@@ -64,11 +64,11 @@ window.onload = function() {
           navigator.mozSetMessageHandler(
             'activity',
             function(activity) {
-              Form.render(
-                activity.source.data.params
-              );
               Form.setActivity(
                 activity
+              );
+              Form.render(
+                activity.source.data.params
               );
             }
           );
