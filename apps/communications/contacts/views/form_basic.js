@@ -508,8 +508,16 @@
 
     fillContact(myContact, function contactFilled(myContact) {
       var contact = utils.misc.toMozContact(myContact);
-      var callbacks = cookMatchingCallbacks(contact);
-      doMatch(contact, callbacks);
+      fbLoader.load();
+      LazyLoader.load(
+        [
+          '/contacts/js/service_extensions.js'
+        ],
+        function() {
+          var callbacks = cookMatchingCallbacks(contact);
+          doMatch(contact, callbacks);
+        }
+      );
     });
   }
 
