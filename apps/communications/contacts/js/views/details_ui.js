@@ -141,7 +141,8 @@
     },
 
     doReloadContactDetails: function(contact) {
-      this.detailsNameText.textContent = this.getDisplayName(contact);
+      var name = this.getDisplayName(contact);
+      this.detailsNameText.textContent = name
       this.contactDetails.classList.remove('no-photo');
       this.contactDetails.classList.remove('up');
       utils.dom.removeChildNodes(this.listContainer);
@@ -165,6 +166,17 @@
       this.renderDuplicate(contact);
 
       this.renderPhoto(contact);
+
+      /* Render for pinned the web */
+
+      document.querySelector('meta[property="og:name"').content = name;
+
+      if (contact.tel && contact.tel.length && contact.tel.length > 0) {
+        document.querySelector('meta[property="og:telephone"').content = contact.tel[0].value;
+      }
+      if (contact.email && contact.email.length && contact.email.length > 0) {
+        document.querySelector('meta[property="og:email"').content = contact.email[0].value;
+      }
 
       this.dispatchEvent('renderdone');
     },

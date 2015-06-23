@@ -59,6 +59,7 @@ window.onload = function() {
           '/contacts/views/form/style/match_service.css',
           '/contacts/views/form/js/matcher.js',
           // TODO Remove 2 above when landing Jorge's patch
+          '/contacts/views/form/js/throbber.js',
           '/contacts/views/form/js/form_ui.js',
           '/contacts/views/form/js/form_basic.js',
           '/contacts/views/form/js/main_navigation.js'
