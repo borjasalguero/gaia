@@ -438,8 +438,12 @@ var Contacts = (function() {
     }
   };
 
-  var showAddContact = function showAddContact() {
-    showForm();
+  var showAddContact = function showAddContact(evt) {
+    window.AnimationsHelper.saveTarget(evt);
+    window.AnimationsHelper.animateInFromTarget().then(() => {
+      window.location.href = '/contacts/views/form/form.html';
+    });
+    // showForm();
   };
 
   var loadFacebook = function loadFacebook(callback) {
@@ -920,12 +924,28 @@ var Contacts = (function() {
   });
 
   window.addEventListener('pageshow', function onPageshow() {
-    var pendingOp = sessionStorage.getItem('oncontactchange');
 
-    // Invoke oncontactchange manually
-    if (typeof pendingOp !== 'undefined') {
-      oncontactchange(JSON.parse(pendingOp));
+
+    // #new handling
+    var contactID = sessionStorage.getItem('contactID');
+    var reason = sessionStorage.getItem('reason');
+    if (!contactID || (contactID.length && contactID.length ===0)) {
+      var pendingOp = sessionStorage.getItem('oncontactchange');
+
+      // Invoke oncontactchange manually
+      if (typeof pendingOp !== 'undefined') {
+        oncontactchange(JSON.parse(pendingOp));
+        sessionStorage.setItem('oncontactchange', null);
+        return;
+      }
+      return;
     }
+    performOnContactChange({
+      contactID: contactID,
+      reason: reason
+    });
+    sessionStorage.setItem('contactID', null);
+    sessionStorage.setItem('reason', null)
   });
 
   return {
