@@ -5,6 +5,49 @@
           NotificationHelper, SettingsListener, SimSettingsHelper,
           SuggestionBar, TelephonyHelper, Utils, Voicemail, MozActivity */
 
+
+function callContact() {
+  var activity = new MozActivity({
+    name: 'pick',
+    data: {
+      type: 'webcontacts/select',
+      contactProperties: ['tel']
+    }
+  });
+
+  activity.onsuccess = function() {
+    if (!activity.result ||
+        !activity.result.select ||
+        !activity.result.select.length ||
+        !activity.result.select[0].value) {
+      console.error('The pick activity result is invalid.');
+      return;
+    }
+
+    var phoneNumber = activity.result.select[0].value;
+
+    if (navigator.mozIccManager &&
+        navigator.mozIccManager.iccIds.length > 1) {
+      KeypadManager.updatePhoneNumber(phoneNumber);
+      window.location.hash = '#keyboard-view';
+    } else {
+
+      LazyLoader.load([
+        '/shared/js/sim_settings_helper.js'
+      ]).then(function() {
+        SimSettingsHelper.getCardIndexFrom('outgoingCall', function(ci) {
+          CallHandler.call(phoneNumber, ci);
+        });
+      });
+
+    }
+  };
+
+
+  activity.onerror = function() {};
+}
+
+
 var NavbarManager = {
   init: function nm_init() {
     // binding now so that we can remove the listener in unit tests
@@ -12,8 +55,15 @@ var NavbarManager = {
     this.update();
     window.addEventListener('hashchange', this.update);
 
-    var contacts = document.getElementById('option-contacts');
-    contacts.addEventListener('click', this.contactsTabTap);
+    // var contacts = document.getElementById('option-contacts');
+    // contacts.addEventListener('click', this.contactsTabTap);
+
+    var callContactButton = document.getElementById('call-contact-button');
+    callContactButton.addEventListener(
+      'click',
+      callContact
+    )
+
   },
   resourcesLoaded: false,
   /*
@@ -45,12 +95,12 @@ var NavbarManager = {
 
   update: function nm_update() {
     var recent = document.getElementById('option-recents');
-    var contacts = document.getElementById('option-contacts');
+    // var contacts = document.getElementById('option-contacts');
     var keypad = document.getElementById('option-keypad');
-    var tabs = [recent, contacts, keypad];
+    var tabs = [recent, keypad];
 
     recent.classList.remove('toolbar-option-selected');
-    contacts.classList.remove('toolbar-option-selected');
+    // contacts.classList.remove('toolbar-option-selected');
     keypad.classList.remove('toolbar-option-selected');
 
     // XXX : Move this to whole activity approach, so far
@@ -91,7 +141,7 @@ var NavbarManager = {
           view.appendChild(frame);
         }
 
-        contacts.classList.add('toolbar-option-selected');
+        // contacts.classList.add('toolbar-option-selected');
         this.ensureResources(function() {
           AccessibilityHelper.setAriaSelected(contacts, tabs);
         });

@@ -1,0 +1,22 @@
+#call-contact-button {
+
+  border-radius: 5.5rem 5.5rem 0 0;
+  width: 11rem;
+  height: 5.5rem;
+  left: calc(50% - 5.5rem);
+  z-index: 5;
+  position: absolute;
+  bottom: 0;
+
+  background-size: 40%;
+  background-position: center 100%;
+  background-color: #00AACC; /* Sustituir por el azul guay*/
+  background-image: url(images/call_contact.png);
+  background-repeat: no-repeat;
+  border: none;
+}
+
+
+#call-contact-button:active {
+  background-color: #00CAF2;
+}
