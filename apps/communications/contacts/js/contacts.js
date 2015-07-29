@@ -462,11 +462,13 @@ var Contacts = (function() {
   };
 
   var showSettings = function showSettings() {
-    initSettings(function onSettingsReady() {
-      // The number of FB Friends has to be recalculated
-      contacts.Settings.refresh();
-      MainNavigation.go('view-settings', 'fade-in');
-    });
+    window.location.href =
+      '/contacts/views/settings/settings.html';
+    // initSettings(function onSettingsReady() {
+    //   // The number of FB Friends has to be recalculated
+    //   contacts.Settings.refresh();
+    //   MainNavigation.go('view-settings', 'fade-in');
+    // });
   };
 
   var stopPropagation = function stopPropagation(evt) {
