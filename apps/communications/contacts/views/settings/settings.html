@@ -40,6 +40,12 @@
     <script defer src="/shared/elements/gaia-header/dist/gaia-header.js"></script>
 
     <link rel="localization" href="/shared/elements/gaia_menu/locales/gaia_menu.{locale}.properties">
+    <link rel="localization" href="/locales/contacts.{locale}.properties">
+    <link rel="localization" href="/shared/locales/import_contacts/import_contacts.{locale}.properties">
+    <link rel="localization" href="/shared/locales/date/date.{locale}.properties">
+    <link rel="localization" href="/shared/locales/phone_types/phone_types.{locale}.properties">
+
+    
     <link rel="localization" href="/shared/elements/gaia_sim_picker/locales/gaia_sim_picker.{locale}.properties">
     <!--
     <link rel="stylesheet" type="text/css" href="/shared/elements/gaia_menu/style.css">
@@ -47,8 +53,8 @@
     <script defer src="/shared/elements/gaia_menu/script.js"></script>
     <script defer src="/shared/elements/gaia_sim_picker/script.js"></script>
     <script defer src="/shared/elements/gaia_switch/script.js"></script>
-    -->
-
+    <script defer type="text/javascript" src="/shared/pages/import/js/curtain.js"></script>
+     -->
     <script defer src="/shared/js/lazy_loader.js"></script>
     <script defer src="/contacts/js/utilities/performance_helper.js"></script>
     <script defer src="/contacts/js/cache.js"></script>
@@ -74,7 +80,7 @@
   </head>
 
   <body role="application" class="app-contacts skin-comms theme-communications">
-    <form    is="confirm-form" data-type="confirm" id="loading-overlay" class="hide no-opacity" role="dialog"></form>
+    <iframe id="iframe_curtain" src="/shared/pages/import/curtain.html"></iframe>
     <article is="settings" id="settings-wrapper"></article>
     <form    is="confirmation-message" id="confirmation-message" class="hide" role="dialog" data-type="confirm"></form>
     <section is="status-message" id="statusMsg" role="status" class="hidden"></section>

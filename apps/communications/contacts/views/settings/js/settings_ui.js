@@ -158,7 +158,10 @@
   var addListeners = function addListeners() {
     orderCheckBox.addEventListener(
       'change', 
-      onOrderingChange.bind(this)
+      // onOrderingChange.bind(this)
+      function() {
+        alert('NGA: Still not working :)');
+      }
     );
 
     doneButton.addEventListener(
@@ -198,6 +201,8 @@
     cacheElements();
     addListeners();
     getData();
+    checkNoContacts();
+    updateTimestamps();
     // To avoid any race condition we listen for online events once
     // containers have been initialized
     window.addEventListener('online', checkOnline);

@@ -39,33 +39,38 @@ var utils = window.utils || {};
   }
 
   function init() {
-    return new Promise(function(resolve, reject) {
-      overlay = document.createElement('form');
-      overlay.setAttribute('is', 'confirm-form');
-      overlay.setAttribute('data-type', 'confirm');
-      overlay.setAttribute('id', 'loading-overlay');
-      overlay.setAttribute('role', 'dialog');
-      overlay.className = 'hide no-opacity';
-      document.head.appendChild(link);
-      document.body.appendChild(overlay);
-      LazyLoader.load([
-        '/shared/js/html_imports.js'
-      ], function() {
-        HtmlImports.populate(function() {
-          cacheElements();
-          addListeners();
-          resolve();
+    if (cancelButton) {
+      return Promise.resolve();
+    } else {
+      return new Promise(function(resolve, reject) {
+        overlay = document.createElement('form');
+        overlay.setAttribute('is', 'confirm-form');
+        overlay.setAttribute('data-type', 'confirm');
+        overlay.setAttribute('id', 'loading-overlay');
+        overlay.setAttribute('role', 'dialog');
+        overlay.className = 'hide no-opacity';
+        document.head.appendChild(link);
+        document.body.appendChild(overlay);
+        LazyLoader.load([
+          '/shared/js/html_imports.js'
+        ], function() {
+          HtmlImports.populate(function() {
+            cacheElements();
+            addListeners();
+            resolve();
+          });
         });
+
       });
-    });
+    } 
   }
 
   function removeOverlay() {
 
-    document.head.removeChild(link);
-    document.body.removeChild(overlay);
-    overlay = null;
-    delete cancelButton.onclick;
+    // document.head.removeChild(link);
+    // document.body.removeChild(overlay);
+    // overlay = null;
+    // delete cancelButton.onclick;
   }
 
   // Constructor for the progress element
@@ -88,14 +93,16 @@ var utils = window.utils || {};
      * @param {Number} value Overrides internal counter.
      */
     this.update = function(value) {
-      if (value && value <= total && value >= counter) {
-        counter = value;
-      } else {
-        counter++;
-      }
-      progressElement.setAttribute('value',
-        ((counter * 100) / total).toFixed()); // Percent fraction is not needed.
-      showMessage();
+      init().then(function() {
+        if (value && value <= total && value >= counter) {
+          counter = value;
+        } else {
+          counter++;
+        }
+        progressElement.setAttribute('value',
+          ((counter * 100) / total).toFixed()); // Percent fraction is not needed.
+        showMessage();
+      });
     };
 
     this.setTotal = function(ptotal) {
@@ -103,23 +110,29 @@ var utils = window.utils || {};
     };
 
     this.setClass = function(clazzName) {
-      setClass(clazzName);
-      clazz = clazzName;
-      // To refresh the message according to the new clazzName
-      if (clazzName === 'activityBar' || clazzName === 'spinner') {
-        progressMsg.removeAttribute('data-l10n-id');
-      }
+      init().then(function() {
+        setClass(clazzName);
+        clazz = clazzName;
+        // To refresh the message according to the new clazzName
+        if (clazzName === 'activityBar' || clazzName === 'spinner') {
+          progressMsg.removeAttribute('data-l10n-id');
+        }
+      });
     };
 
     this.setHeaderMsg = function(headerMsgId) {
-      progressTitle.setAttribute('data-l10n-id', headerMsgId);
+      init().then(function() {
+        progressTitle.setAttribute('data-l10n-id', headerMsgId);
+      });
     };
   } // ProgressBar
 
   utils.overlay.isAnimationPlaying = false;
   utils.overlay.isShown = false;
   utils.overlay._show = function _show(messageId, progressClass, textId) {
-    progressActivity.classList.remove('hide');
+    progressActivity.className = '';
+    console.log(progressActivity);
+    progressTitle.textContent = 'Importing...';
     if (typeof messageId === 'string') {
       progressTitle.setAttribute('data-l10n-id', messageId);
     } else {
@@ -156,17 +169,23 @@ var utils = window.utils || {};
       progressElement.setAttribute('value', 0);
       // In the case of an spinner this object will not be really used
       setClass(progressClass);
-      menu.classList.toggle('showed', isMenuActive);
-      if (!utils.overlay.isAnimationPlaying) {
-        utils.overlay._show(messageId, progressClass, textId);
-        return out;
+      if (isMenuActive) {
+        document.querySelector('#loading-overlay menu').classList.add('showed');
+      } else {
+        document.querySelector('#loading-overlay menu').classList.remove('showed');
       }
-      overlay.addEventListener('animationend',
-        function ov_showWhenFinished(ev) {
-          overlay.removeEventListener('animationend', ov_showWhenFinished);
-          utils.overlay._show(messageId, progressClass, textId);
-        }
-      );
+      // document.querySelector('#loading-overlay menu').classList.add()
+      // menu.classList.toggle('showed', isMenuActive);
+      // if (!utils.overlay.isAnimationPlaying) {
+        utils.overlay._show(messageId, progressClass, textId);
+      //   return out;
+      // }
+      // overlay.addEventListener('animationend',
+      //   function ov_showWhenFinished(ev) {
+      //     overlay.removeEventListener('animationend', ov_showWhenFinished);
+      //     utils.overlay._show(messageId, progressClass, textId);
+      //   }
+      // );
     });
   
     return out;

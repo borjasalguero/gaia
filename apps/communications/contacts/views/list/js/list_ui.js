@@ -1133,10 +1133,15 @@
     var parentDataset = target.parentNode ?
                           (target.parentNode.dataset || {}) : {};
     var uuid = dataset.uuid || parentDataset.uuid;
+    var eventName = 'itemClicked';
     if (uuid) {
-      if (_action && _action === 'pick' || _action === 'update') {
-        selectList(uuid);
-        return;
+      if (_action) {
+        if (_action === 'pick') {
+          eventName = 'pickAction';
+        } else if (_action === 'update') {
+          selectList(uuid);
+          return;
+        }
       }
 
       if (SelectMode.isInSelectMode) {
@@ -1144,7 +1149,7 @@
         return;
       }
 
-      window.dispatchEvent(new CustomEvent('itemClicked', {
+      window.dispatchEvent(new CustomEvent(eventName, {
         'detail': {
           'uuid': uuid
         }
@@ -1724,34 +1729,13 @@
     orderByLastName = value;
   }
 
-  // TODO: Params
-  function selectList(params, fromUpdateActivity) {
+  function selectList(uuid) {
     HeaderUI.hideAddButton();
-    contactsList.clearClickHandlers();
-    contactsList.handleClick(function addToContactHandler(id) {
-      var data = {};
-      if (params.hasOwnProperty('tel')) {
-        var phoneNumber = params.tel;
-        data.tel = [{
-          'value': phoneNumber,
-          'carrier': null,
-          'type': [TAG_OPTIONS['phone-type'][0].type]
-        }];
+    window.dispatchEvent(new CustomEvent('updateAction', {
+      'detail': {
+        'uuid': uuid
       }
-      if (params.hasOwnProperty('email')) {
-        var email = params.email;
-        data.email = [{
-          'value': email,
-          'type': [TAG_OPTIONS['email-type'][0].type]
-        }];
-      }
-      var hash = '#view-contact-form?extras=' +
-        encodeURIComponent(JSON.stringify(data)) + '&id=' + id;
-      if (fromUpdateActivity) {
-        hash += '&fromUpdateActivity=1';
-      }
-      window.location.hash = hash;
-    });
+    }));
   }
 
   // Given a UUID we will call the callback function

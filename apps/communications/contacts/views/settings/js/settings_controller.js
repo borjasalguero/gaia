@@ -35,7 +35,7 @@
     ////////
 
     window.addEventListener('close-ui', function() {
-      window.location.href = '/contacts/views/list/list.html';
+      window.history.back();
     });
 
     window.addEventListener('delete-ui', function() {
@@ -117,7 +117,8 @@
    * Loads the overlay class before showing
    */
   var requireOverlay = function(callback) {
-    Loader.utility('Overlay', callback);
+    callback();
+    // Loader.utility('Overlay', callback);
   };
 
   function saveStatus(data) {
@@ -179,7 +180,7 @@
    * Loads required libraries for sim import
    */
   var requireSimImport = function(callback) {
-    var libraries = ['Overlay', 'Import_sim_contacts'];
+    var libraries = ['Import_sim_contacts'];
     var pending = libraries.length;
 
     libraries.forEach(function onPending(library) {

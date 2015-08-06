@@ -62,7 +62,7 @@ contacts.BulkDelete = (function() {
         Search.invalidateCache();
         Search.removeContact(currentId);
       }
-      contacts.List.remove(currentId);
+      ListUI.remove(currentId);
       progress.update();
     };
 
@@ -80,7 +80,7 @@ contacts.BulkDelete = (function() {
         id: 'DeletedTxt',
         args: {n: contactsRemoverObj.getDeletedCount()}
       });
-      contacts.Settings.refresh();
+      // contacts.Settings.refresh();
 
       if (typeof done === 'function') {
         done();

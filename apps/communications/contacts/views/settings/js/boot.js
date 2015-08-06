@@ -4,7 +4,7 @@
 window.addEventListener('DOMContentLoaded', function() {
   console.info('DOMContentLoaded');
   LazyLoader.load([
-    '/shared/js/l10n.js'], function() {
+    '/shared/js/l10n.js','/shared/pages/import/js/curtain.js'], function() {
       console.info('l10n');
     LazyLoader.load([
       document.getElementById('settings-wrapper'),
@@ -23,6 +23,9 @@ window.onload = function() {
   window._ = navigator.mozL10n.get;
 
   var dependencies = [
+    '/shared/js/contacts/import/utilities/vcard_parser.js',
+    '/contacts/style/overlay.css',
+    '/shared/js/contacts/import/utilities/overlay.js',
     '/contacts/js/navigation.js',
     '/contacts/views/settings/js/main_navigation.js',
     '/contacts/js/activities.js',

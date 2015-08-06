@@ -24,22 +24,22 @@ function contactsRemover() {
       return;
     }
     ids = cIds;
-
+    cb();
     // In order to properly delete FB Contacts we need to obtain their data
     // Take into account that we are querying all FB Contacts but we don't know
     // beforehand if there will be any of them to be deleted
-    var req = fb.utils.getAllFbContacts();
-    req.onsuccess = function() {
-      var fbContacts = req.result;
-      fbContacts.forEach(function(aFbContact) {
-        fbData[aFbContact.id] = aFbContact;
-      });
-      cb();
-    };
-    req.onerror = function() {
-      console.error('Error while retrieving FB Contacts: ', req.error.name);
-      cb();
-    };
+    // var req = fb.utils.getAllFbContacts();
+    // req.onsuccess = function() {
+    //   // var fbContacts = req.result;
+    //   // fbContacts.forEach(function(aFbContact) {
+    //   //   fbData[aFbContact.id] = aFbContact;
+    //   // });
+    //   cb();
+    // };
+    // req.onerror = function() {
+    //   console.error('Error while retrieving FB Contacts: ', req.error.name);
+    //   cb();
+    // };
   };
 
   this.start = function() {

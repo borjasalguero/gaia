@@ -24,6 +24,7 @@ window.addEventListener('load', function() {
   utils.PerformanceHelper.visuallyComplete();
 
   var dependencies = [
+    '/shared/js/contacts/import/utilities/misc.js',
     '/contacts/js/activities.js',
     '/shared/js/contact_photo_helper.js',
     '/shared/js/contacts/utilities/ice_store.js',
@@ -90,5 +91,15 @@ window.addEventListener('load', function() {
       params.action === 'export')) {
       SelectMode.init(params);
     }
+
+    navigator.mozSetMessageHandler(
+      'activity',
+      function(activity) {
+        console.info(activity);
+        ListController.setActivity(
+          activity
+        );
+      }
+    );
   });
 });

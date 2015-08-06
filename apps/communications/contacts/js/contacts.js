@@ -105,48 +105,6 @@ var Contacts = (function() {
     });
   };
 
-<<<<<<< HEAD
-=======
-  var updateContactDetail = function updateContactDetail(id) {
-    ContactsService.get(id, function findCallback(contact) {
-      currentContact = contact;
-      contactsDetails.render(currentContact);
-    });
-  };
-
-  var selectList = function selectList(params, fromUpdateActivity) {
-    HeaderUI.hideAddButton();
-    contactsList.clearClickHandlers();
-    contactsList.handleClick(function addToContactHandler(id) {
-
-      var optionalParams;
-
-      if (params.hasOwnProperty('tel')) {
-        optionalParams = {
-          action: 'update',
-          contact: id,
-          isActivity: true,
-          tel: params.tel
-        };
-      }
-
-      if (params.hasOwnProperty('email')) {
-        optionalParams = {
-          action: 'update',
-          contact: id,
-          isActivity: true,
-          email: params.email
-        };
-      }
-
-      window.location.href = ParamUtils.generateUrl(
-        'form',
-        optionalParams
-      );
-    });
-  };
-
->>>>>>> Bug 1183727 - [Contacts][NGA] Create #update view and connect it to #open within Contacts App r=arcturus
   var handleBack = function handleBack(cb) {
     MainNavigation.back(cb);
   };
